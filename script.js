@@ -1,4 +1,3 @@
-// Importa as funções necessárias do SDK do Firebase (Versão 9 Modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
@@ -11,64 +10,62 @@ const firebaseConfig = {
     appId: "1:1028342828902:web:6d283c8280e7c8aa5542a7"
 };
 
-// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// Referência ao elemento HTML onde os posts serão mostrados
 const postsContainer = document.getElementById('posts-container');
 
-// Função para buscar e renderizar posts
 async function loadPosts() {
     try {
-        // Cria uma query para buscar a coleção 'posts', ordenados por data
-        // Nota: Você precisa criar o índice no Firestore se der erro de 'requires an index'
         const q = query(collection(db, "posts"), orderBy("data", "desc"));
-        
         const querySnapshot = await getDocs(q);
         
-        // Limpa o texto de "Carregando..."
-        postsContainer.innerHTML = '';
+        if (postsContainer) {
+            postsContainer.innerHTML = '';
+        }
 
         if (querySnapshot.empty) {
-            postsContainer.innerHTML = '<p>Nenhum post encontrado no momento.</p>';
+            postsContainer.innerHTML = '<p class="loading">Nenhum post disponível no momento.</p>';
             return;
         }
 
-        // Itera sobre cada documento encontrado
         querySnapshot.forEach((doc) => {
             const post = doc.data();
-            const postElement = createPostElement(post);
+            const postId = doc.id;
+            const postElement = createPostElement(post, postId);
             postsContainer.appendChild(postElement);
         });
 
     } catch (error) {
         console.error("Erro ao carregar posts:", error);
-        postsContainer.innerHTML = '<p>Erro ao carregar o conteúdo. Tente novamente mais tarde.</p>';
+        postsContainer.innerHTML = '<p class="loading">Erro ao carregar o conteúdo.</p>';
     }
 }
 
-// Função auxiliar para criar o HTML de cada post
-function createPostElement(post) {
+function createPostElement(post, id) {
     const article = document.createElement('article');
     article.className = 'post-item';
 
-    // Formatação simples da data (assumindo que no firebase salvou como Timestamp ou String ISO)
-    let dateString = '';
+    // Evento de clique para abrir a página de detalhes
+    article.onclick = () => {
+        window.location.href = `post.html?id=${id}`;
+    };
+
+    // Formatação de data (Ex: 30 DEZ)
+    let dateStr = '---';
     if (post.data && post.data.toDate) {
-        dateString = post.data.toDate().toLocaleDateString('pt-BR');
-    } else {
-        dateString = post.data || 'Data desconhecida';
+        const date = post.data.toDate();
+        dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).toUpperCase();
     }
 
     article.innerHTML = `
-        <span class="post-date">${dateString}</span>
-        <h3 class="post-title">${post.titulo}</h3>
-        <p class="post-excerpt">${post.resumo}</p>
-        `;
+        <span class="post-date">${dateStr}</span>
+        <div class="post-content-wrapper">
+            <h3 class="post-title">${post.titulo}</h3>
+            <p class="post-excerpt">${post.resumo}</p>
+        </div>
+    `;
 
     return article;
 }
 
-// Inicia o carregamento quando a página carrega
 window.addEventListener('DOMContentLoaded', loadPosts);
