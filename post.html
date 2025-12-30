@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mateus Calixto | Jornalismo Independente</title>
+    <title>Carregando... | Mateus Calixto</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,38 +16,40 @@
     <header class="site-header">
         <div class="container header-content">
             <div class="brand">
-                <h1>Mateus Calixto</h1>
-                <span class="tagline">Análise. Fatos. Perspectiva.</span>
+                <h1><a href="index.html" style="text-decoration:none; color:inherit;">Mateus Calixto</a></h1>
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#">Política</a></li>
                     <li><a href="#">Economia</a></li>
                     <li><a href="#">Tecnologia</a></li>
-                    <li><a href="#">Sobre</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <span class="category-tag">Destaque do Dia</span>
-                <h2 id="hero-title">Carregando manchete principal...</h2>
-                <p id="hero-summary">Aguarde enquanto buscamos as últimas informações.</p>
-            </div>
-        </div>
-    </section>
-
-    <main class="container">
-        <div class="section-title">
-            <h3>Últimas Notícias</h3>
-        </div>
+    <main class="container article-container">
         
-        <div id="news-grid" class="news-grid">
+        <a href="index.html" class="back-link">&larr; Voltar para Home</a>
+
+        <article id="article-content" class="full-article">
+            <header class="article-header">
+                <span id="post-category" class="category-tag">Notícia</span>
+                <h1 id="post-title" class="article-title">Carregando título...</h1>
+                <div class="article-meta">
+                    <span id="post-date">...</span>
+                </div>
+            </header>
+
+            <figure class="article-featured-image">
+                <img id="post-image" src="" alt="" style="display:none;">
+            </figure>
+
+            <div id="post-body" class="article-body">
+                <p class="loading-text">Carregando o conteúdo...</p>
             </div>
+        </article>
     </main>
 
     <footer class="site-footer">
@@ -56,6 +58,6 @@
         </div>
     </footer>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="post.js"></script>
 </body>
 </html>
