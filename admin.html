@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo | Mateus Calixto</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .admin-wrapper { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .hidden { display: none; }
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+        label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #333; }
+        input, textarea { padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem; }
+        button { padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-primary { background: #000; color: #fff; width: 100%; }
+        .btn-primary:hover { background: #333; }
+        .btn-cancel { background: #f0f0f0; color: #333; margin-top: 10px; width: 100%; }
+        
+        /* Lista de Notícias */
+        .news-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #eee; margin-bottom: 10px; border-radius: 4px; }
+        .news-info h4 { margin: 0; font-family: 'Playfair Display', serif; }
+        .news-info small { color: #888; }
+        .actions { display: flex; gap: 10px; }
+        .btn-edit { background: #e3f2fd; color: #1976d2; padding: 8px 12px; font-size: 0.8rem; }
+        .btn-delete { background: #ffebee; color: #c62828; padding: 8px 12px; font-size: 0.8rem; }
+        
+        .header-admin { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .logout-link { font-size: 0.8rem; color: #c62828; cursor: pointer; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <header class="header-admin">
+            <h2 id="panel-title">Acesso Restrito</h2>
+            <span id="logout-btn" class="logout-link hidden">Sair do Painel</span>
+        </header>
+
+        <div id="login-section">
+            <p>Identifique-se para gerenciar o mateuscalixto.com.br</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+        </div>
+
+        <div id="admin-panel" class="hidden">
+            <form id="post-form">
+                <input type="hidden" id="edit-id" value="">
+                
+                <div class="form-group">
+                    <label>Título da Notícia</label>
+                    <input type="text" id="titulo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Resumo Curto (Aparece na Home)</label>
+                    <input type="text" id="resumo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>URL da Imagem</label>
+                    <input type="text" id="imagem" placeholder="https://exemplo.com/foto.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label>Conteúdo Completo</label>
+                    <textarea id="conteudo" rows="8" required></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-primary">Publicar Notícia</button>
+                <button type="button" id="cancel-edit" class="btn-cancel hidden">Cancelar Edição</button>
+            </form>
+
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+            <h3>Notícias Publicadas</h3>
+            <div id="news-list-container">
+                </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, 
+            onSnapshot, query, orderBy, serverTimestamp, getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIGURAÇÃO DO FIREBASE
+        const firebaseConfig = {
+        apiKey: "AIzaSyDjuRApif2O4TgX2mAycKEcXULCnFSapbQ",
+        authDomain: "mateuscalixto-b8d30.firebaseapp.com",
+        projectId: "mateuscalixto-b8d30",
+        storageBucket: "mateuscalixto-b8d30.firebasestorage.app",
+        messagingSenderId: "1028342828902",
+        appId: "1:1028342828902:web:6d283c8280e7c8aa5542a7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- CONTROLE DE ACESSO ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                document.getElementById('panel-title').innerText = "Painel de Controle";
+                loadNewsList();
+            } else {
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('admin-panel').classList.add('hidden');
+                document.getElementById('logout-btn').classList.add('hidden');
+                document.getElementById('panel-title').innerText = "Acesso Restrito";
+            }
+        });
+
+        // LOGIN
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            try { await signInWithEmailAndPassword(auth, email, pass); } 
+            catch (error) { alert("Erro: " + error.message); }
+        });
+
+        // LOGOUT
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+        // --- GESTÃO DE NOTÍCIAS ---
+
+        // Carregar Lista
+        function loadNewsList() {
+            const q = query(collection(db, "noticias"), orderBy("data", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('news-list-container');
+                container.innerHTML = "";
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    const item = document.createElement('div');
+                    item.className = 'news-item';
+                    item.innerHTML = `
+                        <div class="news-info">
+                            <h4>${data.titulo}</h4>
+                            <small>${data.data ? new Date(data.data.toDate()).toLocaleDateString() : 'Recent'}</small>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-edit" data-id="${id}">Editar</button>
+                            <button class="btn-delete" data-id="${id}">Excluir</button>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+
+                // Atribuir eventos aos botões recém-criados
+                document.querySelectorAll('.btn-edit').forEach(b => b.onclick = () => editPost(b.dataset.id));
+                document.querySelectorAll('.btn-delete').forEach(b => b.onclick = () => deletePost(b.dataset.id));
+            });
+        }
+
+        // Criar ou Atualizar Post
+        document.getElementById('post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('edit-id').value;
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+
+            const postData = {
+                titulo: document.getElementById('titulo').value,
+                resumo: document.getElementById('resumo').value,
+                imagem: document.getElementById('imagem').value,
+                conteudo: document.getElementById('conteudo').value,
+                data: serverTimestamp()
+            };
+
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "noticias", editId), postData);
+                    alert("Atualizado com sucesso!");
+                } else {
+                    await addDoc(collection(db, "noticias"), postData);
+                    alert("Publicado com sucesso!");
+                }
+                resetForm();
+            } catch (err) { alert("Erro: " + err.message); }
+            finally { btn.disabled = false; }
+        });
+
+        // Editar Post (Carregar no form)
+        async function editPost(id) {
+            const docSnap = await getDoc(doc(db, "noticias", id));
+            const data = docSnap.data();
+            
+            document.getElementById('titulo').value = data.titulo;
+            document.getElementById('resumo').value = data.resumo;
+            document.getElementById('imagem').value = data.imagem || "";
+            document.getElementById('conteudo').value = data.conteudo;
+            document.getElementById('edit-id').value = id;
+            
+            document.getElementById('submit-btn').innerText = "Salvar Alterações";
+            document.getElementById('cancel-edit').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Excluir Post
+        async function deletePost(id) {
+            if (confirm("Deseja realmente excluir esta notícia?")) {
+                await deleteDoc(doc(db, "noticias", id));
+            }
+        }
+
+        // Resetar Formulário
+        function resetForm() {
+            document.getElementById('post-form').reset();
+            document.getElementById('edit-id').value = "";
+            document.getElementById('submit-btn').innerText = "Publicar Notícia";
+            document.getElementById('cancel-edit').classList.add('hidden');
+        }
+
+        document.getElementById('cancel-edit').onclick = resetForm;
+
+    </script>
+</body>
+</html>
