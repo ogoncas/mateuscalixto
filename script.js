@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
-    getFirestore, collection, getDocs, query, orderBy, doc, setDoc 
+    getFirestore, collection, getDocs, query, orderBy, doc, setDoc, where 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { 
     getAuth, onAuthStateChanged, signInWithEmailAndPassword, 
@@ -21,19 +21,20 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- VARIÁVEIS DE CONTROLE ---
-let paginaAtual = 1;
-const noticiasPorPagina = 3;
-let todasNoticias = [];
-
-// Seletores
+// --- SELETORES DE INTERFACE ---
 const grid = document.getElementById('news-grid');
 const heroSection = document.getElementById('hero-section');
 const heroTitle = document.getElementById('hero-title');
 const heroSummary = document.getElementById('hero-summary');
 const searchInput = document.getElementById('search-input');
+const paginationContainer = document.getElementById('pagination-controls');
 
-// --- CARREGAMENTO DE NOTÍCIAS ---
+// --- VARIÁVEIS DE ESTADO DA PAGINAÇÃO ---
+let todasNoticias = [];
+let paginaAtual = 1;
+const noticiasPorPagina = 3;
+
+// --- CARREGAR NOTÍCIAS DO FIREBASE ---
 async function carregarNoticias(filtro = "") {
     if (!grid) return;
 
@@ -41,147 +42,138 @@ async function carregarNoticias(filtro = "") {
         const q = query(collection(db, "noticias"), orderBy("data", "desc"));
         const querySnapshot = await getDocs(q);
         
+        const termo = filtro.toLowerCase().trim();
         todasNoticias = [];
-        querySnapshot.forEach(doc => {
-            todasNoticias.push({ id: doc.id, ...doc.data() });
+        
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const noTitulo = data.titulo.toLowerCase().includes(termo);
+            const noResumo = data.resumo.toLowerCase().includes(termo);
+            
+            if (termo === "" || noTitulo || noResumo) {
+                todasNoticias.push({ id: doc.id, ...data });
+            }
         });
 
-        renderizarPagina(filtro);
+        // Visibilidade do Hero baseada na busca
+        if (heroSection) {
+            heroSection.style.display = termo !== "" ? "none" : "block";
+        }
+
+        renderizarPagina(1); // Sempre inicia na página 1 após busca ou carga inicial
+
     } catch (error) {
         console.error("Erro ao carregar notícias: ", error);
     }
 }
 
-function renderizarPagina(filtro = "") {
-    const termo = filtro.toLowerCase().trim();
-    
-    // Filtrar localmente
-    const noticiasFiltradas = todasNoticias.filter(data => {
-        return data.titulo.toLowerCase().includes(termo) || 
-               data.resumo.toLowerCase().includes(termo);
+// --- RENDERIZAR UMA PÁGINA ESPECÍFICA ---
+function renderizarPagina(pagina) {
+    paginaAtual = pagina;
+    grid.innerHTML = "";
+    const termo = searchInput ? searchInput.value.trim() : "";
+
+    if (todasNoticias.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Nenhuma notícia encontrada.</p>`;
+        if (paginationContainer) paginationContainer.innerHTML = "";
+        return;
+    }
+
+    // Lógica do Hero (Destaque): Só aparece na página 1 e sem filtro de busca
+    if (paginaAtual === 1 && termo === "") {
+        // Agora acessamos a notícia sem removê-la do array original
+        const destaque = todasNoticias[0]; 
+        if (heroTitle) heroTitle.innerHTML = `<a href="post.html?id=${destaque.id}">${destaque.titulo}</a>`;
+        if (heroSummary) heroSummary.innerText = destaque.resumo;
+    }
+
+    // Criamos a lista para a grade (mantendo a primeira notícia também)
+    let noticiasParaGrade = [...todasNoticias];
+
+    // Cálculo do fatiamento (slice) para exibir apenas o limite definido por página
+    const inicio = (paginaAtual - 1) * noticiasPorPagina;
+    const fim = inicio + noticiasPorPagina;
+    const noticiasExibidas = noticiasParaGrade.slice(inicio, fim);
+
+    noticiasExibidas.forEach((data) => {
+        const card = document.createElement('article');
+        card.className = 'news-card';
+        card.innerHTML = `
+            <a href="post.html?id=${data.id}" style="text-decoration: none; color: inherit;">
+                <img src="${data.imagem || 'https://via.placeholder.com/400x250'}" class="card-image">
+                <span class="news-date">${formatDate(data.data)}</span>
+                <h4>${data.titulo}</h4>
+                <p class="news-excerpt">${data.resumo}</p>
+            </a>
+        `;
+        grid.appendChild(card);
     });
 
-    // Lógica do Hero (Só na pág 1 e sem pesquisa)
-    if (heroSection) {
-        if (termo === "" && paginaAtual === 1 && noticiasFiltradas.length > 0) {
-            heroSection.style.display = "block";
-            const destaque = noticiasFiltradas[0];
-            heroTitle.innerHTML = `<a href="post.html?id=${destaque.id}" style="color:inherit; text-decoration:none;">${destaque.titulo}</a>`;
-            heroSummary.innerText = destaque.resumo;
-        } else {
-            heroSection.style.display = "none";
-        }
-    }
-
-    // Paginação (Slice)
-    const indiceInicial = (paginaAtual - 1) * noticiasPorPagina;
-    const indiceFinal = indiceInicial + noticiasPorPagina;
-    const noticiasExibidas = noticiasFiltradas.slice(indiceInicial, indiceFinal);
-
-    grid.innerHTML = "";
-
-    if (noticiasExibidas.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Nenhuma notícia encontrada.</p>`;
-    } else {
-        noticiasExibidas.forEach((data) => {
-            const card = document.createElement('article');
-            card.className = 'news-card';
-            card.innerHTML = `
-                <a href="post.html?id=${data.id}" style="text-decoration: none; color: inherit;">
-                    <img src="${data.imagem || 'https://via.placeholder.com/400x250'}" class="card-image">
-                    <span class="news-date">${formatDate(data.data)}</span>
-                    <h4>${data.titulo}</h4>
-                    <p class="news-excerpt">${data.resumo}</p>
-                </a>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    renderizarControlesPaginacao(noticiasFiltradas.length);
+    renderizarControlesPagina(noticiasParaGrade.length);
 }
 
-function renderizarControlesPaginacao(totalItens) {
-    let paginacaoContainer = document.getElementById('pagination-controls');
+// --- GERAR BOTÕES DE PAGINAÇÃO < | 1 2 3 | > ---
+function renderizarControlesPagina(totalItens) {
+    if (!paginationContainer) return;
     
-    if (!paginacaoContainer) {
-        paginacaoContainer = document.createElement('div');
-        paginacaoContainer.id = 'pagination-controls';
-        paginacaoContainer.style.cssText = "display:flex; justify-content:center; align-items:center; gap:10px; margin: 40px 0; grid-column: 1/-1;";
-        grid.after(paginacaoContainer);
-    }
-
     const totalPaginas = Math.ceil(totalItens / noticiasPorPagina);
-    paginacaoContainer.innerHTML = "";
+    paginationContainer.innerHTML = "";
 
     if (totalPaginas <= 1) return;
 
-    // Botão Anterior <
-    const btnAnt = document.createElement('button');
-    btnAnt.innerHTML = "&#10094;"; 
-    estilizarSeta(btnAnt, paginaAtual > 1);
-    if (paginaAtual > 1) btnAnt.onclick = () => mudarPagina(paginaAtual - 1);
-    paginacaoContainer.appendChild(btnAnt);
+    // Botão Voltar <
+    const btnPrev = document.createElement('button');
+    btnPrev.className = 'pagination-btn';
+    btnPrev.innerHTML = "&lt;";
+    btnPrev.disabled = paginaAtual === 1;
+    btnPrev.onclick = () => {
+        renderizarPagina(paginaAtual - 1);
+        window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+    };
+    paginationContainer.appendChild(btnPrev);
 
     // Números das Páginas
     for (let i = 1; i <= totalPaginas; i++) {
         const btnNum = document.createElement('button');
+        btnNum.className = `pagination-btn ${i === paginaAtual ? 'active' : ''}`;
         btnNum.innerText = i;
-        const isAtiva = (i === paginaAtual);
-        
-        btnNum.style.cssText = `
-            border: none;
-            background: none;
-            padding: 5px 12px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.2rem;
-            font-weight: ${isAtiva ? '700' : '400'};
-            color: ${isAtiva ? '#000' : '#888'};
-            border-bottom: ${isAtiva ? '3px solid #000' : '3px solid transparent'};
-            transition: 0.3s;
-        `;
-        
-        btnNum.onclick = () => mudarPagina(i);
-        paginacaoContainer.appendChild(btnNum);
+        btnNum.onclick = () => {
+            renderizarPagina(i);
+            window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+        };
+        paginationContainer.appendChild(btnNum);
     }
 
     // Botão Próximo >
-    const btnProx = document.createElement('button');
-    btnProx.innerHTML = "&#10095;";
-    estilizarSeta(btnProx, paginaAtual < totalPaginas);
-    if (paginaAtual < totalPaginas) btnProx.onclick = () => mudarPagina(paginaAtual + 1);
-    paginacaoContainer.appendChild(btnProx);
+    const btnNext = document.createElement('button');
+    btnNext.className = 'pagination-btn';
+    btnNext.innerHTML = "&gt;";
+    btnNext.disabled = paginaAtual === totalPaginas;
+    btnNext.onclick = () => {
+        renderizarPagina(paginaAtual + 1);
+        window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+    };
+    paginationContainer.appendChild(btnNext);
 }
 
-function estilizarSeta(btn, ativo) {
-    btn.style.cssText = `
-        border: none;
-        background: none;
-        font-size: 1.3rem;
-        cursor: ${ativo ? 'pointer' : 'not-allowed'};
-        opacity: ${ativo ? '1' : '0.2'};
-        padding: 10px;
-        color: #000;
-        transition: 0.2s;
-    `;
+// --- EVENTO DE BUSCA ---
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        carregarNoticias(e.target.value);
+    });
 }
 
-function mudarPagina(n) {
-    paginaAtual = n;
-    renderizarPagina(searchInput ? searchInput.value : "");
-    window.scrollTo({ top: grid.offsetTop - 120, behavior: 'smooth' });
-}
-
+// --- FORMATAR DATA ---
 function formatDate(timestamp) {
     if (!timestamp) return "";
-    const date = timestamp.toDate();
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
-// --- MODAL DE AUTENTICAÇÃO ---
-window.openAuthModal = () => document.getElementById('auth-modal-overlay')?.classList.remove('hidden');
-window.closeAuthModal = () => document.getElementById('auth-modal-overlay')?.classList.add('hidden');
+// --- GESTÃO DE AUTENTICAÇÃO ---
+window.openAuthModal = () => document.getElementById('auth-modal-root').classList.remove('hidden');
+window.closeAuthModal = () => document.getElementById('auth-modal-root').classList.add('hidden');
+
 window.toggleAuthStep = (step) => {
     const loginStep = document.getElementById('login-step');
     const signupStep = document.getElementById('signup-step');
@@ -194,19 +186,29 @@ window.toggleAuthStep = (step) => {
     }
 };
 
-// Eventos de Autenticação
 const signupForm = document.getElementById('reader-signup-form');
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nome = document.getElementById('r-signup-name').value;
         const email = document.getElementById('r-signup-email').value;
         const pass = document.getElementById('r-signup-pass').value;
+        const name = document.getElementById('r-signup-displayname').value;
+        const username = document.getElementById('r-signup-username').value;
+
         try {
-            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-            await updateProfile(userCred.user, { displayName: nome });
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            await updateProfile(userCredential.user, { displayName: name });
+            await setDoc(doc(db, "usuarios", userCredential.user.uid), {
+                nome: name,
+                username: username,
+                email: email,
+                tipo: 'leitor'
+            });
+            alert("Conta criada com sucesso!");
             closeAuthModal();
-        } catch (error) { alert("Erro: " + error.message); }
+        } catch (error) {
+            alert("Erro ao criar conta: " + error.message);
+        }
     });
 }
 
@@ -219,32 +221,28 @@ if (loginForm) {
         try {
             await signInWithEmailAndPassword(auth, email, pass);
             closeAuthModal();
-        } catch (error) { alert("Erro: " + error.message); }
+        } catch (error) {
+            alert("Erro no login: " + error.message);
+        }
     });
 }
 
 document.getElementById('btn-logout')?.addEventListener('click', () => signOut(auth));
 
-// Monitor de Login
 onAuthStateChanged(auth, (user) => {
     const loggedOutDiv = document.getElementById('user-logged-out');
     const loggedInDiv = document.getElementById('user-logged-in');
     const nameDisplay = document.getElementById('user-name-display');
+
     if (user) {
-        loggedOutDiv?.classList.add('hidden');
-        loggedInDiv?.classList.remove('hidden');
+        if (loggedOutDiv) loggedOutDiv.classList.add('hidden');
+        if (loggedInDiv) loggedInDiv.classList.remove('hidden');
         if (nameDisplay) nameDisplay.innerText = user.displayName || "Leitor";
     } else {
-        loggedOutDiv?.classList.remove('hidden');
-        loggedInDiv?.classList.add('hidden');
+        if (loggedOutDiv) loggedOutDiv.classList.remove('hidden');
+        if (loggedInDiv) loggedInDiv.classList.add('hidden');
     }
 });
 
-// Inicialização e Busca
+// Inicialização
 carregarNoticias();
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        paginaAtual = 1;
-        renderizarPagina(e.target.value);
-    });
-}

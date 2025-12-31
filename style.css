@@ -245,3 +245,28 @@ body {
     .article-title { font-size: 2rem; }
     .article-body { font-size: 1.05rem; }
 }
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+.pagination-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: 0.2s;
+}
+.pagination-btn.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+.pagination-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

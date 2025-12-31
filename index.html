@@ -46,6 +46,36 @@
         #search-input:focus {
             border-color: #000;
         }
+
+        /* ESTILOS DE PAGINAÇÃO */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 40px 0;
+        }
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .pagination-btn.active {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+        .pagination-btn:hover:not(:disabled):not(.active) {
+            background: #f0f0f0;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -119,8 +149,9 @@
             <h3>Últimas Notícias</h3>
         </div>
         
-        <div id="news-grid" class="news-grid">
-            </div>
+        <div id="news-grid" class="news-grid"></div>
+
+        <div id="pagination-controls" class="pagination-container"></div>
     </main>
 
     <footer class="site-footer">
