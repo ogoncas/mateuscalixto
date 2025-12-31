@@ -7,201 +7,182 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
+    <link rel="icon" href="favicon.png" type="image/png">
+
     <style>
         .admin-wrapper { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
         label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #333; }
         input, textarea { padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem; }
-        button { padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-primary { background: #000; color: #fff; width: 100%; }
+        textarea { resize: vertical; min-height: 150px; }
+        
+        .btn-block { padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: 0.2s; }
+        .btn-primary { background: #000; color: #fff; }
         .btn-primary:hover { background: #333; }
-        .btn-cancel { background: #f0f0f0; color: #333; margin-top: 10px; width: 100%; }
         
-        /* Lista de Notícias */
-        .news-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #eee; margin-bottom: 10px; border-radius: 4px; }
-        .news-info h4 { margin: 0; font-family: 'Playfair Display', serif; }
-        .news-info small { color: #888; }
-        .actions { display: flex; gap: 10px; }
-        .btn-edit { background: #e3f2fd; color: #1976d2; padding: 8px 12px; font-size: 0.8rem; }
-        .btn-delete { background: #ffebee; color: #c62828; padding: 8px 12px; font-size: 0.8rem; }
-        
-        .header-admin { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-        .logout-link { font-size: 0.8rem; color: #c62828; cursor: pointer; text-decoration: underline; }
+        .posts-list { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
+        .post-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f5f5f5; }
+        .post-info h4 { margin: 0; font-family: 'Playfair Display', serif; }
+        .post-actions button { margin-left: 10px; padding: 5px 10px; cursor: pointer; border: 1px solid #ddd; background: #fff; border-radius: 4px; font-size: 0.8rem; }
+        .btn-delete { color: red; border-color: #ffcccc !important; }
+
+        /* Overlay de carregamento para a verificação de segurança */
+        #loading-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background:#fff;
+            display:flex; align-items:center; justify-content:center; z-index:9999;
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
 <body>
 
-    <div class="admin-wrapper">
-        <header class="header-admin">
-            <h2 id="panel-title">Acesso Restrito</h2>
-            <span id="logout-btn" class="logout-link hidden">Sair do Painel</span>
-        </header>
+    <div id="loading-overlay">Verificando permissões...</div>
 
-        <div id="login-section">
-            <p>Identifique-se para gerenciar o mateuscalixto.com.br</p>
-            <form id="login-form">
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" id="login-email" required>
-                </div>
-                <div class="form-group">
-                    <label>Senha</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="submit" class="btn-primary">Entrar</button>
-            </form>
+    <header class="site-header">
+        <div class="container">
+            <div class="brand">
+                <h1>Painel Admin</h1>
+                <a href="index.html" style="text-decoration:none; color:#666; font-size:0.9rem;">← Voltar para o Site</a>
+            </div>
         </div>
+    </header>
 
-        <div id="admin-panel" class="hidden">
+    <main class="container">
+        <div class="admin-wrapper">
+            <h2 style="margin-bottom: 25px; font-family: 'Playfair Display', serif;">Gerenciar Notícias</h2>
+            
             <form id="post-form">
-                <input type="hidden" id="edit-id" value="">
+                <input type="hidden" id="edit-id">
                 
                 <div class="form-group">
-                    <label>Título da Notícia</label>
-                    <input type="text" id="titulo" required>
+                    <label for="titulo">Título da Notícia</label>
+                    <input type="text" id="titulo" placeholder="Ex: As novas tendências da economia" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Resumo Curto (Aparece na Home)</label>
-                    <input type="text" id="resumo" required>
+                    <label for="resumo">Resumo (Chamada na Home)</label>
+                    <input type="text" id="resumo" placeholder="Um breve resumo para atrair o leitor" required>
                 </div>
 
                 <div class="form-group">
-                    <label>URL da Imagem</label>
-                    <input type="text" id="imagem" placeholder="https://exemplo.com/foto.jpg">
+                    <label for="imagem">URL da Imagem</label>
+                    <input type="url" id="imagem" placeholder="https://link-da-imagem.jpg">
                 </div>
 
                 <div class="form-group">
-                    <label>Conteúdo Completo</label>
-                    <textarea id="conteudo" rows="8" required></textarea>
+                    <label for="conteudo">Conteúdo Completo (HTML aceito)</label>
+                    <textarea id="conteudo" placeholder="Escreva o corpo da notícia aqui..." required></textarea>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn-primary">Publicar Notícia</button>
-                <button type="button" id="cancel-edit" class="btn-cancel hidden">Cancelar Edição</button>
+                <button type="submit" id="submit-btn" class="btn-block btn-primary">Publicar Notícia</button>
+                <button type="button" id="cancel-edit" class="btn-block hidden" style="margin-top:10px;">Cancelar Edição</button>
             </form>
 
-            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
-
-            <h3>Notícias Publicadas</h3>
-            <div id="news-list-container">
-                </div>
+            <div class="posts-list">
+                <h3>Notícias Publicadas</h3>
+                <div id="admin-posts-container">
+                    </div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { 
-            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, 
-            onSnapshot, query, orderBy, serverTimestamp, getDoc 
+            getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // CONFIGURAÇÃO DO FIREBASE
+        // CONFIGURAÇÃO
         const firebaseConfig = {
-        apiKey: "AIzaSyDjuRApif2O4TgX2mAycKEcXULCnFSapbQ",
-        authDomain: "mateuscalixto-b8d30.firebaseapp.com",
-        projectId: "mateuscalixto-b8d30",
-        storageBucket: "mateuscalixto-b8d30.firebasestorage.app",
-        messagingSenderId: "1028342828902",
-        appId: "1:1028342828902:web:6d283c8280e7c8aa5542a7"
+            apiKey: "AIzaSyDjuRApif2O4TgX2mAycKEcXULCnFSapbQ",
+            authDomain: "mateuscalixto-b8d30.firebaseapp.com",
+            projectId: "mateuscalixto-b8d30",
+            storageBucket: "mateuscalixto-b8d30.firebasestorage.app",
+            messagingSenderId: "1028342828902",
+            appId: "1:1028342828902:web:6d283c8280e7c8aa5542a7"
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // --- CONTROLE DE ACESSO ---
-        onAuthStateChanged(auth, (user) => {
+        // --- PROTEÇÃO DE ROTA (VERIFICAÇÃO DE ADM) ---
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                document.getElementById('panel-title').innerText = "Painel de Controle";
-                loadNewsList();
+                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+                if (userDoc.exists() && userDoc.data().role === "admin") {
+                    // É admin, remove o overlay e carrega a página
+                    document.getElementById('loading-overlay').classList.add('hidden');
+                } else {
+                    alert("Acesso negado. Apenas administradores podem acessar esta página.");
+                    window.location.href = "index.html";
+                }
             } else {
-                document.getElementById('login-section').classList.remove('hidden');
-                document.getElementById('admin-panel').classList.add('hidden');
-                document.getElementById('logout-btn').classList.add('hidden');
-                document.getElementById('panel-title').innerText = "Acesso Restrito";
+                // Não logado
+                window.location.href = "index.html";
             }
         });
 
-        // LOGIN
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
+        // --- CRUD DE NOTÍCIAS ---
+
+        const postForm = document.getElementById('post-form');
+        const postsContainer = document.getElementById('admin-posts-container');
+
+        // Salvar ou Atualizar Notícia
+        postForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            try { await signInWithEmailAndPassword(auth, email, pass); } 
-            catch (error) { alert("Erro: " + error.message); }
-        });
-
-        // LOGOUT
-        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
-
-        // --- GESTÃO DE NOTÍCIAS ---
-
-        // Carregar Lista
-        function loadNewsList() {
-            const q = query(collection(db, "noticias"), orderBy("data", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const container = document.getElementById('news-list-container');
-                container.innerHTML = "";
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-                    const item = document.createElement('div');
-                    item.className = 'news-item';
-                    item.innerHTML = `
-                        <div class="news-info">
-                            <h4>${data.titulo}</h4>
-                            <small>${data.data ? new Date(data.data.toDate()).toLocaleDateString() : 'Recent'}</small>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-edit" data-id="${id}">Editar</button>
-                            <button class="btn-delete" data-id="${id}">Excluir</button>
-                        </div>
-                    `;
-                    container.appendChild(item);
-                });
-
-                // Atribuir eventos aos botões recém-criados
-                document.querySelectorAll('.btn-edit').forEach(b => b.onclick = () => editPost(b.dataset.id));
-                document.querySelectorAll('.btn-delete').forEach(b => b.onclick = () => deletePost(b.dataset.id));
-            });
-        }
-
-        // Criar ou Atualizar Post
-        document.getElementById('post-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const editId = document.getElementById('edit-id').value;
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-
+            
+            const id = document.getElementById('edit-id').value;
             const postData = {
                 titulo: document.getElementById('titulo').value,
                 resumo: document.getElementById('resumo').value,
                 imagem: document.getElementById('imagem').value,
                 conteudo: document.getElementById('conteudo').value,
-                data: serverTimestamp()
+                data: new Date()
             };
 
             try {
-                if (editId) {
-                    await updateDoc(doc(db, "noticias", editId), postData);
-                    alert("Atualizado com sucesso!");
+                if (id) {
+                    await updateDoc(doc(db, "noticias", id), postData);
+                    alert("Notícia atualizada!");
                 } else {
                     await addDoc(collection(db, "noticias"), postData);
-                    alert("Publicado com sucesso!");
+                    alert("Notícia publicada com sucesso!");
                 }
                 resetForm();
-            } catch (err) { alert("Erro: " + err.message); }
-            finally { btn.disabled = false; }
+            } catch (error) {
+                alert("Erro ao salvar: " + error.message);
+            }
         });
 
-        // Editar Post (Carregar no form)
-        async function editPost(id) {
+        // Listar Notícias (Real-time)
+        const q = query(collection(db, "noticias"), orderBy("data", "desc"));
+        onSnapshot(q, (snapshot) => {
+            postsContainer.innerHTML = "";
+            snapshot.forEach((docSnap) => {
+                const post = docSnap.data();
+                const id = docSnap.id;
+                
+                const div = document.createElement('div');
+                div.className = 'post-item';
+                div.innerHTML = `
+                    <div class="post-info">
+                        <h4>${post.titulo}</h4>
+                        <small>${post.data.toDate().toLocaleDateString()}</small>
+                    </div>
+                    <div class="post-actions">
+                        <button onclick="editPost('${id}')">Editar</button>
+                        <button class="btn-delete" onclick="deletePost('${id}')">Excluir</button>
+                    </div>
+                `;
+                postsContainer.appendChild(div);
+            });
+        });
+
+        // Funções globais para os botões da lista
+        window.editPost = async (id) => {
             const docSnap = await getDoc(doc(db, "noticias", id));
             const data = docSnap.data();
             
@@ -214,25 +195,22 @@
             document.getElementById('submit-btn').innerText = "Salvar Alterações";
             document.getElementById('cancel-edit').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        };
 
-        // Excluir Post
-        async function deletePost(id) {
+        window.deletePost = async (id) => {
             if (confirm("Deseja realmente excluir esta notícia?")) {
                 await deleteDoc(doc(db, "noticias", id));
             }
-        }
+        };
 
-        // Resetar Formulário
         function resetForm() {
-            document.getElementById('post-form').reset();
+            postForm.reset();
             document.getElementById('edit-id').value = "";
             document.getElementById('submit-btn').innerText = "Publicar Notícia";
             document.getElementById('cancel-edit').classList.add('hidden');
         }
 
         document.getElementById('cancel-edit').onclick = resetForm;
-
     </script>
 </body>
 </html>

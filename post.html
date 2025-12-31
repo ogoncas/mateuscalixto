@@ -8,8 +8,39 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <link rel="icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .hidden { display: none !important; }
+        .comments-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid #eee;
+            max-width: 800px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .auth-notice {
+            background: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .auth-notice a { color: #000; font-weight: bold; }
+        .comment-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+    </style>
 </head>
 <body>
 
@@ -17,15 +48,8 @@
         <div class="container header-content">
             <div class="brand">
                 <h1><a href="index.html" style="text-decoration:none; color:inherit;">Mateus Calixto</a></h1>
+                <span class="tagline">Análise. Fatos. Perspectiva.</span>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#">Política</a></li>
-                    <li><a href="#">Economia</a></li>
-                    <li><a href="#">Tecnologia</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
@@ -49,6 +73,23 @@
             <div id="post-body" class="article-body">
                 <p class="loading-text">Carregando o conteúdo...</p>
             </div>
+
+            <section class="comments-section">
+                <h3>Comentários</h3>
+                
+                <div id="comment-auth-notice" class="auth-notice">
+                    <p>Deseja participar da discussão? <a href="index.html">Faça login ou crie uma conta</a> na página inicial.</p>
+                </div>
+
+                <form id="comment-form" class="comment-form hidden">
+                    <textarea id="comment-text" placeholder="Escreva o seu comentário..." rows="4" required></textarea>
+                    <button type="submit" class="category-tag" style="background:#000; color:#fff; cursor:pointer; border:none; padding: 10px 25px;">Publicar Comentário</button>
+                </form>
+
+                <div id="comments-display" style="margin-top: 30px;">
+                    <p style="color:#888;">Carregando comentários...</p>
+                </div>
+            </section>
         </article>
     </main>
 

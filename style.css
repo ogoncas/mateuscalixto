@@ -55,28 +55,7 @@ body {
     display: block;
 }
 
-.main-nav {
-    margin-top: 1.5rem;
-}
 
-.main-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.main-nav a {
-    text-decoration: none;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: opacity 0.3s;
-}
-
-.main-nav a:hover {
-    opacity: 0.6;
-}
 
 /* Hero Section */
 .hero {

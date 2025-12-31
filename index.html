@@ -8,8 +8,45 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <link rel="icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Estilos específicos para o Modal de Login e Pesquisa */
+        .hidden { display: none !important; }
+        .auth-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .auth-modal {
+            background: #fff; padding: 30px; border-radius: 4px;
+            width: 100%; max-width: 400px; position: relative;
+        }
+        .auth-modal h3 { font-family: 'Playfair Display', serif; margin-bottom: 20px; }
+        .auth-modal input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .close-modal { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; }
+        .auth-bar { background: #f9f9f9; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+        
+        /* Estilo para a barra de pesquisa */
+        .search-container {
+            margin: 20px 0;
+            width: 100%;
+        }
+        #search-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        #search-input:focus {
+            border-color: #000;
+        }
+    </style>
 </head>
 <body>
 
@@ -19,19 +56,51 @@
                 <h1>Mateus Calixto</h1>
                 <span class="tagline">Análise. Fatos. Perspectiva.</span>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#" class="active">Home</a></li>
-                    <li><a href="#">Política</a></li>
-                    <li><a href="#">Economia</a></li>
-                    <li><a href="#">Tecnologia</a></li>
-                    <li><a href="#">Sobre</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
-    <section class="hero">
+    <section class="auth-bar">
+        <div class="container" style="display: flex; justify-content: flex-end; align-items: center;">
+            <div id="user-logged-out">
+                <span>Deseja comentar? </span>
+                <button onclick="openAuthModal()" style="background:none; border:none; text-decoration:underline; cursor:pointer; font-weight:600;">Entrar ou Cadastrar-se</button>
+            </div>
+            <div id="user-logged-in" class="hidden">
+                <span>Olá, <strong id="user-name-display"></strong></span>
+                <button id="btn-logout" style="margin-left:15px; color:red; background:none; border:none; cursor:pointer;">Sair</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="auth-modal-root" class="auth-modal-overlay hidden">
+        <div class="auth-modal">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            
+            <div id="login-step">
+                <h3>Entrar</h3>
+                <form id="reader-login-form">
+                    <input type="email" id="r-login-email" placeholder="E-mail" required>
+                    <input type="password" id="r-login-pass" placeholder="Senha" required>
+                    <button type="submit" class="category-tag" style="width:100%; background:#000; color:#fff; cursor:pointer;">Entrar</button>
+                </form>
+                <p style="margin-top:15px; font-size:0.8rem;">Não tem conta? <a href="javascript:void(0)" onclick="toggleAuthStep('signup')">Crie uma agora</a></p>
+            </div>
+
+            <div id="signup-step" class="hidden">
+                <h3>Criar Conta</h3>
+                <form id="reader-signup-form">
+                    <input type="text" id="r-signup-displayname" placeholder="Nome de Exibição (Como aparecerá nos comentários)" required>
+                    <input type="text" id="r-signup-username" placeholder="@username (ex: m_calixto)" required>
+                    <input type="email" id="r-signup-email" placeholder="E-mail" required>
+                    <input type="password" id="r-signup-pass" placeholder="Senha (mín. 6 caracteres)" required>
+                    <button type="submit" class="category-tag" style="width:100%; background:#000; color:#fff; cursor:pointer;">Cadastrar</button>
+                </form>
+                <p style="margin-top:15px; font-size:0.8rem;">Já tem conta? <a href="javascript:void(0)" onclick="toggleAuthStep('login')">Fazer Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero" id="hero-section">
         <div class="container">
             <div class="hero-content">
                 <span class="category-tag">Destaque do Dia</span>
@@ -42,6 +111,10 @@
     </section>
 
     <main class="container">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Pesquisar notícias por título ou resumo...">
+        </div>
+
         <div class="section-title">
             <h3>Últimas Notícias</h3>
         </div>
