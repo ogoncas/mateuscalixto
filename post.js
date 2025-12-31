@@ -44,7 +44,7 @@ async function carregarPost() {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            document.title = `${data.titulo} | Mateus Calixto`;
+            document.title = `${data.titulo} | MC.`;
             document.getElementById('post-title').innerText = data.titulo;
             document.getElementById('post-date').innerText = formatDate(data.data);
             

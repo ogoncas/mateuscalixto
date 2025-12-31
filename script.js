@@ -55,12 +55,12 @@ async function carregarNoticias(filtro = "") {
             }
         });
 
-        // Visibilidade do Hero baseada na busca
+        // MANUTENÇÃO DO HERO: Agora o heroSection permanece visível mesmo com filtro
         if (heroSection) {
-            heroSection.style.display = termo !== "" ? "none" : "block";
+            heroSection.style.display = "block";
         }
 
-        renderizarPagina(1); // Sempre inicia na página 1 após busca ou carga inicial
+        renderizarPagina(1); 
 
     } catch (error) {
         console.error("Erro ao carregar notícias: ", error);
@@ -71,29 +71,29 @@ async function carregarNoticias(filtro = "") {
 function renderizarPagina(pagina) {
     paginaAtual = pagina;
     grid.innerHTML = "";
-    const termo = searchInput ? searchInput.value.trim() : "";
 
     if (todasNoticias.length === 0) {
         grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Nenhuma notícia encontrada.</p>`;
         if (paginationContainer) paginationContainer.innerHTML = "";
+        // Opcional: esconder o hero se não houver NENHUM resultado na busca
+        if (heroSection) heroSection.style.display = "none";
         return;
+    } else {
+        if (heroSection) heroSection.style.display = "block";
     }
 
-    // Lógica do Hero (Destaque): Só aparece na página 1 e sem filtro de busca
-    if (paginaAtual === 1 && termo === "") {
-        // Agora acessamos a notícia sem removê-la do array original
+    // Lógica do Hero: Aparece na página 1, exibindo o primeiro resultado da lista (seja da busca ou geral)
+    if (paginaAtual === 1) {
         const destaque = todasNoticias[0]; 
-        if (heroTitle) heroTitle.innerHTML = `<a href="post.html?id=${destaque.id}">${destaque.titulo}</a>`;
-        if (heroSummary) heroSummary.innerText = destaque.resumo;
+        if (destaque) {
+            if (heroTitle) heroTitle.innerHTML = `<a href="post.html?id=${destaque.id}">${destaque.titulo}</a>`;
+            if (heroSummary) heroSummary.innerText = destaque.resumo;
+        }
     }
 
-    // Criamos a lista para a grade (mantendo a primeira notícia também)
-    let noticiasParaGrade = [...todasNoticias];
-
-    // Cálculo do fatiamento (slice) para exibir apenas o limite definido por página
     const inicio = (paginaAtual - 1) * noticiasPorPagina;
     const fim = inicio + noticiasPorPagina;
-    const noticiasExibidas = noticiasParaGrade.slice(inicio, fim);
+    const noticiasExibidas = todasNoticias.slice(inicio, fim);
 
     noticiasExibidas.forEach((data) => {
         const card = document.createElement('article');
@@ -109,10 +109,10 @@ function renderizarPagina(pagina) {
         grid.appendChild(card);
     });
 
-    renderizarControlesPagina(noticiasParaGrade.length);
+    renderizarControlesPagina(todasNoticias.length);
 }
 
-// --- GERAR BOTÕES DE PAGINAÇÃO < | 1 2 3 | > ---
+// --- GERAR BOTÕES DE PAGINAÇÃO ---
 function renderizarControlesPagina(totalItens) {
     if (!paginationContainer) return;
     
@@ -121,7 +121,6 @@ function renderizarControlesPagina(totalItens) {
 
     if (totalPaginas <= 1) return;
 
-    // Botão Voltar <
     const btnPrev = document.createElement('button');
     btnPrev.className = 'pagination-btn';
     btnPrev.innerHTML = "&lt;";
@@ -132,7 +131,6 @@ function renderizarControlesPagina(totalItens) {
     };
     paginationContainer.appendChild(btnPrev);
 
-    // Números das Páginas
     for (let i = 1; i <= totalPaginas; i++) {
         const btnNum = document.createElement('button');
         btnNum.className = `pagination-btn ${i === paginaAtual ? 'active' : ''}`;
@@ -144,7 +142,6 @@ function renderizarControlesPagina(totalItens) {
         paginationContainer.appendChild(btnNum);
     }
 
-    // Botão Próximo >
     const btnNext = document.createElement('button');
     btnNext.className = 'pagination-btn';
     btnNext.innerHTML = "&gt;";
