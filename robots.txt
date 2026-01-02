@@ -8,4 +8,5 @@ Disallow: /admin.html
 Allow: /
 
 # Indica onde está o mapa do seu site
-Sitemap: https://mateuscalixto-b8d30.web.app/sitemap.xml
+
+Sitemap: https://mateuscalixto.com.br/sitemap.xml
