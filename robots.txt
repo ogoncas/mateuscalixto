@@ -1,0 +1,11 @@
+# Direciona a todos os motores de busca
+User-agent: *
+
+# Impede a indexação de páginas administrativas e privadas
+Disallow: /admin.html
+
+# Permite tudo o resto
+Allow: /
+
+# Indica onde está o mapa do seu site
+Sitemap: https://mateuscalixto-b8d30.web.app/sitemap.xml

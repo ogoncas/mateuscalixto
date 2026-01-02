@@ -1,3 +1,4 @@
+/* --- VARIÁVEIS DE DESIGN --- */
 :root {
     --bg-color: #ffffff;
     --text-primary: #1a1a1a;
@@ -8,6 +9,7 @@
     --font-sans: 'Inter', sans-serif;
 }
 
+/* --- RESET E ESTILOS GERAIS --- */
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +21,7 @@ body {
     color: var(--text-primary);
     font-family: var(--font-sans);
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -27,85 +30,97 @@ body {
     padding: 0 20px;
 }
 
-/* Header */
+/* --- CABEÇALHO (HEADER) --- */
 .site-header {
     border-bottom: 1px solid var(--border-color);
-    padding: 2rem 0;
+    padding: 1.5rem 0;
     text-align: center;
     position: sticky;
     top: 0;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     z-index: 100;
 }
 
-.brand h1 {
+/* Estilo unificado para a marca (H1 na Home, P no Post) */
+.brand-name {
     font-family: var(--font-serif);
     font-size: 2.5rem;
-    letter-spacing: -1px;
+    font-weight: bold;
     color: var(--accent-color);
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -1px;
 }
 
 .tagline {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-top: 0.5rem;
+    color: var(--text-secondary);
     display: block;
+    margin-top: 5px;
 }
 
-
-
-/* Hero Section */
+/* --- SEÇÃO HERO (DESTAQUE NA HOME) --- */
 .hero {
     padding: 4rem 0;
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 850px;
 }
 
-.category-tag {
-    font-size: 0.75rem;
-    font-weight: 700;
+.hero h1, .hero h2 {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin: 1rem 0;
+    letter-spacing: -1px;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+}
+
+.hero a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+/* --- GRID DE NOTÍCIAS (HOME) --- */
+.news-section {
+    padding: 40px 0;
+}
+
+.section-title {
+    margin-bottom: 2.5rem;
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1.5rem;
+}
+
+.section-title h2, .section-title h3 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 1px solid var(--text-primary);
-    padding: 4px 8px;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-.hero h2 {
-    font-family: var(--font-serif);
-    font-size: 3rem;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-}
-
-/* News Grid */
-.section-title {
-    margin-bottom: 2rem;
-    border-left: 3px solid var(--accent-color);
-    padding-left: 1rem;
-}
-
-.section-title h3 {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
 }
 
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 3rem;
-    margin-bottom: 4rem;
 }
 
 .news-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
     transition: transform 0.3s ease;
 }
 
@@ -113,160 +128,183 @@ body {
     transform: translateY(-5px);
 }
 
+/* SEO: Aspect-ratio evita o Cumulative Layout Shift (pulo de conteúdo) */
 .card-image {
     width: 100%;
-    height: 200px;
-    background-color: #f0f0f0;
-    margin-bottom: 1rem;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
+    background-color: #f5f5f5;
+    margin-bottom: 1.2rem;
+    border-radius: 4px;
 }
 
-.news-card h4 {
+.news-card h3 {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
 }
 
-.news-date {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.news-excerpt {
+.news-card p {
     font-size: 0.95rem;
     color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-/* Footer */
-.site-footer {
-    background-color: #f9f9f9;
-    padding: 3rem 0;
-    text-align: center;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .brand h1 { font-size: 2rem; }
-    .hero h2 { font-size: 2rem; }
-    .main-nav ul { gap: 1rem; flex-wrap: wrap; }
-}
-
-/* --- Estilos para post.html --- */
-
+/* --- PÁGINA DO ARTIGO (POST) --- */
 .article-container {
-    padding-top: 3rem;
-    padding-bottom: 5rem;
-    max-width: 800px; /* Limita a largura para melhor leitura */
-}
-
-.back-link {
-    display: inline-block;
-    margin-bottom: 2rem;
-    text-decoration: none;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.back-link:hover {
-    color: var(--accent-color);
-}
-
-.article-header {
-    text-align: center;
-    margin-bottom: 2rem;
+    max-width: 800px;
+    padding-top: 4rem;
 }
 
 .article-title {
     font-family: var(--font-serif);
-    font-size: 2.5rem; /* Título grande */
-    line-height: 1.2;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
+    font-size: 3.2rem;
+    line-height: 1.1;
+    margin: 1.5rem 0;
+    letter-spacing: -1px;
 }
 
 .article-meta {
-    font-size: 0.9rem;
     color: var(--text-secondary);
-    border-top: 1px solid #eee;
-    display: inline-block;
-    padding-top: 1rem;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    font-style: italic;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.article-featured-image {
+    width: 100%;
+    margin-bottom: 3rem;
 }
 
 .article-featured-image img {
     width: 100%;
     height: auto;
-    max-height: 500px;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-radius: 2px;
-    margin-bottom: 3rem;
+    border-radius: 4px;
 }
 
 .article-body {
-    font-family: var(--font-serif); /* Serif para o corpo do texto é mais elegante */
-    font-size: 1.15rem;
-    line-height: 1.8; /* Espaçamento generoso */
-    color: #333;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.85;
+    color: #222;
 }
 
-/* Espaçamento entre parágrafos no texto */
 .article-body p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-/* Garante que o link do Hero mantenha a sofisticação */
-#hero-title a {
-    color: var(--accent-color);
-    text-decoration: none;
-    transition: opacity 0.3s ease;
+/* --- COMENTÁRIOS --- */
+.comments-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 2px solid var(--border-color);
 }
 
-#hero-title a:hover {
-    opacity: 0.7;
+.comment-item {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fdfdfd;
+    margin-bottom: 15px;
+    border-radius: 4px;
 }
 
-/* Deixa o cursor indicar que o Hero é clicável */
-.hero-content {
-    cursor: pointer;
+.comment-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    resize: vertical;
 }
 
-.hero-content a {
-    color: var(--accent-color);
+/* --- COMPONENTES --- */
+.category-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid var(--accent-color);
+    padding: 5px 12px;
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-    .article-title { font-size: 2rem; }
-    .article-body { font-size: 1.05rem; }
+.search-container {
+    margin-bottom: 3rem;
+}
+
+#search-input {
+    width: 100%;
+    padding: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#search-input:focus {
+    border-color: var(--accent-color);
 }
 
 .pagination-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 10px;
-    margin: 40px 0;
+    margin: 4rem 0;
 }
+
 .pagination-btn {
-    padding: 8px 16px;
+    padding: 10px 18px;
     border: 1px solid var(--border-color);
     background: #fff;
     cursor: pointer;
-    font-family: var(--font-sans);
-    transition: 0.2s;
+    font-weight: 600;
+    transition: 0.3s;
 }
+
 .pagination-btn.active {
     background: #000;
     color: #fff;
     border-color: #000;
 }
-.pagination-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+
+.hidden {
+    display: none !important;
+}
+
+/* --- RODAPÉ (FOOTER) --- */
+.site-footer {
+    background-color: #fcfcfc;
+    padding: 4rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 6rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 992px) {
+    .hero h1 { font-size: 2.8rem; }
+    .article-title { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+    .brand-name { font-size: 2rem; }
+    .hero h1 { font-size: 2.2rem; }
+    .article-title { font-size: 2rem; }
+    .news-grid { gap: 2rem; }
+    .article-container { padding-top: 2rem; }
 }

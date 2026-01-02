@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carregando... | Mateus Calixto</title>
+    <title>Carregando notícia... | Mateus Calixto</title>
     
+    <meta name="description" id="meta-desc" content="Leia esta notícia no portal Mateus Calixto.">
+    <meta property="og:title" id="og-title" content="Mateus Calixto | Notícias">
+    <meta property="og:description" id="og-desc" content="Confira o conteúdo completo aqui.">
+    <meta property="og:image" id="og-image" content="">
+    <meta property="og:type" content="article">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -19,6 +25,11 @@
             border-top: 2px solid #eee;
             max-width: 800px;
         }
+        .comment-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 10px;
+        }
         .comment-form textarea {
             width: 100%;
             padding: 15px;
@@ -26,19 +37,13 @@
             border-radius: 4px;
             font-family: 'Inter', sans-serif;
             margin-bottom: 10px;
-            resize: vertical;
         }
         .auth-notice {
             background: #f9f9f9;
             padding: 20px;
-            text-align: center;
             border-radius: 4px;
+            text-align: center;
             font-size: 0.9rem;
-        }
-        .auth-notice a { color: #000; font-weight: bold; }
-        .comment-item {
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
         }
     </style>
 </head>
@@ -47,28 +52,27 @@
     <header class="site-header">
         <div class="container header-content">
             <div class="brand">
-                <h1><a href="index.html" style="text-decoration:none; color:inherit;">Mateus Calixto</a></h1>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <p class="brand-name">Mateus Calixto</p>
+                </a>
                 <span class="tagline">Conteúdos Diferenciados</span>
             </div>
         </div>
     </header>
 
     <main class="container article-container">
-        
-        <a href="index.html" class="back-link">&larr; Voltar para Home</a>
-
-        <article id="article-content" class="full-article">
+        <article>
             <header class="article-header">
-                <span id="post-category" class="category-tag">Notícia</span>
+                <span class="category-tag">Notícia</span>
                 <h1 id="post-title" class="article-title">Carregando título...</h1>
                 <div class="article-meta">
-                    <span id="post-date">...</span>
+                    <span id="post-date">-- de -- de ----</span>
                 </div>
             </header>
 
-            <figure class="article-featured-image">
-                <img id="post-image" src="" alt="" style="display:none;">
-            </figure>
+            <div class="article-featured-image">
+                <img id="post-image" src="" alt="" style="display: none;">
+            </div>
 
             <div id="post-body" class="article-body">
                 <p class="loading-text">Carregando o conteúdo...</p>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://mateuscalixto-b8d30.web.app/</loc>
+        <lastmod>2025-05-20</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://mateuscalixto-b8d30.web.app/post.html?id=ID_DO_SEU_POST</loc>
+        <lastmod>2025-05-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>

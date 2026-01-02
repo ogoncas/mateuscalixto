@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mateus Calixto</title>
+    <title>Mateus Calixto | Conteúdos Diferenciados</title>
     
+    <meta name="description" content="Portal de notícias e artigos sobre tecnologia, economia e tendências por Mateus Calixto.">
+    <meta name="author" content="Mateus Calixto">
+    <link rel="canonical" href="https://mateuscalixto-b8d30.web.app">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mateuscalixto-b8d30.web.app">
+    <meta property="og:title" content="Mateus Calixto | Conteúdos Diferenciados">
+    <meta property="og:description" content="Análises exclusivas sobre o mundo contemporâneo.">
+    <meta property="og:image" content="https://mateuscalixto-b8d30.web.app/favicon.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mateus Calixto | Conteúdos Diferenciados">
+    <meta name="twitter:description" content="Análises exclusivas sobre o mundo contemporâneo.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -12,7 +26,6 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Estilos específicos para o Modal de Login e Pesquisa */
         .hidden { display: none !important; }
         .auth-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -28,68 +41,35 @@
         .close-modal { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; }
         .auth-bar { background: #f9f9f9; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
         
-        /* Estilo para a barra de pesquisa */
-        .search-container {
-            margin: 20px 0;
-            width: 100%;
-        }
+        .search-container { margin: 20px 0; width: 100%; }
         #search-input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #e5e5e5;
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
+            width: 100%; padding: 15px; border: 1px solid #e5e5e5; border-radius: 4px;
+            font-family: 'Inter', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.3s;
         }
-        #search-input:focus {
-            border-color: #000;
-        }
+        #search-input:focus { border-color: #000; }
 
-        /* ESTILOS DE PAGINAÇÃO */
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: 40px 0;
-        }
+        .pagination-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 40px 0; }
         .pagination-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--border-color);
-            background: #fff;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            transition: 0.2s;
-            font-weight: 500;
+            padding: 8px 16px; border: 1px solid var(--border-color); background: #fff;
+            cursor: pointer; font-family: var(--font-sans); transition: 0.2s; font-weight: 500;
         }
-        .pagination-btn.active {
-            background: #000;
-            color: #fff;
-            border-color: #000;
-        }
-        .pagination-btn:hover:not(:disabled):not(.active) {
-            background: #f0f0f0;
-        }
-        .pagination-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        .pagination-btn.active { background: #000; color: #fff; border-color: #000; }
+        .pagination-btn:hover:not(:disabled):not(.active) { background: #f0f0f0; }
+        .pagination-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <header class="site-header">
-        <div class="container header-content">
+        <div class="container">
             <div class="brand">
-                <h1>Mateus Calixto</h1>
+                <h1 class="brand-name">Mateus Calixto</h1>
                 <span class="tagline">Conteúdos Diferenciados</span>
             </div>
         </div>
     </header>
 
-    <section class="auth-bar">
+    <section class="auth-bar" aria-label="Barra de Autenticação">
         <div class="container" style="display: flex; justify-content: flex-end; align-items: center;">
             <div id="user-logged-out">
                 <span>Deseja comentar? </span>
@@ -103,11 +83,10 @@
     </section>
 
     <div id="auth-modal-root" class="auth-modal-overlay hidden">
-        <div class="auth-modal">
+        <div class="auth-modal" role="dialog" aria-labelledby="modal-title">
             <span class="close-modal" onclick="closeAuthModal()">&times;</span>
-            
             <div id="login-step">
-                <h3>Entrar</h3>
+                <h3 id="modal-title">Entrar</h3>
                 <form id="reader-login-form">
                     <input type="email" id="r-login-email" placeholder="E-mail" required>
                     <input type="password" id="r-login-pass" placeholder="Senha" required>
@@ -115,12 +94,11 @@
                 </form>
                 <p style="margin-top:15px; font-size:0.8rem;">Não tem conta? <a href="javascript:void(0)" onclick="toggleAuthStep('signup')">Crie uma agora</a></p>
             </div>
-
             <div id="signup-step" class="hidden">
                 <h3>Criar Conta</h3>
                 <form id="reader-signup-form">
-                    <input type="text" id="r-signup-displayname" placeholder="Nome de Exibição (Como aparecerá nos comentários)" required>
-                    <input type="text" id="r-signup-username" placeholder="@username (ex: m_calixto)" required>
+                    <input type="text" id="r-signup-displayname" placeholder="Nome de Exibição" required>
+                    <input type="text" id="r-signup-username" placeholder="@username" required>
                     <input type="email" id="r-signup-email" placeholder="E-mail" required>
                     <input type="password" id="r-signup-pass" placeholder="Senha (mín. 6 caracteres)" required>
                     <button type="submit" class="category-tag" style="width:100%; background:#000; color:#fff; cursor:pointer;">Cadastrar</button>
@@ -132,26 +110,27 @@
 
     <section class="hero" id="hero-section">
         <div class="container">
-            <div class="hero-content">
+            <article class="hero-content">
                 <span class="category-tag">Destaque</span>
-                <h2 id="hero-title">Carregando manchete principal...</h2>
+                <h1 id="hero-title">Carregando manchete principal...</h1>
                 <p id="hero-summary">Aguarde enquanto buscamos as últimas informações.</p>
-            </div>
+            </article>
         </div>
     </section>
 
     <main class="container">
         <div class="search-container">
+            <label for="search-input" class="hidden">Pesquisar notícias</label>
             <input type="text" id="search-input" placeholder="Pesquisar notícias por título ou resumo...">
         </div>
 
-        <div class="section-title">
-            <h3>Últimas Notícias</h3>
-        </div>
-        
-        <div id="news-grid" class="news-grid"></div>
-
-        <div id="pagination-controls" class="pagination-container"></div>
+        <section class="news-section">
+            <div class="section-title">
+                <h2>Últimas Notícias</h2>
+            </div>
+            <div id="news-grid" class="news-grid"></div>
+            <div id="pagination-controls" class="pagination-container"></div>
+        </section>
     </main>
 
     <footer class="site-footer">
