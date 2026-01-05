@@ -3,87 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo | MC.</title>
+    <title>Dashboard | Mateus Calixto</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="icon" href="favicon.png" type="image/png">
 
     <style>
-        .admin-wrapper { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .hidden { display: none !important; }
-        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
-        label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; color: #333; }
-        input, textarea { padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 1rem; }
-        textarea { resize: vertical; min-height: 150px; }
-        
-        .btn-block { padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: 0.2s; }
-        .btn-primary { background: #000; color: #fff; }
-        .btn-primary:hover { background: #333; }
-        
-        .posts-list { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
-        .post-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f5f5f5; }
-        .post-info h4 { margin: 0; font-family: 'Playfair Display', serif; }
-        .post-actions button { margin-left: 10px; padding: 5px 10px; cursor: pointer; border: 1px solid #ddd; background: #fff; border-radius: 4px; font-size: 0.8rem; }
-        .btn-delete { color: red; border-color: #ffcccc !important; }
+        :root {
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --primary: #1a1a1a;
+            --primary-hover: #333333;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --danger: #ef4444;
+            --success: #10b981;
+            --sidebar-width: 260px;
+        }
 
-        /* Overlay de carregamento para a verificação de segurança */
-        #loading-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%; background:#fff;
-            display:flex; align-items:center; justify-content:center; z-index:9999;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-body);
             font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .brand {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .brand span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+        }
+
+        .nav-menu {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: 0.2s;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #f9fafb;
+            color: var(--primary);
+        }
+
+        .nav-item .material-symbols-outlined {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .user-profile {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px; height: 36px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h2 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+
+        /* --- GRID LAYOUT --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr; /* Form maior, Lista menor */
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #f3f4f6;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title { font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+
+        /* --- FORMULÁRIO --- */
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: #f9fafb;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+        }
+
+        textarea { min-height: 200px; resize: vertical; line-height: 1.6; }
+
+        /* Preview de Imagem */
+        .image-preview-container {
+            width: 100%;
+            height: 200px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px dashed var(--border);
+            color: var(--text-light);
+        }
+        
+        .image-preview-container img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary { background: var(--primary); color: #fff; width: 100%; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background: #f9fafb; }
+
+        .btn-icon { padding: 8px; border-radius: 4px; }
+        .btn-delete { color: var(--danger); background: #fef2f2; }
+        .btn-edit { color: var(--text-main); background: #f3f4f6; }
+
+        /* --- LISTA DE POSTS --- */
+        .post-list-container {
+            max-height: 750px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .post-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+            background: #fff;
+        }
+
+        .post-item:hover { background: #fafafa; }
+        .post-item:last-child { border-bottom: none; }
+
+        .post-thumb {
+            width: 60px; height: 60px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: #eee;
+            flex-shrink: 0;
+        }
+
+        .post-info { flex-grow: 1; }
+        .post-info h4 { font-family: 'Playfair Display', serif; margin-bottom: 5px; font-size: 1rem; }
+        .post-info span { font-size: 0.75rem; color: var(--text-light); display: block; }
+
+        .post-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        /* --- UTILITÁRIOS --- */
+        .hidden { display: none !important; }
+        
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 100;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; } /* Em produção, adicionaria um menu toggle */
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+            .header-mobile-only { display: block; margin-bottom: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="loading-overlay">Verificando permissões...</div>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Verificando credenciais...</p>
+    </div>
 
-    <header class="site-header">
-        <div class="container">
-            <div class="brand">
-                <h1>Painel Admin</h1>
-                <a href="index.html" style="text-decoration:none; color:#666; font-size:0.9rem;">← Voltar para o Site</a>
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>MC.</h1>
+            <span>Admin Panel</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+            <a href="index.html" class="nav-item">
+                <span class="material-symbols-outlined">public</span>
+                Ver Site
+            </a>
+        </nav>
+        <div class="user-profile">
+            <div class="avatar" id="admin-avatar">A</div>
+            <div style="flex-grow:1;">
+                <p style="font-size:0.9rem; font-weight:600;" id="admin-name">Admin</p>
+                <button id="btn-logout" style="background:none; border:none; color:var(--danger); font-size:0.8rem; cursor:pointer;">Sair</button>
             </div>
         </div>
-    </header>
+    </aside>
 
-    <main class="container">
-        <div class="admin-wrapper">
-            <h2 style="margin-bottom: 25px; font-family: 'Playfair Display', serif;">Gerenciar Notícias</h2>
-            
-            <form id="post-form">
-                <input type="hidden" id="edit-id">
-                
-                <div class="form-group">
-                    <label for="titulo">Título da Notícia</label>
-                    <input type="text" id="titulo" placeholder="Ex: As novas tendências da economia" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="resumo">Resumo (Chamada na Home)</label>
-                    <input type="text" id="resumo" placeholder="Um breve resumo para atrair o leitor" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="imagem">URL da Imagem</label>
-                    <input type="url" id="imagem" placeholder="https://link-da-imagem.jpg">
-                </div>
-
-                <div class="form-group">
-                    <label for="conteudo">Conteúdo Completo (HTML aceito)</label>
-                    <textarea id="conteudo" placeholder="Escreva o corpo da notícia aqui..." required></textarea>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn-block btn-primary">Publicar Notícia</button>
-                <button type="button" id="cancel-edit" class="btn-block hidden" style="margin-top:10px;">Cancelar Edição</button>
-            </form>
-
-            <div class="posts-list">
-                <h3>Notícias Publicadas</h3>
-                <div id="admin-posts-container">
-                    </div>
+    <main class="main-content">
+        <header>
+            <div>
+                <h2>Gerenciar Notícias</h2>
+                <p style="color:var(--text-light);">Crie, edite ou exclua publicações do portal.</p>
             </div>
+        </header>
+
+        <div class="dashboard-grid">
+            
+            <section class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="material-symbols-outlined">edit_note</span>
+                        Editor de Conteúdo
+                    </h3>
+                    <button type="button" id="btn-cancel-edit" class="btn btn-outline hidden" style="font-size:0.8rem; padding: 5px 10px;">
+                        Cancelar Edição
+                    </button>
+                </div>
+
+                <form id="post-form">
+                    <input type="hidden" id="edit-id">
+
+                    <div class="form-group">
+                        <label for="titulo">Título da Matéria</label>
+                        <input type="text" id="titulo" placeholder="Ex: O futuro da economia digital" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resumo">Resumo / Subtítulo</label>
+                        <input type="text" id="resumo" placeholder="Texto curto que aparece na home..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagem">URL da Imagem de Capa</label>
+                        <input type="url" id="imagem" placeholder="https://..." required>
+                        <div class="image-preview-container" id="img-preview-box">
+                            <span>Preview da Imagem</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conteudo">Conteúdo (HTML Permitido)</label>
+                        <textarea id="conteudo" placeholder="<p>Escreva o corpo da notícia aqui...</p>" required></textarea>
+                        <small style="color: #999; margin-top: 5px; display: block;">Dica: Use tags HTML como &lt;p&gt;, &lt;b&gt;, &lt;br&gt; para formatar.</small>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
+                        <span class="material-symbols-outlined">publish</span>
+                        Publicar Notícia
+                    </button>
+                </form>
+            </section>
+
+            <section class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="material-symbols-outlined">list</span>
+                        Publicações Recentes
+                    </h3>
+                </div>
+                <div class="post-list-container" id="admin-posts-container">
+                    <p style="text-align:center; padding:20px; color:#999;">Carregando...</p>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -92,7 +402,7 @@
         import { 
             getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // CONFIGURAÇÃO
         const firebaseConfig = {
@@ -108,59 +418,106 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- PROTEÇÃO DE ROTA (VERIFICAÇÃO DE ADM) ---
+        // --- AUTH E SEGURANÇA ---
         onAuthStateChanged(auth, async (user) => {
+            const overlay = document.getElementById('loading-overlay');
+            
             if (user) {
+                // Busca dados adicionais do usuário para confirmar role e nome
                 const userDoc = await getDoc(doc(db, "usuarios", user.uid));
-                if (userDoc.exists() && userDoc.data().role === "admin") {
-                    // É admin, remove o overlay e carrega a página
-                    document.getElementById('loading-overlay').classList.add('hidden');
+                
+                if (userDoc.exists() && userDoc.data().tipo === "admin") { // Alterado para 'tipo' conforme seu script.js, ou mantenha verificação segura
+                    // Sucesso
+                    document.getElementById('admin-name').innerText = user.displayName || "Administrador";
+                    document.getElementById('admin-avatar').innerText = (user.displayName || "A").charAt(0).toUpperCase();
+                    overlay.classList.add('hidden');
                 } else {
-                    alert("Acesso negado. Apenas administradores podem acessar esta página.");
+                    // Usuário logado mas não é admin
+                    // OBS: No seu script.js original você usava 'role' ou 'tipo'. Adaptei para garantir segurança.
+                    // Se no seu DB for 'tipo: leitor', ele cai aqui.
+                    alert("Acesso restrito a administradores.");
                     window.location.href = "index.html";
                 }
             } else {
-                // Não logado
                 window.location.href = "index.html";
             }
         });
 
-        // --- CRUD DE NOTÍCIAS ---
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
 
+        // --- PREVIEW DE IMAGEM ---
+        const imgInput = document.getElementById('imagem');
+        const imgPreviewBox = document.getElementById('img-preview-box');
+
+        imgInput.addEventListener('input', () => {
+            const url = imgInput.value;
+            if (url) {
+                imgPreviewBox.innerHTML = `<img src="${url}" onerror="this.src='https://via.placeholder.com/400?text=Erro+na+Imagem'">`;
+            } else {
+                imgPreviewBox.innerHTML = `<span>Preview da Imagem</span>`;
+            }
+        });
+
+        // --- CRUD NOTÍCIAS ---
         const postForm = document.getElementById('post-form');
         const postsContainer = document.getElementById('admin-posts-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('btn-cancel-edit');
 
-        // Salvar ou Atualizar Notícia
+        // Salvar / Editar
         postForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // UI Feedback
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processando...";
+
             const id = document.getElementById('edit-id').value;
             const postData = {
                 titulo: document.getElementById('titulo').value,
                 resumo: document.getElementById('resumo').value,
                 imagem: document.getElementById('imagem').value,
                 conteudo: document.getElementById('conteudo').value,
-                data: new Date()
+                data: new Date() // Atualiza data ao editar? Se não quiser, faça check se é new doc
             };
+
+            // Se for edição, talvez não queira mudar a data, comente a linha 'data' acima se preferir manter data original
+            if(id) {
+                delete postData.data; // Remove data para não alterar a data de publicação original na edição
+            } else {
+                postData.data = new Date(); // Adiciona data apenas na criação
+            }
 
             try {
                 if (id) {
                     await updateDoc(doc(db, "noticias", id), postData);
-                    alert("Notícia atualizada!");
+                    showToast("Notícia atualizada com sucesso!");
                 } else {
                     await addDoc(collection(db, "noticias"), postData);
-                    alert("Notícia publicada com sucesso!");
+                    showToast("Notícia publicada com sucesso!");
                 }
                 resetForm();
             } catch (error) {
-                alert("Erro ao salvar: " + error.message);
+                alert("Erro: " + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         });
 
-        // Listar Notícias (Real-time)
+        // Listagem em Tempo Real
         const q = query(collection(db, "noticias"), orderBy("data", "desc"));
         onSnapshot(q, (snapshot) => {
             postsContainer.innerHTML = "";
+            
+            if (snapshot.empty) {
+                postsContainer.innerHTML = "<p style='text-align:center; padding:20px;'>Nenhuma notícia encontrada.</p>";
+                return;
+            }
+
             snapshot.forEach((docSnap) => {
                 const post = docSnap.data();
                 const id = docSnap.id;
@@ -168,22 +525,29 @@
                 const div = document.createElement('div');
                 div.className = 'post-item';
                 div.innerHTML = `
+                    <img src="${post.imagem || 'https://via.placeholder.com/60'}" class="post-thumb">
                     <div class="post-info">
                         <h4>${post.titulo}</h4>
-                        <small>${post.data.toDate().toLocaleDateString()}</small>
+                        <span>${post.data ? post.data.toDate().toLocaleDateString('pt-BR') : 'Data desc.'}</span>
                     </div>
                     <div class="post-actions">
-                        <button onclick="editPost('${id}')">Editar</button>
-                        <button class="btn-delete" onclick="deletePost('${id}')">Excluir</button>
+                        <button class="btn btn-icon btn-edit" onclick="editPost('${id}')" title="Editar">
+                            <span class="material-symbols-outlined" style="font-size:18px;">edit</span>
+                        </button>
+                        <button class="btn btn-icon btn-delete" onclick="deletePost('${id}')" title="Excluir">
+                            <span class="material-symbols-outlined" style="font-size:18px;">delete</span>
+                        </button>
                     </div>
                 `;
                 postsContainer.appendChild(div);
             });
         });
 
-        // Funções globais para os botões da lista
+        // Funções Globais (Edit/Delete)
         window.editPost = async (id) => {
             const docSnap = await getDoc(doc(db, "noticias", id));
+            if (!docSnap.exists()) return;
+
             const data = docSnap.data();
             
             document.getElementById('titulo').value = data.titulo;
@@ -192,25 +556,55 @@
             document.getElementById('conteudo').value = data.conteudo;
             document.getElementById('edit-id').value = id;
             
-            document.getElementById('submit-btn').innerText = "Salvar Alterações";
-            document.getElementById('cancel-edit').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Disparar evento para carregar preview da imagem
+            document.getElementById('imagem').dispatchEvent(new Event('input'));
+
+            // UI Changes
+            submitBtn.innerHTML = '<span class="material-symbols-outlined">save</span> Salvar Alterações';
+            cancelBtn.classList.remove('hidden');
+            
+            // Scroll para o topo do form
+            document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deletePost = async (id) => {
-            if (confirm("Deseja realmente excluir esta notícia?")) {
-                await deleteDoc(doc(db, "noticias", id));
+            if (confirm("Tem certeza que deseja apagar esta notícia? Essa ação é irreversível.")) {
+                try {
+                    await deleteDoc(doc(db, "noticias", id));
+                    showToast("Notícia excluída.");
+                } catch (e) {
+                    alert("Erro ao excluir: " + e.message);
+                }
             }
         };
 
         function resetForm() {
             postForm.reset();
             document.getElementById('edit-id').value = "";
-            document.getElementById('submit-btn').innerText = "Publicar Notícia";
-            document.getElementById('cancel-edit').classList.add('hidden');
+            document.getElementById('img-preview-box').innerHTML = `<span>Preview da Imagem</span>`;
+            
+            submitBtn.innerHTML = '<span class="material-symbols-outlined">publish</span> Publicar Notícia';
+            cancelBtn.classList.add('hidden');
         }
 
-        document.getElementById('cancel-edit').onclick = resetForm;
+        cancelBtn.addEventListener('click', resetForm);
+
+        // Helper Simples de Toast (Notificação flutuante)
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.innerText = message;
+            toast.style.cssText = `
+                position: fixed; bottom: 20px; right: 20px;
+                background: #1a1a1a; color: #fff; padding: 12px 24px;
+                border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000; animation: fadeIn 0.3s; font-size: 0.9rem;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>
