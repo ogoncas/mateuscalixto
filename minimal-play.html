@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Play | 0.1</title>
+    <title>Minimal Play | 0.2</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
             --bg-body: #050507;
@@ -16,6 +18,7 @@
             --border-glass: rgba(255, 255, 255, 0.1);
             --font-family: 'Inter', system-ui, -apple-system, sans-serif;
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --danger: #ff7675;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -28,7 +31,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* CORREÇÃO: Removido overflow:hidden para permitir scroll no mobile */
             overflow-y: auto;
             padding: 20px 0;
         }
@@ -48,7 +50,6 @@
             display: flex;
             width: 95%;
             max-width: 1200px;
-            /* CORREÇÃO: Removido height fixo de 85vh para evitar corte de conteúdo */
             min-height: 85vh;
             gap: 30px;
             z-index: 1;
@@ -109,9 +110,10 @@
 
         .time-stamps { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); margin-top: 12px; }
 
-        .controls { display: flex; align-items: center; gap: 30px; }
+        .controls { display: flex; align-items: center; gap: 25px; }
         .btn { background: none; border: none; color: #fff; cursor: pointer; transition: var(--transition); opacity: 0.7; }
         .btn:hover { opacity: 1; transform: scale(1.1); }
+        .btn.active { color: var(--accent); opacity: 1; }
         
         .btn-play { 
             width: 85px; height: 85px; border-radius: 50%; 
@@ -142,8 +144,27 @@
             100% { box-shadow: 0 0 0px rgba(162, 155, 254, 0.2); }
         }
 
-        /* CORREÇÃO: Altura máxima definida para permitir scroll interno na biblioteca */
-        .songs-list { flex: 1; overflow-y: auto; margin-top: 25px; max-height: 500px; }
+        .search-container {
+            margin: 20px 0 10px 0;
+            position: relative;
+        }
+        #searchBar {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        #searchBar:focus {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 15px rgba(162, 155, 254, 0.1);
+        }
+
+        .songs-list { flex: 1; overflow-y: auto; margin-top: 15px; max-height: 500px; }
         .song-item {
             padding: 15px; border-radius: 20px; cursor: pointer;
             display: flex; align-items: center; justify-content: space-between;
@@ -157,10 +178,6 @@
             border-color: var(--accent);
             background: rgba(162, 155, 254, 0.1);
         }
-
-        .song-actions { display: flex; gap: 12px; }
-        .btn-del { background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
-        .btn-del:hover { color: #ff7675; }
 
         #toggleEdit {
             background: rgba(255,255,255,0.05);
@@ -199,13 +216,27 @@
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass);
             border-radius: 12px; color: #fff; font-size: 1rem;
         }
-        .modal-buttons { display: flex; gap: 15px; margin-top: 10px; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
         .btn-save { flex: 1; background: var(--accent); color: #000; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
         .btn-cancel { flex: 1; background: rgba(255,255,255,0.05); color: #fff; padding: 15px; border-radius: 12px; border: none; cursor: pointer; }
+        
+        .btn-modal-del {
+            background: rgba(255, 118, 117, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn-modal-del:hover { background: var(--danger); color: #000; }
 
         .drop-active { border: 2px dashed var(--accent) !important; background: rgba(162,155,254,0.1) !important; }
 
-        /* CORREÇÃO: Media Query ajustada para permitir scroll vertical natural */
         @media (max-width: 900px) {
             body { align-items: flex-start; padding-top: 20px; }
             .app-container { flex-direction: column; height: auto; min-height: 100vh; overflow-y: visible; margin-bottom: 50px; }
@@ -221,12 +252,12 @@
     <div class="app-container" id="app-box">
         <main class="player-card" id="playerMain">
             <div class="art-viewport">
-                <img id="art-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Capa">
+                <img id="art-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cover">
             </div>
 
             <div class="song-info">
                 <h1 id="title">Minimal Play</h1>
-                <p id="artist">Selecione uma música</p>
+                <p id="artist">Select a song</p>
             </div>
 
             <div class="progress-section">
@@ -238,45 +269,68 @@
             </div>
 
             <div class="controls">
-                <button class="btn btn-secondary" id="prev"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-                <button class="btn btn-play" id="play"><svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor" id="play-icon"><path d="M8 5v14l11-7z"/></svg></button>
-                <button class="btn btn-secondary" id="next"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                <button class="btn" id="shuffle" title="Shuffle Mode">
+                    <i class="fas fa-shuffle" style="font-size: 1.2rem;"></i>
+                </button>
+                <button class="btn" id="prev">
+                    <i class="fas fa-backward-step" style="font-size: 1.2rem;"></i>
+                </button>
+                <button class="btn btn-play" id="play">
+                    <i class="fas fa-play" id="play-icon" style="font-size: 2rem; margin-left: 5px;"></i>
+                </button>
+                <button class="btn" id="next">
+                    <i class="fas fa-forward-step" style="font-size: 1.2rem;"></i>
+                </button>
             </div>
 
             <div style="margin-top: 25px; display: flex; align-items: center; gap: 15px; opacity: 0.6; width: 100%; max-width: 200px;">
-                <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+                <i class="fas fa-volume-high" style="color: white; font-size: 0.9rem;"></i>
                 <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8" style="flex: 1; accent-color: var(--accent);">
             </div>
         </main>
 
         <aside class="playlist-panel" id="playlistPanel">
             <header style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                <h3 style="font-size: 0.7rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase;">Biblioteca</h3>
+                <h3 style="font-size: 0.7rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase;">Library</h3>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <button id="toggleEdit">Editar: Off</button>
-                    <label for="upload" style="cursor: pointer; color: var(--accent); font-size: 0.7rem; font-weight: 800; background: rgba(162, 155, 254, 0.1); padding: 8px 12px; border-radius: 12px;">+ ADD</label>
+                    <button id="toggleEdit">Edit: Off</button>
+                    <label for="upload" style="cursor: pointer; color: var(--accent); font-size: 0.7rem; font-weight: 800; background: rgba(162, 155, 254, 0.1); padding: 8px 12px; border-radius: 12px;">
+                        <i class="fas fa-plus"></i> ADD
+                    </label>
                 </div>
                 <input type="file" id="upload" multiple accept="audio/*" style="display:none">
             </header>
+
+            <div class="search-container">
+                <input type="text" id="searchBar" placeholder="Search songs or artists...">
+            </div>
+
             <div class="songs-list" id="list"></div>
         </aside>
     </div>
 
     <div class="modal-overlay" id="editModal">
         <div class="modal-content">
-            <h2>Editar Música</h2>
+            <h2>Edit Track Info</h2>
             <div style="text-align: center; margin-bottom: 25px;">
                 <label for="editCoverInput" style="cursor: pointer; position: relative; display: inline-block;">
                     <img id="editCoverPreview" src="" style="width: 140px; height: 140px; border-radius: 20px; object-fit: cover; border: 2px solid var(--accent);">
-                    <div style="position: absolute; bottom: 5px; right: 5px; background: var(--accent); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">✎</div>
+                    <div style="position: absolute; bottom: 5px; right: 5px; background: var(--accent); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                        <i class="fas fa-pen"></i>
+                    </div>
                 </label>
                 <input type="file" id="editCoverInput" accept="image/*" style="display: none;">
             </div>
-            <input type="text" id="editTitle" placeholder="Título">
-            <input type="text" id="editArtist" placeholder="Artista">
+            <input type="text" id="editTitle" placeholder="Title">
+            <input type="text" id="editArtist" placeholder="Artist">
             <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-                <button class="btn-save" id="saveEditBtn">Salvar</button>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button class="btn-save" id="saveEditBtn">Save Changes</button>
+                </div>
+                <button class="btn-modal-del" id="modalDeleteBtn">
+                    <i class="fas fa-trash-can" style="margin-right: 5px;"></i> DELETE FROM LIBRARY
+                </button>
             </div>
         </div>
     </div>
@@ -287,6 +341,8 @@
         const dbName = "MinimalPlayDB";
         const audio = document.getElementById('audio');
         const listDiv = document.getElementById('list');
+        const searchBar = document.getElementById('searchBar');
+        const shuffleBtn = document.getElementById('shuffle');
         const playlistPanel = document.getElementById('playlistPanel');
         const playBtn = document.getElementById('play');
         const playIcon = document.getElementById('play-icon');
@@ -294,10 +350,12 @@
         const toggleEditBtn = document.getElementById('toggleEdit');
         
         let songs = [];
+        let originalOrder = [];
         let currentIndex = 0;
         let editingSongId = null;
         let currentEditCoverBase64 = null;
         let isEditMode = false;
+        let isShuffle = false;
 
         // --- DATABASE ---
         const dbRequest = indexedDB.open(dbName, 1);
@@ -322,7 +380,7 @@
             const songData = {
                 file: file,
                 title: tags.title || file.name.replace(/\.[^/.]+$/, ""),
-                artist: tags.artist || "Artista Desconhecido",
+                artist: tags.artist || "Unknown Artist",
                 cover: cover
             };
 
@@ -333,22 +391,58 @@
         function loadFromDB() {
             const store = dbRequest.result.transaction("library", "readonly").objectStore("library");
             store.getAll().onsuccess = (e) => {
-                songs = e.target.result.map(s => ({ ...s, url: URL.createObjectURL(s.file) }));
+                const data = e.target.result.map(s => ({ ...s, url: URL.createObjectURL(s.file) }));
+                originalOrder = [...data];
+                
+                if (isShuffle) {
+                    applyShuffleLogic();
+                } else {
+                    songs = [...originalOrder];
+                }
+                
                 render();
                 if (songs.length > 0 && !audio.src) loadSong(0, false);
                 else if (songs.length > 0) updateCurrentDisplay();
             };
         }
 
-        function removeSong(id, e) {
-            e.stopPropagation();
-            dbRequest.result.transaction("library", "readwrite").objectStore("library").delete(id).onsuccess = () => loadFromDB();
+        // --- SEARCH & SHUFFLE ---
+        searchBar.oninput = (e) => render(e.target.value);
+
+        shuffleBtn.onclick = () => {
+            isShuffle = !isShuffle;
+            shuffleBtn.classList.toggle('active', isShuffle);
+            
+            if (isShuffle && songs.length > 0) {
+                applyShuffleLogic();
+            } else {
+                const currentId = songs[currentIndex]?.id;
+                songs = [...originalOrder];
+                currentIndex = songs.findIndex(s => s.id === currentId);
+            }
+            render(searchBar.value);
+        };
+
+        function applyShuffleLogic() {
+            if (songs.length === 0) return;
+            const currentSong = songs[currentIndex];
+            let pool = [...originalOrder];
+            
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            
+            songs = pool;
+            if (currentSong) {
+                currentIndex = songs.findIndex(s => s.id === currentSong.id);
+            }
         }
 
         // --- TOGGLE MODE ---
         toggleEditBtn.onclick = () => {
             isEditMode = !isEditMode;
-            toggleEditBtn.innerText = isEditMode ? "Editar: On" : "Editar: Off";
+            toggleEditBtn.innerText = isEditMode ? "Edit: On" : "Edit: Off";
             toggleEditBtn.classList.toggle('active', isEditMode);
             playlistPanel.classList.toggle('edit-mode-active', isEditMode);
         };
@@ -390,7 +484,7 @@
                 });
                 updateMediaSessionActionHandlers();
             }
-            render();
+            render(searchBar.value);
         }
 
         function updateMediaSessionActionHandlers() {
@@ -411,29 +505,36 @@
             const shouldPlay = forcePlay !== null ? forcePlay : audio.paused;
             if (shouldPlay) {
                 audio.play();
-                playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                playIcon.className = "fas fa-pause";
+                playIcon.style.marginLeft = "0";
                 document.getElementById('playerMain').classList.add('playing');
                 if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
             } else {
                 audio.pause();
-                playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                playIcon.className = "fas fa-play";
+                playIcon.style.marginLeft = "5px";
                 document.getElementById('playerMain').classList.remove('playing');
                 if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
             }
         }
 
-        function render() {
-            listDiv.innerHTML = songs.map((s, i) => `
-                <div class="song-item ${i === currentIndex ? 'active' : ''}" onclick="handleSongClick(${i}, ${s.id}, event)">
+        function render(filter = "") {
+            const term = filter.toLowerCase();
+            const filteredData = songs.filter(s => 
+                s.title.toLowerCase().includes(term) || 
+                s.artist.toLowerCase().includes(term)
+            );
+
+            listDiv.innerHTML = filteredData.map((s) => {
+                const actualIdx = songs.findIndex(item => item.id === s.id);
+                return `
+                <div class="song-item ${actualIdx === currentIndex ? 'active' : ''}" onclick="handleSongClick(${actualIdx}, ${s.id}, event)">
                     <div style="overflow:hidden; flex: 1;">
                         <h4 style="white-space:nowrap; text-overflow:ellipsis; overflow:hidden; font-size: 0.95rem;">${s.title}</h4>
                         <p style="font-size:0.75rem; opacity:0.6; margin-top: 2px;">${s.artist}</p>
                     </div>
-                    <div class="song-actions">
-                        <button class="btn-del" onclick="removeSong(${s.id}, event)">✕</button>
-                    </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function openEditModal(id, e) {
@@ -481,6 +582,17 @@
             };
         };
 
+        // NEW: Modal Delete logic
+        document.getElementById('modalDeleteBtn').onclick = () => {
+            if (!editingSongId) return;
+            if (confirm("Permanently remove this song from your library?")) {
+                dbRequest.result.transaction("library", "readwrite").objectStore("library").delete(editingSongId).onsuccess = () => {
+                    closeModal();
+                    loadFromDB();
+                };
+            }
+        };
+
         playBtn.onclick = () => togglePlay();
         document.getElementById('next').onclick = () => loadSong((currentIndex + 1) % songs.length);
         document.getElementById('prev').onclick = () => loadSong((currentIndex - 1 + songs.length) % songs.length);
@@ -517,7 +629,15 @@
         };
 
         const fmt = s => isNaN(s) ? "0:00" : Math.floor(s/60) + ":" + String(Math.floor(s%60)).padStart(2, '0');
-        window.onkeydown = (e) => { if(e.code === "Space") { e.preventDefault(); togglePlay(); } };
+        
+        window.onkeydown = (e) => { 
+            if(e.code === "Space") { 
+                if(document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault(); 
+                    togglePlay(); 
+                }
+            } 
+        };
     </script>
 </body>
 </html>
