@@ -1,6 +1,5 @@
 {
   "short_name": "MinPlay",
-  "name": "Minimal Play Music Player",
   "description": "A sleek, glassmorphic offline music player with library management.",
   "icons": [
     {
@@ -33,3 +32,4 @@
   ]
 
 }
+
