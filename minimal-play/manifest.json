@@ -16,7 +16,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "./minimal-play.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#050507",
   "background_color": "#050507",
@@ -27,8 +27,9 @@
       "name": "Library",
       "short_name": "Library",
       "description": "View your music library",
-      "url": "./minimal-play.html",
+      "url": "./index.html",
       "icons": [{ "src": "favicon_minimal-play.png", "sizes": "192x192" }]
     }
   ]
+
 }
