@@ -1,22 +1,22 @@
 {
   "short_name": "MinPlay",
-  "name": "Minimal Play | 0.1",
+  "name": "Minimal Play - Music Player",
   "description": "A sleek, glassmorphic offline music player with library management.",
   "icons": [
     {
-      "src": "favicon_minimal-play.png",
+      "src": "favicon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "favicon_minimal-play.png",
+      "src": "favicon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "start_url": "./minimal-play.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#050507",
   "background_color": "#050507",
@@ -27,8 +27,8 @@
       "name": "Library",
       "short_name": "Library",
       "description": "View your music library",
-      "url": "./minimal-play.html",
-      "icons": [{ "src": "favicon_minimal-play.png", "sizes": "192x192" }]
+      "url": "./index.html",
+      "icons": [{ "src": "favicon.png", "sizes": "192x192" }]
     }
   ]
 }
