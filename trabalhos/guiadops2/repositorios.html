@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositório ISOs</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mateusgoncalves-rj/guiadoplaystation2/refs/heads/main/favicon.png">
+    <style>
+        /* Variáveis de Cor Fornecidas */
+        :root {
+            --bg-deep: #05050a; /* Fundo mais profundo */
+            --bg-surface: #0f101a; /* Superfície dos cards */
+            --bg-overlay: rgba(15, 16, 26, 0.85); /* Vidro */
+            
+            --primary: #00f0ff; /* Cyan Cyberpunk */
+            --primary-dim: rgba(0, 240, 255, 0.15);
+            
+            --secondary: #2d5bff; /* Azul Sony Style */
+            --accent-green: #00ff9d; /* Sucesso/Download */
+            --accent-warn: #ffb800; /* Avisos */
+            
+            --text-main: #ffffff;
+            --text-body: #b8b9c5;
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 240, 255, 0.3);
+
+            /* Tamanhos & Espaçamentos */
+            --header-height: 72px;
+            --radius-md: 12px;
+            --radius-sm: 6px;
+            
+            /* Efeitos */
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --blur-fx: blur(16px);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-deep);
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            text-shadow: 0 0 10px var(--primary-dim);
+            margin-bottom: 0.5em;
+        }
+
+        /* Container Principal (Card) - ESTILO PADRÃO (DESKTOP) */
+        .lp-container {
+            width: 90%;
+            max-width: 450px;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            transition: var(--transition); /* Adicionado para a transição suave */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Área dos Botões */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* Estilo Base dos Botões */
+        .btn {
+            padding: 15px 25px;
+            text-decoration: none;
+            border: 2px solid;
+            border-radius: var(--radius-sm);
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Botão 1: Primary (Cyan) */
+        .btn-primary {
+            background-color: transparent;
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-dim);
+        }
+
+        .btn-primary:hover {
+            color: var(--bg-deep);
+            background-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Botão 2: Secondary (Blue) */
+        .btn-secondary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: var(--text-main);
+            box-shadow: 0 0 10px rgba(45, 91, 255, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background-color: transparent;
+            color: var(--secondary);
+            box-shadow: 0 0 20px var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Efeito de Brilho (Neon Glow) */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--border-glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .btn:hover::before {
+            opacity: 0.5;
+        }
+
+
+        /* =================================== */
+        /* ✨ MOBILE OPTIMIZATION (MEDIA QUERY) */
+        /* =================================== */
+
+        @media (max-width: 600px) {
+            /* Remove o fundo, bordas, padding e sombra do container */
+            .lp-container {
+                background-color: transparent; /* Fundo transparente */
+                border: none; /* Remove a borda */
+                box-shadow: none; /* Remove a sombra */
+                padding: 20px; /* Reduz o padding para preencher a tela */
+                width: 100%; /* Ocupa a largura total */
+                max-width: none;
+            }
+
+            /* Centraliza e ajusta o padding do Body (para alinhar o conteúdo no topo ou meio) */
+            body {
+                align-items: flex-start; /* Alinha o conteúdo ao topo, o que é comum em mobile */
+                padding-top: 20vh; /* Adiciona um espaço do topo para melhor visualização */
+                min-height: 100vh;
+            }
+
+            h1 {
+                font-size: 2em; /* Reduz o tamanho do título */
+            }
+
+            .button-group {
+                gap: 15px; /* Reduz o espaço entre os botões */
+            }
+
+            .btn {
+                padding: 18px; /* Aumenta um pouco a área de toque dos botões */
+                font-size: 1em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="lp-container">
+        <h1>// Repositório ISOs</h1>
+        
+        <div class="button-group">
+            <a href="https://archive.org/download/RedumpSonyPS2NTSCU" class="btn btn-primary">
+                Parte 1
+            </a>
+            
+            <a href="https://archive.org/download/RedumpSonyPS2NTSCUPart2" class="btn btn-secondary">
+                Parte 2
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

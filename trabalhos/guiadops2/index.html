@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia PlayStation 2 | 0.4</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <meta name="description" content="Este documento cobre métodos de carregamento de jogos via USB, Rede (SMB) e HD Interno.">
+    <meta name="author" content="Mateus Calixto">
+    <link rel="canonical" href="https://mateuscalixto.com.br/trabalhos/guiadops2">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mateuscalixto.com.br/trabalhos/guiadops2">
+    <meta property="og:title" content="Guia PlayStation 2 | 0.4">
+    <meta property="og:description" content="Guia definitivo de modernização do PlayStation 2.">
+    <meta property="og:image" content="https://mateuscalixto.com.br/trabalhos/guiadops2/favicon.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guia PlayStation 2 | 0.4">
+    <meta name="twitter:description" content="Guia definitivo de modernização do PlayStation 2.">
+
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        /* --- VARIÁVEIS DE DESIGN SYSTEM --- */
+        :root {
+            /* Paleta de Cores */
+            --bg-deep: #05050a;          /* Fundo mais profundo */
+            --bg-surface: #0f101a;       /* Superfície dos cards */
+            --bg-overlay: rgba(15, 16, 26, 0.85); /* Vidro */
+            
+            --primary: #00f0ff;          /* Cyan Cyberpunk */
+            --primary-dim: rgba(0, 240, 255, 0.15);
+            
+            --secondary: #2d5bff;        /* Azul Sony Style */
+            --accent-green: #00ff9d;     /* Sucesso/Download */
+            --accent-warn: #ffb800;      /* Avisos */
+            
+            --text-main: #ffffff;
+            --text-body: #b8b9c5;
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 240, 255, 0.3);
+
+            /* Tamanhos & Espaçamentos */
+            --header-height: 72px;
+            --radius-md: 12px;
+            --radius-sm: 6px;
+            
+            /* Efeitos */
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --blur-fx: blur(16px);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at top center, #1a1b35 0%, transparent 60%),
+                linear-gradient(to bottom, transparent, var(--bg-deep));
+            color: var(--text-body);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--text-main);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+
+        /* --- HEADER & NAVEGAÇÃO --- */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: var(--header-height);
+            background: rgba(5, 5, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .brand i { color: var(--secondary); font-size: 1.8rem; }
+        .brand span { color: var(--primary); font-size: 0.8em; opacity: 0.8; }
+
+        /* Menu Desktop */
+        .nav-desk { display: flex; gap: 8px; }
+
+        .nav-desk a {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-body);
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-desk a:hover {
+            color: var(--primary);
+            background: var(--primary-dim);
+        }
+
+        /* Botão Hambúrguer */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Menu Mobile (Overlay) */
+        .mobile-menu {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(5, 5, 10, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .mobile-menu.active { right: 0; }
+
+        .mobile-menu a {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .mobile-menu a:hover { color: var(--primary); transform: scale(1.1); }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: calc(var(--header-height) + 40px) 20px 60px;
+        }
+
+        section {
+            margin-bottom: 80px;
+            scroll-margin-top: 100px;
+            opacity: 0;
+            animation: fadeUp 0.8s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 15px;
+        }
+
+        .section-title i {
+            font-size: 2rem;
+            color: var(--primary);
+            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.4));
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- CARDS & GRID --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.6;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card p { font-size: 0.95rem; margin-bottom: 15px; color: #a0a0b0; }
+
+        /* --- BADGES & BOTÕES --- */
+        .badge-dl {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--accent-green);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            transition: var(--transition);
+        }
+
+        .badge-dl:hover {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
+        }
+
+        .btn-action {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .btn-action:hover { background: var(--primary); color: #000; }
+
+        /* --- ALERTAS & INFO --- */
+        .alert-box {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 25px 0;
+            border-left: 4px solid;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .alert-box i { font-size: 1.4rem; margin-top: 2px; }
+        
+        .alert-warn { border-color: var(--accent-warn); }
+        .alert-warn i { color: var(--accent-warn); }
+        
+        .alert-tip { border-color: var(--primary); }
+        .alert-tip i { color: var(--primary); }
+
+        /* --- CÓDIGO --- */
+        .code-snippet {
+            font-family: 'Consolas', monospace;
+            background: #000;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            color: var(--primary);
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-snippet::after {
+            content: 'SHELL';
+            position: absolute;
+            top: 5px; right: 10px;
+            font-size: 0.6rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* --- LISTAS --- */
+        .checklist li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+        .checklist li::before {
+            content: '\f00c'; /* Check icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--secondary);
+            position: absolute;
+            left: 0; top: 3px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-light);
+            background: #020205;
+        }
+
+        .btn-offline {
+            background: transparent;
+            color: var(--text-body);
+            border: 1px solid var(--border-light);
+            padding: 12px 25px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-offline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* --- RESPONSIVIDADE (MOBILE) --- */
+        @media (max-width: 768px) {
+            :root { --header-height: 60px; }
+            
+            .nav-desk { display: none; }
+            .hamburger { display: block; }
+            
+            section { margin-bottom: 50px; }
+            .section-title h2 { font-size: 1.8rem; }
+            
+            .grid-container { grid-template-columns: 1fr; }
+            
+            .card { padding: 20px; }
+            .badge-dl { float: right; margin-left: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <i class="fa-brands fa-playstation"></i>
+            <div>GUIA PS2 <span>0.4</span></div>
+        </div>
+
+        <nav class="nav-desk">
+            <a href="#home">Início</a>
+            <a href="#opl">OPL</a>
+            <a href="#ferramentas">Ferramentas</a>
+            <a href="#ulaunch">uLaunchELF</a>
+            <a href="#funtertainment">FMCB</a>
+            <a href="https://github.com/mateusgoncalves-rj/guiadoplaystation2" target="_blank">Github</a>
+        </nav>
+
+        <button class="hamburger" aria-label="Menu">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+    </header>
+
+    <div class="mobile-menu">
+        <a href="#home" class="menu-link">Início</a>
+        <a href="#opl" class="menu-link">OPL (Loader)</a>
+        <a href="#ferramentas" class="menu-link">Ferramentas</a>
+        <a href="#ulaunch" class="menu-link">uLaunchELF</a>
+        <a href="#funtertainment" class="menu-link">FMCB / FunTuna</a>
+        <a href="https://github.com/mateusgoncalves-rj/guiadoplaystation2" target="_blank" class="menu-link">Github</a>
+    </div>
+
+    <main>
+
+        <section id="home">
+            <div class="section-title">
+                <i class="fa-solid fa-gamepad"></i>
+                <div>
+                    <h2>Preservação Digital</h2>
+                    <p style="font-size: 0.9rem; color: var(--secondary); text-transform: uppercase;">Guia Técnico</p>
+                </div>
+            </div>
+            
+            <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 20px;">
+                Bem-vindo ao guia definitivo de modernização do PlayStation 2. Este documento cobre métodos de carregamento de jogos via <strong>USB, Rede (SMB) e HD Interno</strong>, além de ferramentas de manutenção essenciais.
+            </p>
+
+            <div class="alert-box alert-warn">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                    <strong>Atenção:</strong> Procedimentos que envolvem formatação ou gravação no Memory Card podem resultar em perda de dados. Faça backup dos seus saves antes de começar.
+                </div>
+            </div>
+        </section>
+
+        <section id="opl">
+            <div class="section-title">
+                <i class="fa-solid fa-compact-disc"></i>
+                <h2>OPL</h2>
+                <a href="https://github.com/ps2homebrew/Open-PS2-Loader/releases" target="_blank" class="badge-dl" style="margin-left: auto;">
+                    <i class="fa-solid fa-download"></i> Latest Build
+                </a>
+            </div>
+
+            <p>O Open PS2 Loader (OPL) é o coração da emulação moderna no PS2. Ele substitui a necessidade do leitor de disco.</p>
+
+            <div class="grid-container" style="margin-top: 25px;">
+                <div class="card">
+                    <h3><i class="fa-brands fa-usb" style="color:var(--text-body)"></i> USB 1.1</h3>
+                    <p>Método mais simples, porém o mais lento. Vídeos (FMVs) podem travar devido à baixa velocidade da porta USB do console.</p>
+                    <span style="font-size:0.8em; color:var(--accent-warn);">Desempenho: Baixo</span>
+                </div>
+                <div class="card" style="border-color: var(--secondary);">
+                    <h3><i class="fa-solid fa-network-wired" style="color:var(--primary)"></i> Rede SMB</h3>
+                    <p>O melhor equilíbrio para usuários de PS2 Slim. Carrega jogos via cabo de rede conectado ao PC ou Roteador. Velocidade excelente.</p>
+                    <span style="font-size:0.8em; color:var(--primary);">Desempenho: Alto</span>
+                </div>
+                <div class="card">
+                    <h3><i class="fa-solid fa-hdd" style="color:var(--text-body)"></i> HD Interno</h3>
+                    <p>Exclusivo para modelos FAT com Network Adapter. Velocidade superior ao disco original. Requer instalação física.</p>
+                    <span style="font-size:0.8em; color:var(--accent-green);">Desempenho: Máximo</span>
+                </div>
+            </div>
+
+            <br>
+            <h3>Configuração SMB (Resumo)</h3>
+            <div class="alert-box alert-tip">
+                <i class="fa-solid fa-lightbulb"></i>
+                <div>
+                    <strong>Dica de Ouro:</strong> Se encontrar o <strong>Erro 300</strong>, seu firewall está bloqueando a conexão. Libere a porta <strong>445 (TCP)</strong>.
+                </div>
+            </div>
+            
+            <ul class="checklist">
+                <li>Pasta compartilhada no PC com nome: <strong>PS2GAMES</strong>.</li>
+                <li>Permissões de compartilhamento: <strong>Todos (Leitura/Gravação)</strong>.</li>
+                <li>No PS2: IP Estático (ex: <code>192.168.1.100</code>).</li>
+                <li>No PS2: SMB Server IP = IP do seu Computador.</li>
+            </ul>
+        </section>
+
+        <section id="ferramentas">
+            <div class="section-title">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <h2>Toolbox & Emulação</h2>
+            </div>
+
+            <div class="grid-container">
+                <div class="card">
+                    <h3>OPL Manager <a href="https://oplmanager.com/" target="_blank" class="badge-dl"><i class="fa-solid fa-download"></i></a></h3>
+                    <p>Gerenciador de biblioteca. Baixa capas (Artworks), renomeia ISOs corretamente e cria arquivos de configuração.</p>
+                </div>
+                <div class="card">
+                    <h3>POPStarter (PS1) <a href="#" class="badge-dl"><i class="fa-solid fa-book"></i> Wiki</a></h3>
+                    <p>Emulador de PS1 integrado ao OPL. Necessário converter jogos <code>.BIN/.CUE</code> para formato <code>.VCD</code>.</p>
+                </div>
+                <div class="card">
+                    <h3>Repositório ISOs <a href="repositorios.html" target="_blank" class="badge-dl"><i class="fa-solid fa-box-archive"></i> Archive</a></h3>
+                    <p>Banco de dados de preservação (Redump). Necessário cadastro gratuito no Internet Archive para download.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ulaunch">
+            <div class="section-title">
+                <i class="fa-solid fa-folder-tree"></i>
+                <h2>uLaunchELF (File Manager)</h2>
+            </div>
+            <p>O gerenciador de arquivos essencial. Use para copiar saves entre Memory Card e USB.</p>
+
+            <div class="card" style="margin-top: 20px;">
+                <h4 style="color: var(--secondary); margin-bottom: 15px;">Mapa de Controles</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                    <div><span style="border:1px solid #555; padding: 2px 6px; border-radius: 4px;">O</span> &nbsp; Executar/Entrar</div>
+                    <div><span style="border:1px solid #555; padding: 2px 6px; border-radius: 4px;">X</span> &nbsp; Voltar/Cancelar</div>
+                    <div><span style="border:1px solid #555; padding: 2px 6px; border-radius: 4px;">R1</span> &nbsp; Menu Contexto</div>
+                    <div><span style="border:1px solid #555; padding: 2px 6px; border-radius: 4px;">Select</span> &nbsp; Informações</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="funtertainment">
+            <div class="section-title">
+                <i class="fa-solid fa-microchip"></i>
+                <h2>Exploits (FMCB & FunTuna)</h2>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <h3>Free McBoot</h3>
+                    <p>Para todos os modelos FAT e Slims até a série 7xxxx. Inicia automaticamente ao ligar o console.</p>
+                    <a href="https://github.com/israpps/FreeMcBoot-Installer" target="_blank" class="btn-action">Github Repo</a>
+                </div>
+                <div class="card">
+                    <h3>FunTuna</h3>
+                    <p>Solução para Slims da série 9xxxx. Requer execução manual via Browser > Memory Card para ativar.</p>
+                    <a href="https://github.com/israpps/Funtuna-Fork" target="_blank" class="btn-action">Github Repo</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <button id="download-page-btn" class="btn-offline">
+            <i class="fa-solid fa-download"></i> Baixar Versão Offline
+        </button>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #555;">
+            Guia desenvolvido para fins educacionais e de preservação histórica.
+        </p>
+    </footer>
+
+    <script>
+        // 1. Menu Mobile Logic
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const menuLinks = document.querySelectorAll('.menu-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            
+            if (mobileMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars-staggered');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars-staggered');
+            }
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+
+        // Fecha o menu ao clicar em link
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('active')) toggleMenu();
+            });
+        });
+
+        // 2. Download Offline Logic
+        document.getElementById('download-page-btn').addEventListener('click', function() {
+            const clone = document.documentElement.cloneNode(true);
+            
+            // Remove elementos desnecessários na versão offline
+            const btn = clone.querySelector('#download-page-btn');
+            if (btn) btn.remove();
+
+            const htmlContent = clone.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PS2_Guia_Ultimate.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+
+</html>
