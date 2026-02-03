@@ -31,7 +31,6 @@ O projeto está publicado e pode ser acessado em:
 
 ## 📧 Contato
 
-- **LinkedIn:** [Seu Link Aqui]
 - **GitHub:** [@ogoncas](https://github.com/ogoncas)
 - **Email:** [mateusgoncalves.rj.ofc@gmail.com](mailto:mateusgoncalves.rj.ofc@gmail.com)
 
