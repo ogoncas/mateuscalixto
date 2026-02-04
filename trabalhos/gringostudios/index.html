@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gringo Studios | Inglês Definitivo</title>
+    <meta name="description" content="Exemplo de site do meu portfólio: Domine a língua inglesa com o Método do Gringo. Do básico à fluência nativa com imersão cultural e prática real.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Gringo Studios | Inglês Definitivo">
+    <meta property="og:description" content="Do básico à fluência nativa com imersão cultural.">
+    <meta property="og:image" content="https://images.pexels.com/photos/4386426/pexels-photo-4386426.jpeg">
+    <meta name="theme-color" content="#050507">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* --- Cores --- */
+            --p-orange: #00D4FF; 
+            --p-orange-glow: #0a3161;
+            --a-cyan: #b31942;
+            --bg-obsidian: #050507;
+            --brd-glass: rgba(255, 255, 255, 0.08);
+            --text-high: #F0F4F8;
+            --text-low: #94A3B8;
+            
+            /* --- Tipografia --- */
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Plus Jakarta Sans', sans-serif;
+            --display: 'Orbitron', sans-serif;
+            
+            /* --- Layout --- */
+            --nav-height: 80px;
+            --container-padding: clamp(1.5rem, 5vw, 8rem);
+            --section-gap: clamp(60px, 10vh, 120px);
+            
+            /* --- Efeitos --- */
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --glass-blur: 16px;
+        }
+
+        /* --- RESET & BASE --- */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+        
+        body { 
+            background-color: var(--bg-obsidian); 
+            color: var(--text-high); 
+            font-family: var(--sans); 
+            overflow-x: hidden; 
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { max-width: 100%; height: auto; display: block; }
+        ul { list-style: none; }
+        a { text-decoration: none; color: inherit; }
+
+        .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+        /* --- HUD BACKGROUND --- */
+        .hud-overlay { 
+            position: fixed; inset: 0; pointer-events: none; z-index: 0; 
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                radial-gradient(circle at center, transparent 0%, #000 120%);
+            background-size: 100% 4px, 100% 100%; opacity: 0.15; 
+        }
+
+        /* --- HEADER & NAV --- */
+        header { 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
+            height: var(--nav-height);
+            padding: 0 var(--container-padding); 
+            background: rgba(5, 5, 7, 0.7); 
+            backdrop-filter: blur(var(--glass-blur)); 
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border-bottom: 1px solid var(--brd-glass); 
+            display: flex; justify-content: space-between; align-items: center; 
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        
+        header.hide { transform: translateY(-100%); }
+        header.solid { background: rgba(5, 5, 7, 0.98); }
+
+        .brand { 
+            font-family: var(--display); font-weight: 900; letter-spacing: 1px; 
+            display: flex; align-items: center; gap: 12px; font-size: clamp(0.9rem, 2vw, 1.1rem); 
+            z-index: 1002; white-space: nowrap; user-select: none;
+        }
+        .logo-mark { 
+            flex-shrink: 0; width: 14px; height: 14px; 
+            background: var(--p-orange); transform: rotate(45deg); 
+            box-shadow: 0 0 15px var(--p-orange-glow); 
+        }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { 
+            color: var(--text-low); font-family: var(--mono); 
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; 
+            transition: var(--transition); position: relative; padding: 10px 0;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--p-orange); text-shadow: 0 0 10px var(--p-orange-glow); }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 5px; left: 0; width: 0%; height: 2px; 
+            background: var(--a-cyan); transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        .menu-toggle { display: none; } /* Desktop: Escondido */
+
+        /* --- SECTIONS --- */
+        section { 
+            padding: var(--section-gap) var(--container-padding); 
+            border-bottom: 1px solid var(--brd-glass); 
+            position: relative; z-index: 1;
+        }
+        
+        .section-header { margin-bottom: clamp(30px, 5vw, 60px); border-left: 4px solid var(--p-orange); padding-left: 20px; }
+        .section-header h2 { 
+            font-family: var(--display); 
+            font-size: clamp(1.8rem, 5vw, 3rem); 
+            letter-spacing: 2px; text-transform: uppercase; color: #fff; line-height: 1; 
+        }
+        .section-header p { 
+            color: var(--a-cyan); font-family: var(--mono); 
+            font-size: clamp(0.75rem, 2vw, 0.9rem); 
+            margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; 
+        }
+
+        /* --- HERO --- */
+        .hero { 
+            min-height: 100svh; 
+            display: flex; align-items: center; position: relative; 
+            background: #000; overflow: hidden; 
+            padding-top: var(--nav-height);
+        }
+        .hero-bg { 
+            position: absolute; right: 0; top: 0; width: 65%; height: 100%; 
+            background-color: #000; 
+            background-image: url(../../imagens/gringostudios.jpeg); 
+            background-size: cover; background-position: center;
+            mask-image: linear-gradient(to left, black 30%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to left, black 30%, transparent 100%);
+            opacity: 0.6; transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .hero:hover .hero-bg { transform: scale(1.05); }
+        .hero-content { position: relative; z-index: 10; width: 100%; max-width: 900px; }
+        
+        .game-title { 
+            font-family: var(--display); font-size: clamp(2.8rem, 10vw, 6rem); 
+            line-height: 0.9; margin-bottom: 25px; font-weight: 900; 
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .badge { 
+            font-family: var(--mono); font-size: 0.7rem; color: var(--p-orange); 
+            border: 1px solid var(--p-orange); padding: 6px 12px; 
+            background: rgba(0, 212, 255, 0.05); margin-bottom: 25px; display: inline-block; letter-spacing: 1px;
+        }
+        .hero-desc {
+            color: var(--text-low); font-size: clamp(1rem, 3vw, 1.25rem);
+            max-width: 600px; margin-bottom: 40px; text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 18px 45px; font-family: var(--display); font-size: 0.9rem; letter-spacing: 1px;
+            text-decoration: none; color: #fff; background: #0946ff;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            transition: var(--transition); border: none; cursor: pointer; font-weight: 700;
+        }
+        .cta-btn:hover { background: var(--p-orange); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); color: #000; }
+
+        /* --- CARDS & GRID --- */
+        .grid-responsive { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+        .card-glass { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.005) 100%);
+            border: 1px solid var(--brd-glass); padding: 30px; 
+            transition: var(--transition); height: 100%; display: flex; flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+        .card-glass:hover { border-color: var(--p-orange); transform: translateY(-5px); background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%); }
+
+        .card-title { font-family: var(--display); font-size: 1.1rem; color: #fff; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 1px solid var(--brd-glass); padding-bottom: 15px; }
+        .card-header-icon { color: var(--a-cyan); margin-right: 12px; font-size: 1.2em; }
+        .list-tech { list-style: none; font-family: var(--mono); font-size: 0.85rem; flex-grow: 1; }
+        .list-tech li { margin-bottom: 12px; padding-left: 20px; position: relative; color: var(--text-low); font-size: 0.9rem; font-family: var(--mono); }
+        .list-tech li::before { content: '>'; position: absolute; left: 0; color: var(--p-orange); }
+        .list-tech li strong { color: var(--text-high); }
+        
+        .tag-status { background: rgba(255, 107, 53, 0.15); color: var(--a-cyan); padding: 4px 8px; font-size: 0.6rem; border-radius: 4px; margin-left: auto; border: 1px solid rgba(255, 107, 53, 0.3); }
+        .team-role { font-family: var(--mono); font-size: 0.75rem; color: var(--p-orange); text-transform: uppercase; display: block; margin: 5px 0 15px 0; }
+        .team-bio { font-size: 0.9rem; color: var(--text-low); line-height: 1.6; }
+
+        .gallery-item { position: relative; overflow: hidden; aspect-ratio: 16/9; border: 1px solid var(--brd-glass); background: #111; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: transform 0.6s ease, opacity 0.3s; display: block; }
+        .gallery-item:hover img { transform: scale(1.1); opacity: 1; }
+        .gallery-caption {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; 
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            font-family: var(--display); font-size: 0.8rem; color: var(--text-high);
+            transform: translateY(100%); transition: 0.3s ease;
+        }
+        .gallery-item:hover .gallery-caption { transform: translateY(0); }
+
+        .dl-card { border-left: 4px solid var(--text-low); }
+        .dl-card.highlight { border-left-color: var(--p-orange); background: linear-gradient(90deg, rgba(0, 212, 255, 0.05), transparent); }
+        .dl-btn { 
+            margin-top: auto; padding: 12px 0; width: 100%; text-align: center;
+            font-family: var(--display); font-size: 0.8rem; border: 1px solid var(--p-orange); 
+            color: var(--p-orange); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .dl-btn:hover { background: var(--p-orange); color: #000; box-shadow: 0 0 20px var(--p-orange-glow); }
+
+        footer { padding: 80px var(--container-padding); text-align: center; border-top: 1px solid var(--brd-glass); font-family: var(--mono); font-size: 0.75rem; color: var(--text-low); background: #020203; margin-top: auto; }
+        .reveal-hidden { opacity: 0; transform: translateY(30px); }
+        .reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+
+        /* --- MOBILE & RESPONSIVO (CORREÇÃO DE ALINHAMENTO) --- */
+        @media (max-width: 900px) {
+            header {
+                /* Padding reduzido para Mobile: Garante que os itens encostem mais nas bordas */
+                padding: 0 24px; 
+            }
+
+            .menu-toggle { 
+                display: flex; 
+                flex-direction: column;
+                justify-content: space-between;
+                width: 32px; /* Tamanho fixo ligeiramente maior */
+                height: 24px;
+                cursor: pointer; 
+                z-index: 1002; 
+                background: transparent;
+                border: none;
+                padding: 0;
+                
+                /* CORREÇÃO CRUCIAL DE ALINHAMENTO */
+                margin-left: auto; /* Empurra o botão totalmente para a direita */
+            }
+
+            .bar { 
+                width: 100%; 
+                height: 2px; 
+                background: var(--text-high); 
+                transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s; 
+                border-radius: 2px; 
+                transform-origin: center;
+                display: block;
+            }
+
+            /* Container dos Links */
+            .nav-links { 
+                position: fixed; 
+                top: 0; 
+                right: 0; 
+                width: 100%; 
+                max-width: 100%;
+                height: 100svh;
+                background: rgba(5, 5, 7, 0.98); 
+                backdrop-filter: blur(20px); 
+                -webkit-backdrop-filter: blur(20px);
+                
+                flex-direction: column; 
+                justify-content: flex-start; 
+                align-items: center;
+                padding-top: calc(var(--nav-height) + 40px);
+                gap: 30px;
+                
+                border-left: none; 
+                transform: translateX(100%); 
+                transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+                z-index: 1001;
+            }
+
+            .nav-links.active { transform: translateX(0); }
+
+            .nav-links a { 
+                font-size: 1.5rem; 
+                display: block; 
+                text-align: center;
+                width: auto;
+                padding: 10px 0;
+                border-bottom: none; 
+            }
+            
+            /* Animação do X Perfeito */
+            .menu-toggle.active .bar:nth-child(1) { transform: translateY(11px) rotate(45deg); }
+            .menu-toggle.active .bar:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+            .menu-toggle.active .bar:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
+        }
+
+        @media (max-width: 768px) {
+            :root { --nav-height: 70px; }
+            .hero-bg { mask-image: none; -webkit-mask-image: none; filter: brightness(0.4) blur(2px); opacity: 0.5; width: 100%; }
+            .hero-content { text-align: center; align-items: center; display: flex; flex-direction: column; }
+            .cta-btn { width: 100%; max-width: 350px; }
+            .grid-responsive, .gallery-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hud-overlay"></div>
+
+    <header id="main-header">
+        <div class="brand">
+            <div class="logo-mark"></div> GRINGO STUDIOS
+        </div>
+        
+        <button class="menu-toggle" id="mobile-menu" aria-label="Abrir Menu" aria-expanded="false">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#metodologia">Metodologia</a></li>
+                <li><a href="#conteudo">O Curso</a></li>
+                <li><a href="#idealizador">Idealizador</a></li>
+                <li><a href="#planos">Planos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-bg"></div> 
+            
+            <div class="hero-content">
+                <span class="badge reveal-hidden">Do Zero à Fluência em 6 Meses</span>
+                <h1 class="game-title reveal-hidden">MÉTODO<br><span style="color: var(--p-orange);">DO GRINGO</span></h1>
+                <p class="hero-desc reveal-hidden">
+                Não é apenas mais um curso de inglês. É uma imersão cultural desenhada para desbloquear sua fala com técnicas de conversação real e vivência internacional.
+                </p>
+                <div class="reveal-hidden">
+                    <a href="#planos" class="cta-btn">COMEÇAR AGORA</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="metodologia">
+            <div class="section-header reveal-hidden">
+                <h2>IMERSÃO</h2>
+                <p>Como você vai aprender</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item reveal-hidden">
+                    <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?q=80&w=600&auto=format&fit=crop" alt="Grupo de pessoas conversando em inglês" width="600" height="337" loading="lazy">
+                    <div class="gallery-caption">CONVERSAÇÃO REAL</div>
+                </div>
+                <div class="gallery-item reveal-hidden">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop" alt="Material Didático Digital" width="600" height="337" loading="lazy">
+                    <div class="gallery-caption">MATERIAL DIGITAL</div>
+                </div>
+                <div class="gallery-item reveal-hidden">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop" alt="Mentoria Online via computador" width="600" height="337" loading="lazy">
+                    <div class="gallery-caption">SUPORTE 24H</div>
+                </div>
+                <div class="gallery-item reveal-hidden">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=600&auto=format&fit=crop" alt="Vista da asa de avião, foco em viagem" width="600" height="337" loading="lazy">
+                    <div class="gallery-caption">FOCO EM VIAGEM</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conteudo">
+            <div class="section-header reveal-hidden">
+                <h2>ESTRUTURA</h2>
+                <p>Cronograma de Aprendizado</p>
+            </div>
+            
+            <div class="grid-responsive">
+                <div class="card-glass reveal-hidden">
+                    <h3 class="card-title"><span class="card-header-icon">◈</span> FUNDAMENTOS</h3>
+                    <ul class="list-tech">
+                        <li><strong>Boot Mental:</strong> Desconstruindo o medo de falar.</li>
+                        <li><strong>Estruturas Base:</strong> Verbo To Be sem enrolação.</li>
+                        <li><strong>Vocabulário:</strong> As 1000 palavras mais usadas.</li>
+                        <li><strong>Listening:</strong> Entendendo sotaques nativos.</li>
+                    </ul>
+                </div>
+
+                <div class="card-glass reveal-hidden">
+                    <h3 class="card-title"><span class="card-header-icon">◈</span> MODO IMERSÃO</h3>
+                    <ul class="list-tech">
+                        <li><strong>Roleplay:</strong> Situações reais (Aeroporto, Restaurante).</li>
+                        <li><strong>Gírias e Idioms:</strong> Falando como um nativo.</li>
+                        <li><strong>Conectivos:</strong> Fluidez nas frases complexas.</li>
+                        <li><strong>Shadowing:</strong> Técnica de repetição para pronúncia.</li>
+                    </ul>
+                </div>
+
+                <div class="card-glass reveal-hidden">
+                    <h3 class="card-title"><span class="card-header-icon">◈</span> BUSINESS PRO <span class="tag-status">BÔNUS</span></h3>
+                    <ul class="list-tech">
+                        <li><strong>Job Interview:</strong> Preparação para entrevistas.</li>
+                        <li><strong>E-mails:</strong> Escrita formal e corporativa.</li>
+                        <li><strong>Meetings:</strong> Como liderar reuniões em inglês.</li>
+                        <li><strong>Networking:</strong> Vocabulário para negócios.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="idealizador">
+            <div class="section-header reveal-hidden">
+                <h2>SOBRE O GRINGO</h2>
+                <p>Perfil do Instrutor</p>
+            </div>
+            <div class="grid-responsive">
+                <div class="card-glass reveal-hidden" style="border-left: 4px solid var(--p-orange);">
+                    <strong style="font-family: var(--display); color: var(--p-orange); font-size: 1.3rem;">Teacher John "Gringo"</strong>
+                    <span class="team-role">Fundador & Head Teacher</span>
+                    <p class="team-bio">Nativo americano com 10 anos de experiência no Brasil. Criador da metodologia de aprendizado acelerado focada em destravar a fala de brasileiros.</p>
+                </div>
+                
+                <div class="card-glass reveal-hidden">
+                    <strong style="font-family: var(--display); color: var(--text-high);">Equipe Pedagógica</strong>
+                    <span class="team-role">Suporte</span>
+                    <p class="team-bio">Monitores disponíveis no grupo VIP para correção de pronúncia e dúvidas gramaticais 7 dias por semana.</p>
+                </div>
+                <div class="card-glass reveal-hidden">
+                    <strong style="font-family: var(--display); color: var(--text-high);">Comunidade</strong>
+                    <span class="team-role">Networking</span>
+                    <p class="team-bio">Acesso vitalício à comunidade "Gringo Squad" para praticar conversação com outros alunos.</p>
+                </div>
+            </div>
+            
+            <div class="card-glass reveal-hidden" style="margin-top: 25px; border-left: 2px solid var(--text-low);">
+                <h4 style="color: var(--p-orange); font-family: var(--mono); margin-bottom: 10px;"> CERTIFICAÇÃO</h4>
+                <p style="font-family: var(--mono); font-size: 0.75rem; color: var(--text-low); line-height: 1.8;">
+                    Ao final do curso, todos os alunos recebem certificado de conclusão com carga horária reconhecida, válido para LinkedIn e currículo acadêmico.
+                </p>
+            </div>
+        </section>
+
+        <section id="planos">
+            <div class="section-header reveal-hidden">
+                <h2>PLANOS</h2>
+                <p> Escolha seu nível de upgrade</p>
+            </div>
+            <div class="grid-responsive">
+                <div class="card-glass dl-card highlight reveal-hidden">
+                    <h3 class="card-title">CURSO COMPLETO</h3>
+                    <p class="team-bio">Acesso total a todos os módulos, comunidade VIP e suporte por 1 ano. O melhor custo-benefício.</p>
+                    <div style="margin-top: 25px; margin-bottom: 20px;">
+                        <span style="font-family: var(--display); font-size: 1.5rem; color: var(--p-orange);">R$ 97,00</span>
+                        <span style="font-size: 0.8rem; color: var(--text-low);">/mês</span>
+                    </div>
+                    <a href="#" class="dl-btn">MATRICULAR AGORA</a>
+                </div>
+                
+                <div class="card-glass dl-card reveal-hidden">
+                    <h3 class="card-title">E-BOOK STARTER</h3>
+                    <p class="team-bio">Guia prático em PDF com as 500 frases essenciais para viagens. Ideal para quem tem pressa.</p>
+                    <div style="margin-top: 25px; margin-bottom: 20px;">
+                        <span style="font-family: var(--display); font-size: 1.5rem; color: #fff;">R$ 29,90</span>
+                        <span style="font-size: 0.8rem; color: var(--text-low);">único</span>
+                    </div>
+                    <a href="#" class="dl-btn" style="color: #fff; border-color: #fff;">COMPRAR PDF</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>GRINGO STUDIOS &copy; 2026 - gringostudios@gmail.com</p>
+        <p style="opacity: 0.5; margin-top: 10px; font-size: 0.65rem;">Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            const navItems = document.querySelectorAll('.nav-links a');
+            const header = document.getElementById('main-header');
+
+            // --- Menu Mobile Otimizado (Correção de Bug de Scroll) ---
+            function toggleMenu() {
+                const isActive = navLinks.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+                menuToggle.setAttribute('aria-expanded', isActive);
+                
+                // Trava o scroll do corpo do site APENAS quando o menu abre
+                document.body.style.overflow = isActive ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                toggleMenu();
+            });
+
+            // Fecha o menu ao clicar em um link
+            navItems.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) toggleMenu();
+                });
+            });
+
+            // Fecha ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (navLinks.classList.contains('active') && 
+                    !navLinks.contains(e.target) && 
+                    !menuToggle.contains(e.target)) {
+                    toggleMenu();
+                }
+            });
+
+            // --- Scroll Header com Proteção de Lógica ---
+            let lastScroll = 0;
+            let ticking = false;
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const currentScroll = window.scrollY;
+                        const isMenuOpen = navLinks.classList.contains('active'); // Verifica se menu está aberto
+
+                        // Só executa a lógica de esconder se o menu estiver FECHADO
+                        if (!isMenuOpen) {
+                            if (currentScroll > 100) {
+                                if (currentScroll > lastScroll) {
+                                    // Descendo: Esconde header
+                                    header.classList.add('hide');
+                                    header.classList.remove('solid');
+                                } else {
+                                    // Subindo: Mostra header sólido
+                                    header.classList.remove('hide');
+                                    header.classList.add('solid');
+                                }
+                            } else {
+                                // Topo da página: Transparente
+                                header.classList.remove('hide');
+                                header.classList.remove('solid');
+                            }
+                        }
+
+                        lastScroll = currentScroll;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // --- Animações de Entrada (Intersection Observer) ---
+            const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+            
+            const fadeObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-hidden').forEach((el) => {
+                fadeObserver.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
