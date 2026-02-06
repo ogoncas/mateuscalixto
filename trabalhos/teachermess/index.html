@@ -55,9 +55,31 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* JUSTIFICAR TEXTOS PRINCIPAIS */
+        p,
+        .faq-inner,
+        .list-tech li,
+        .team-bio,
+        .creator-bio p {
+            text-align: justify;
+        }
+
+    /* EXCEÇÃO: FOOTER SEMPRE CENTRALIZADO */
+        footer p {
+            text-align: center;
+        }
+
         img { max-width: 100%; height: auto; display: block; }
         ul { list-style: none; }
         a { text-decoration: none; color: inherit; }
+
+        .hud-overlay { 
+            position: fixed; inset: 0; pointer-events: none; z-index: 0; 
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                radial-gradient(circle at center, transparent 0%, #000 120%);
+            background-size: 100% 4px, 100% 100%; opacity: 0.15; 
+        }
 
         .hud-overlay { 
             position: fixed; inset: 0; pointer-events: none; z-index: 0; 
@@ -109,23 +131,27 @@
 
         .menu-toggle { display: none; }
 
-        /* --- SECTIONS --- */
+    /* --- SECTIONS --- */
         section { 
             padding: var(--section-gap) var(--container-padding); 
             border-bottom: 1px solid var(--brd-glass); 
             position: relative; z-index: 1;
         }
         
-        .section-header { margin-bottom: clamp(30px, 5vw, 60px); border-left: 4px solid var(--p-orange); padding-left: 20px; }
+        .section-header { 
+            margin-bottom: clamp(40px, 6vw, 70px); 
+            border-left: 4px solid var(--p-orange); 
+            padding-left: 24px; 
+        }
         .section-header h2 { 
             font-family: var(--display); 
-            font-size: clamp(1.8rem, 5vw, 3rem); 
-            letter-spacing: 2px; text-transform: uppercase; color: #fff; line-height: 1; 
+            font-size: clamp(2rem, 6vw, 3.5rem); 
+            letter-spacing: 2px; text-transform: uppercase; color: #fff; line-height: 1.1; 
         }
         .section-header p { 
             color: var(--p-accent); font-family: var(--mono); 
-            font-size: clamp(0.75rem, 2vw, 0.9rem); 
-            margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; 
+            font-size: clamp(0.8rem, 2vw, 1rem); 
+            margin-top: 12px; text-transform: uppercase; letter-spacing: 1.5px; 
         }
 
         /* --- HERO --- */
@@ -170,37 +196,54 @@
         }
         .cta-btn:hover { background: var(--p-orange); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); color: #fff; }
 
-        /* --- CARDS & GRID --- */
-        .grid-responsive { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+/* --- CARDS & GRID --- */
+        .grid-responsive { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 32px; 
+        }
         
         .card-glass { 
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.005) 100%);
-            border: 1px solid var(--brd-glass); padding: 30px; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.008) 100%);
+            border: 1px solid var(--brd-glass); padding: 36px; 
             transition: var(--transition); height: 100%; display: flex; flex-direction: column;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(6px); border-radius: 12px;
         }
-        .card-glass:hover { border-color: var(--p-orange); transform: translateY(-5px); background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%); }
+        .card-glass:hover { 
+            border-color: var(--p-orange); 
+            transform: translateY(-8px); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.015) 100%); 
+        }
 
-        .card-title { font-family: var(--display); font-size: 1.1rem; color: #fff; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 1px solid var(--brd-glass); padding-bottom: 15px; }
-        .card-header-icon { color: var(--p-orange); margin-right: 12px; font-size: 1.2em; }
+        .card-title { 
+            font-family: var(--display); font-size: 1.3rem; color: #fff; 
+            margin-bottom: 24px; display: flex; align-items: center; 
+            border-bottom: 1px solid var(--brd-glass); padding-bottom: 18px; 
+        }
+        .card-header-icon { color: var(--p-orange); margin-right: 14px; font-size: 1.3em; }
         
-        .list-tech { list-style: none; font-family: var(--mono); font-size: 0.9rem; flex-grow: 1; color: var(--text-low); }
-        .list-tech li { margin-bottom: 15px; padding-left: 20px; position: relative; }
-        .list-tech li::before { content: '>'; position: absolute; left: 0; color: var(--p-accent); font-weight: bold; }
-        .list-tech li strong { color: var(--text-high); display: block; margin-bottom: 4px; }
-        
-        .team-role { font-family: var(--mono); font-size: 0.75rem; color: var(--p-orange); text-transform: uppercase; display: block; margin: 5px 0 15px 0; }
-        .team-bio { font-size: 0.95rem; color: var(--text-low); line-height: 1.7; }
+        .list-tech { 
+            list-style: none; font-family: var(--mono); font-size: 0.95rem; 
+            flex-grow: 1; color: var(--text-low); 
+        }
+        .list-tech li { 
+            margin-bottom: 18px; padding-left: 28px; position: relative; 
+        }
+        .list-tech li::before { 
+            content: '>'; position: absolute; left: 0; color: var(--p-accent); font-weight: bold; 
+        }
+        .list-tech li strong { 
+            color: var(--text-high); display: block; margin-bottom: 6px; 
+        }
 
-            /* --- AREA DO CRIADOR (REFORMULADA) --- */
-        /* Transforma os dois cards em um layout unificado de perfil */
+        /* --- AREA DO CRIADOR (REFORMULADA) --- */
         .creator-wrapper {
             display: flex;
             background: #0b0b0d;
-            border: 1px solid var(--border-light);
+            border: 1px solid var(--brd-glass);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .creator-image {
@@ -226,7 +269,7 @@
         .creator-badge {
             display: inline-block;
             background: rgba(79, 81, 250, 0.1);
-            color: var(--primary);
+            color: var(--p-orange);
             padding: 6px 12px;
             border-radius: 100px;
             font-size: 0.75rem;
@@ -236,7 +279,7 @@
         }
 
         .creator-name {
-            font-family: var(--font-heading);
+            font-family: var(--display);
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 10px;
@@ -244,31 +287,31 @@
         }
 
         .creator-role {
-            color: var(--text-muted);
+            color: var(--text-low);
             font-size: 1rem;
             margin-bottom: 25px;
             display: block;
         }
 
         .creator-bio {
-            color: var(--text-muted);
+            color: var(--text-low);
             margin-bottom: 30px;
+            line-height: 1.7;
         }
         
         .creator-highlight {
-            border-left: 3px solid var(--accent);
+            border-left: 3px solid var(--p-accent);
             padding-left: 20px;
             margin-top: auto;
         }
-        .creator-highlight h4 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; font-family: var(--font-heading); }
-        .creator-highlight p { font-size: 0.9rem; color: var(--text-muted); }
+        .creator-highlight h4 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; font-family: var(--display); }
+        .creator-highlight p { font-size: 0.9rem; color: var(--text-low); }
 
         /* --- PREÇOS (APRIMORADO) --- */
         .pricing-container {
             max-width: 500px; margin: 0 auto; position: relative;
         }
         
-        /* Brilho de fundo para destacar o card */
         .pricing-container::before {
             content: ''; position: absolute; top: 50%; left: 50%; width: 120%; height: 120%;
             background: radial-gradient(circle, rgba(118, 75, 162, 0.15) 0%, transparent 70%);
@@ -281,7 +324,6 @@
             position: relative; overflow: hidden;
         }
         
-        /* Borda brilhante no topo */
         .dl-card::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: linear-gradient(90deg, var(--p-orange), var(--p-accent));
@@ -378,14 +420,24 @@
         }
 
         /* --- FOOTER --- */
-        footer { padding: 80px var(--container-padding); text-align: center; border-top: 1px solid var(--brd-glass); font-family: var(--mono); font-size: 0.75rem; color: var(--text-low); background: #020203; margin-top: auto; }
-        
+        footer { 
+            padding: 90px var(--container-padding) 60px; 
+            text-align: center; 
+            border-top: 1px solid var(--brd-glass); 
+            background: #020203; 
+        }
+        footer .footer-title {
+            font-family: var(--display);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
         .reveal-hidden { opacity: 0; transform: translateY(30px); }
         .reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
 
         /* --- MOBILE --- */
         @media (max-width: 900px) {
-            /* Mobile adjustment for Creator Section */
             .creator-wrapper { flex-direction: column; }
             .creator-image { width: 100%; height: 500px; min-width: auto; }
             .creator-content { padding: 30px 24px; }
@@ -634,12 +686,13 @@
     </main>
 
     <footer>
-        <div style="margin-bottom: 20px;">
-            <p style="font-family: var(--display); font-size: 1.2rem; margin-bottom: 10px;">TEACHER MESS</p>
-            <p>Feito com ❤️ para resgatar sua fluência.</p>
-        </div>
-        <p style="opacity: 0.5; font-size: 0.65rem;">Copyright © Super Friendly Teacher Mess - Todos os direitos reservados.</p>
+        <div class="footer-title">TEACHER MESS</div>
+        <p>Feito com ❤️ para resgatar sua fluência.</p>
+        <p style="opacity: 0.5; font-size: 0.75rem; margin-top: 30px;">
+            Copyright © Super Friendly Teacher Mess - Todos os direitos reservados.
+        </p>
     </footer>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -648,7 +701,6 @@
             const navItems = document.querySelectorAll('.nav-links a');
             const header = document.getElementById('main-header');
 
-            // --- Menu Mobile Otimizado ---
             function toggleMenu() {
                 const isActive = navLinks.classList.toggle('active');
                 menuToggle.classList.toggle('active');
@@ -675,7 +727,6 @@
                 }
             });
 
-            // --- FAQ Accordion Logic ---
             const faqItems = document.querySelectorAll('.faq-item');
             
             faqItems.forEach(item => {
@@ -685,7 +736,6 @@
                 trigger.addEventListener('click', () => {
                     const isActive = item.classList.contains('active');
                     
-                    // Fecha todos os outros (Opcional - remova este bloco se quiser permitir múltiplos abertos)
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
                             otherItem.classList.remove('active');
@@ -693,7 +743,6 @@
                         }
                     });
 
-                    // Toggle do atual
                     if (isActive) {
                         item.classList.remove('active');
                         content.style.maxHeight = null;
@@ -704,7 +753,6 @@
                 });
             });
 
-            // --- Scroll Header ---
             let lastScroll = 0;
             let ticking = false;
 
@@ -735,7 +783,6 @@
                 }
             });
 
-            // --- Animações (Scroll Reveal) ---
             const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
             
             const fadeObserver = new IntersectionObserver((entries, observer) => {
