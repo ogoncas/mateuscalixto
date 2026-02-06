@@ -27,9 +27,9 @@
             --text-low: #94A3B8;
             
             /* --- Tipografia --- */
-            --mono: 'JetBrains Mono', monospace;
-            --sans: 'Plus Jakarta Sans', sans-serif;
-            --display: 'Orbitron', sans-serif;
+            --mono: 'Montserrat', sans-serif;
+            --sans: 'Montserrat', sans-serif;
+            --display: 'Montserrat', sans-serif;
             
             /* --- Layout --- */
             --nav-height: 80px;
@@ -192,6 +192,77 @@
         .team-role { font-family: var(--mono); font-size: 0.75rem; color: var(--p-orange); text-transform: uppercase; display: block; margin: 5px 0 15px 0; }
         .team-bio { font-size: 0.95rem; color: var(--text-low); line-height: 1.7; }
 
+            /* --- AREA DO CRIADOR (REFORMULADA) --- */
+        /* Transforma os dois cards em um layout unificado de perfil */
+        .creator-wrapper {
+            display: flex;
+            background: #0b0b0d;
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .creator-image {
+            width: 40%;
+            min-width: 350px;
+            position: relative;
+        }
+
+        .creator-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .creator-content {
+            padding: 60px 50px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .creator-badge {
+            display: inline-block;
+            background: rgba(79, 81, 250, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        .creator-name {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .creator-role {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .creator-bio {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        
+        .creator-highlight {
+            border-left: 3px solid var(--accent);
+            padding-left: 20px;
+            margin-top: auto;
+        }
+        .creator-highlight h4 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; font-family: var(--font-heading); }
+        .creator-highlight p { font-size: 0.9rem; color: var(--text-muted); }
+
         /* --- PREÇOS (APRIMORADO) --- */
         .pricing-container {
             max-width: 500px; margin: 0 auto; position: relative;
@@ -314,6 +385,10 @@
 
         /* --- MOBILE --- */
         @media (max-width: 900px) {
+            /* Mobile adjustment for Creator Section */
+            .creator-wrapper { flex-direction: column; }
+            .creator-image { width: 100%; height: 500px; min-width: auto; }
+            .creator-content { padding: 30px 24px; }
             header { padding: 0 24px; }
             .menu-toggle { 
                 display: flex; flex-direction: column; justify-content: space-between;
@@ -438,30 +513,26 @@
 
         <section id="idealizador">
             <div class="section-header reveal-hidden">
-                <h2>O CRIADOR</h2>
-                <p>Messias Rabello</p>
+                <span class="section-label">Seu Mentor</span>
+                <h2>Quem é Teacher Mess?</h2>
             </div>
-            <div class="grid-responsive">
-                <div class="card-glass reveal-hidden" style="border-left: 4px solid var(--p-orange);">
-                    <strong style="font-family: var(--display); color: var(--p-orange); font-size: 1.3rem;">Super Friendly Teacher Mess</strong>
-                    <span class="team-role">Idealizador do Método</span>
-                    <p class="team-bio">
-                        Messias Rabello possui habilidades linguísticas extraordinárias e uma missão definida: <strong>resgatar a fluência de alunos enferrujados</strong>.
-                        <br><br>
-                        Seu campo de batalha são as redes sociais (Reels e Stories) e este curso, a central de comando do método RESCUE.
-                    </p>
+            
+            <div class="creator-wrapper reveal-hidden">
+                <div class="creator-image">
+                    <img src="../../imagens/professor.jpeg" alt="Messias Rabello">
                 </div>
-                
-                <div class="card-glass reveal-hidden">
-                    <strong style="font-family: var(--display); color: var(--text-high);">Destravar a Superidentidade</strong>
-                    <span class="team-role">Filosofia</span>
-                    <p class="team-bio">
-                        Para o Teacher Mess, destravar o inglês é como redescobrir uma superidentidade adormecida. Ele transforma conteúdos complexos em entretenimento educativo, devolvendo a confiança para você se expressar livremente.
+                <div class="creator-content">
+                    <span class="creator-badge">Idealizador do Método</span>
+                    <h3 class="creator-name">Messias Rabello</h3>
+                    <span class="creator-role">Teacher & Criador de Conteúdo</span>
+                    
+                    <p class="creator-bio">
+                        Com uma abordagem única que mistura humor e técnica, Messias transformou a forma de ensinar inglês nas redes sociais. Sua missão não é apenas ensinar gramática, mas <strong>resgatar a confiança</strong> de alunos que se sentem enferrujados.
                     </p>
-                    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--brd-glass);">
-                        <p style="font-family: var(--mono); font-size: 0.8rem; color: var(--p-accent);">
-                            📱 Mestre da linguagem digital
-                        </p>
+
+                    <div class="creator-bio">
+                        <h4>Filosofia "Super Friendly"</h4>
+                        <p>Destravar o inglês é redescobrir sua voz. Aqui, o erro é parte do processo e a diversão é obrigatória para o aprendizado fixar.</p>
                     </div>
                 </div>
             </div>
