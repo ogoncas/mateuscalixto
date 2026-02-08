@@ -11,6 +11,14 @@
     <meta property="og:image" content="https://images.pexels.com/photos/4386426/pexels-photo-4386426.jpeg">
     <meta name="theme-color" content="#050507">
 
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <style>
         :root {
             /* --- Cores --- */
@@ -23,7 +31,7 @@
             --text-low: #94A3B8;
             
             /* --- Tipografia --- */
-            --sans: sans-serif;
+            --sans: 'Poppins', sans-serif;
             
             /* --- Layout --- */
             --nav-height: 80px;
@@ -224,7 +232,7 @@
             margin-bottom: 18px; padding-left: 28px; position: relative; 
         }
         .list-tech li::before { 
-            content: '>'; position: absolute; left: 0; color: var(--p-accent); font-weight: bold; 
+            font-family: "Font Awesome 6 Free"; font-weight: 900; content: "\f054"; position: absolute; left: 0; color: var(--p-accent); 
         }
         .list-tech li strong { 
             color: var(--text-high); display: block; margin-bottom: 6px; 
@@ -287,10 +295,21 @@
             display: block;
         }
 
+        .creator-subtitle {
+            color: var(--p-orange);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
         .creator-bio {
             color: var(--text-low);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.7;
+            text-align: justify;
+            hyphens: auto;
+            word-break: break-word;
         }
         
         .creator-highlight {
@@ -354,7 +373,7 @@
             font-size: 1rem; padding-left: 35px; margin-bottom: 18px; color: var(--text-high);
         }
         .benefit-list li::before {
-            content: '✓'; color: var(--p-accent); font-weight: 900; font-size: 1.1rem; top: -2px;
+            font-family: "Font Awesome 6 Free"; font-weight: 900; content: "\f00c"; color: var(--p-accent); font-size: 1.1rem; top: -2px;
         }
 
         .dl-btn { 
@@ -396,15 +415,11 @@
             width: 24px; height: 24px; position: relative; flex-shrink: 0;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .faq-icon::before, .faq-icon::after {
-            content: ''; position: absolute; top: 50%; left: 50%; background: var(--text-low);
-            transform: translate(-50%, -50%); transition: 0.3s;
+        .faq-icon i {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-low); transition: 0.3s;
         }
-        .faq-icon::before { width: 14px; height: 2px; }
-        .faq-icon::after { width: 2px; height: 14px; }
-        
-        .faq-item.active .faq-icon { transform: rotate(135deg); }
-        .faq-item.active .faq-icon::before, .faq-item.active .faq-icon::after { background: var(--p-accent); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+        .faq-item.active .faq-icon i { color: var(--p-accent); }
 
         .faq-content {
             max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
@@ -501,7 +516,7 @@
             <div class="hero-bg"></div> 
             
             <div class="hero-content">
-                <span class="badge reveal-hidden">⚠️ VAGAS LIMITADAS</span>
+                <span class="badge reveal-hidden"><i class="fas fa-exclamation-triangle"></i> VAGAS LIMITADAS</span>
                 <h1 class="game-title reveal-hidden">SUPER FRIENDLY<br><span style="color: var(--p-orange);">TEACHER MESS</span></h1>
                 <p class="hero-desc reveal-hidden">
                     Recupere a sua confiança, fluência e prática no inglês. Estude no seu ritmo e participe de um grupo EXCLUSIVO para destravar de vez.
@@ -509,7 +524,7 @@
                 <div class="reveal-hidden" style="width: 100%;">
                     <a href="#planos" class="cta-btn">RESGATAR FLUÊNCIA AGORA</a>
                     <p style="margin-top: 15px; font-size: 0.8rem; color: var(--p-accent); font-family: var(--sans);">
-                        <span style="opacity: 0.8;">⚡ Oferta pode terminar em breve</span>
+                        <span style="opacity: 0.8;"><i class="fas fa-bolt"></i> Oferta pode terminar em breve</span>
                     </p>
                 </div>
             </div>
@@ -523,7 +538,7 @@
             
             <div class="grid-responsive">
                 <div class="card-glass reveal-hidden">
-                    <h3 class="card-title"><span class="card-header-icon">◈</span> PARA QUEM JÁ ESTUDOU</h3>
+                    <h3 class="card-title"><span class="card-header-icon"><i class="fas fa-gem"></i></span> PARA QUEM JÁ ESTUDOU</h3>
                     <p class="team-bio">
                         Perfeito para quem já tem base no inglês, mas sente que <strong>perdeu a prática e está enferrujado</strong>.
                     </p>
@@ -534,7 +549,7 @@
                 </div>
 
                 <div class="card-glass reveal-hidden">
-                    <h3 class="card-title"><span class="card-header-icon">◈</span> MÉTODO DINÂMICO</h3>
+                    <h3 class="card-title"><span class="card-header-icon"><i class="fas fa-gem"></i></span> MÉTODO DINÂMICO</h3>
                     <p class="team-bio">
                         Um módulo completo com vídeos selecionados exclusivamente para <strong>SALVAR SUA FLUÊNCIA</strong>.
                     </p>
@@ -545,7 +560,7 @@
                 </div>
 
                 <div class="card-glass reveal-hidden">
-                    <h3 class="card-title"><span class="card-header-icon">◈</span> COMUNIDADE VIP</h3>
+                    <h3 class="card-title"><span class="card-header-icon"><i class="fas fa-gem"></i></span> COMUNIDADE VIP</h3>
                     <p class="team-bio">
                         Não estude sozinho. Acesso a um grupo onde você interage e se motiva.
                     </p>
@@ -576,9 +591,10 @@
                         Com uma abordagem única que mistura humor e técnica, Messias transformou a forma de ensinar inglês nas redes sociais. Sua missão não é apenas ensinar gramática, mas <strong>resgatar a confiança</strong> de alunos que se sentem enferrujados.
                     </p>
 
-                    <div class="creator-bio">
-                        <h4>Filosofia "Super Friendly"</h4>
-                        <p>Destravar o inglês é redescobrir sua voz. Aqui, o erro é parte do processo e a diversão é obrigatória para o aprendizado fixar.</p>
+                    <h4 class="creator-subtitle">Filosofia "Super Friendly"</h4>
+                    <p class="creator-bio">
+                        Destravar o inglês é redescobrir sua voz. Aqui, o erro é parte do processo e a diversão é obrigatória para o aprendizado fixar.
+                    </p>
                     </div>
                 </div>
             </div>
@@ -598,12 +614,12 @@
                         <span class="price-sub">Parcelado em até 5x</span>
                     </div>
 
-                    <ul class="list-tech" style="margin: 20px 0;">
-                        <li>✓ Acesso Imediato e Vitalício</li>
-                        <li>✓ Pagamento 100% Seguro</li>
-                        <li>✓ Grupo Exclusivo</li>
-                        <li>✓ Certificado Digital Incluso</li>
-                        <li>✓ Acesso em qualquer dispositivo (PC/Mobile)</li>
+                    <ul class="list-tech benefit-list" style="margin: 20px 0;">
+                        <li>Acesso Imediato e Vitalício</li>
+                        <li>Pagamento 100% Seguro</li>
+                        <li>Grupo Exclusivo</li>
+                        <li>Certificado Digital Incluso</li>
+                        <li>Acesso em qualquer dispositivo</li>
                     </ul>
 
                     <a href="https://pay.hotmart.com/K99956629B" class="dl-btn">COMPRAR AGORA</a>
@@ -630,7 +646,7 @@
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span class="faq-q">Para quem é esse produto?</span>
-                        <div class="faq-icon"></div>
+                        <div class="faq-icon"><i class="fas fa-plus"></i></div>
                     </button>
                     <div class="faq-content">
                         <div class="faq-inner">
@@ -642,7 +658,7 @@
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span class="faq-q">Como acesso o curso?</span>
-                        <div class="faq-icon"></div>
+                        <div class="faq-icon"><i class="fas fa-plus"></i></div>
                     </button>
                     <div class="faq-content">
                         <div class="faq-inner">
@@ -654,7 +670,7 @@
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span class="faq-q">Recebo certificado?</span>
-                        <div class="faq-icon"></div>
+                        <div class="faq-icon"><i class="fas fa-plus"></i></div>
                     </button>
                     <div class="faq-content">
                         <div class="faq-inner">
@@ -666,7 +682,7 @@
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span class="faq-q">E se eu não gostar?</span>
-                        <div class="faq-icon"></div>
+                        <div class="faq-icon"><i class="fas fa-plus"></i></div>
                     </button>
                     <div class="faq-content">
                         <div class="faq-inner">
@@ -681,9 +697,9 @@
 
     <footer>
         <div class="footer-title">TEACHER MESS</div>
-        <p>Feito com ❤️ para resgatar sua fluência.</p>
+        <p>Desenvolvido por <a href="https://mateuscalixto.com.br" style="color: #667eea;">Mateus Calixto</a></p>
         <p style="opacity: 0.5; font-size: 0.75rem; margin-top: 30px;">
-            Copyright © Super Friendly Teacher Mess - Todos os direitos reservados.
+            Copyright © Teacher Mess - Todos os direitos reservados.
         </p>
     </footer>
 
@@ -726,6 +742,7 @@
             faqItems.forEach(item => {
                 const trigger = item.querySelector('.faq-trigger');
                 const content = item.querySelector('.faq-content');
+                const icon = item.querySelector('.faq-icon i');
                 
                 trigger.addEventListener('click', () => {
                     const isActive = item.classList.contains('active');
@@ -734,15 +751,21 @@
                         if (otherItem !== item) {
                             otherItem.classList.remove('active');
                             otherItem.querySelector('.faq-content').style.maxHeight = null;
+                            otherItem.querySelector('.faq-icon i').classList.remove('fa-minus');
+                            otherItem.querySelector('.faq-icon i').classList.add('fa-plus');
                         }
                     });
 
                     if (isActive) {
                         item.classList.remove('active');
                         content.style.maxHeight = null;
+                        icon.classList.remove('fa-minus');
+                        icon.classList.add('fa-plus');
                     } else {
                         item.classList.add('active');
                         content.style.maxHeight = content.scrollHeight + "px";
+                        icon.classList.remove('fa-plus');
+                        icon.classList.add('fa-minus');
                     }
                 });
             });
