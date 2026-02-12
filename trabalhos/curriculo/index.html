@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Currículos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            /* UI Editor Colors */
+            --bg-body: #f3f4f6;
+            --bg-panel: #ffffff;
+            --border-ui: #e5e7eb;
+            --input-bg: #f9fafb;
+            
+            /* --- VARIÁVEIS DO CURRÍCULO (DINÂMICAS) --- */
+            /* Padrão: Monocromático (Tons de Cinza/Preto) */
+            --cv-sidebar-bg: #111827; /* Fundo Lateral (Quase preto) */
+            --cv-sidebar-text: #f9fafb; /* Texto Lateral */
+            --cv-accent: #9ca3af; /* Detalhes (Cinza claro) */
+            --cv-title: #000000; /* Títulos Principais */
+            --cv-text: #374151; /* Texto Corrido */
+            --cv-icon-bg: #f3f4f6; /* Fundo dos icones principais */
+            --cv-icon-color: #1f2937; /* Cor dos icones principais */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            height: 100vh;
+            display: flex;
+            color: #1f2937;
+            overflow: hidden;
+        }
+
+        /* --- EDITOR (ESQUERDA) --- */
+        .editor-panel {
+            width: 450px;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border-ui);
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.05);
+            z-index: 20;
+        }
+
+        /* Seletor de Cores */
+        .color-picker-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid var(--border-ui);
+        }
+        .color-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: #333; transform: scale(1.15); }
+
+        .editor-header h1 { 
+            font-size: 1.6rem; 
+            color: #111827; 
+            font-weight: 800; 
+            text-align: center;
+        }
+        .editor-header p { 
+            text-align: center; 
+            color: #6b7280; 
+            font-size: 0.85rem; 
+            margin-top: 5px; 
+        }
+
+        .section-group {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-ui);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .section-group h3 {
+            font-size: 0.9rem;
+            color: #374151;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-ui);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label { 
+            display: block; font-size: 0.75rem; font-weight: 600; 
+            color: #4b5563; margin-bottom: 6px; 
+        }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: var(--input-bg);
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus, .input-group textarea:focus { 
+            border-color: #111827; 
+            background: #fff;
+        }
+        textarea { resize: vertical; min-height: 70px; }
+
+        /* Estilo dos Cards de Inputs Repetíveis */
+        .repeater-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        /* Pequeno aviso visual de item vazio */
+        .repeater-item.empty-state {
+            opacity: 0.6;
+        }
+
+        .btn-add {
+            background: #fff;
+            color: #111827;
+            border: 1px dashed #9ca3af;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-add:hover { background: #f3f4f6; border-color: #4b5563; }
+        
+        .btn-download {
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
+        }
+        .btn-download:hover { transform: translateY(-2px); background: #000; }
+
+        /* --- PREVIEW --- */
+        .preview-panel {
+            flex: 1;
+            background: #cbd5e1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 60px;
+        }
+
+        #resume {
+            width: 210mm;
+            height: 297mm;
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: grid;
+            grid-template-columns: 32% 68%;
+            overflow: hidden;
+        }
+
+        /* --- DESIGN DO CV --- */
+        
+        /* Lateral */
+        .cv-sidebar {
+            background: var(--cv-sidebar-bg);
+            color: var(--cv-sidebar-text);
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s;
+        }
+
+        .cv-photo-container {
+            display: flex; justify-content: center; margin-bottom: 30px; display: none;
+        }
+        .cv-photo {
+            width: 140px; height: 140px; border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.15);
+            overflow: hidden;
+        }
+        .cv-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+        .sidebar-section { margin-bottom: 35px; display: none; }
+        .sidebar-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            margin-bottom: 15px;
+            color: var(--cv-accent);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+
+        .contact-info li {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 14px; font-size: 12px; line-height: 1.4; color: #e5e7eb;
+        }
+        .contact-info i { width: 16px; color: var(--cv-accent); font-size: 13px; text-align: center; }
+
+        .skills-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill-tag {
+            background: rgba(255,255,255,0.1);
+            color: #f3f4f6; padding: 5px 10px; border-radius: 4px;
+            font-size: 11px; font-weight: 500;
+        }
+
+        /* Principal */
+        .cv-main {
+            padding: 50px 40px;
+            color: var(--cv-text);
+            display: flex; flex-direction: column;
+        }
+
+        .cv-header { margin-bottom: 35px; border-bottom: 2px solid #f1f5f9; padding-bottom: 25px; display: none; }
+        .cv-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px; font-weight: 700; color: var(--cv-title);
+            line-height: 1; margin-bottom: 8px;
+        }
+        .cv-role {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; color: var(--cv-text); opacity: 0.8;
+            font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .cv-summary { 
+            font-size: 13px; color: var(--cv-text); margin-top: 20px; 
+            line-height: 1.6; text-align: justify; 
+        }
+
+        .main-section { margin-bottom: 30px; display: none; }
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; font-weight: 700;
+            text-transform: uppercase; color: var(--cv-title);
+            margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+            letter-spacing: 0.8px;
+        }
+        .main-title-icon-box {
+            background: var(--cv-icon-bg); color: var(--cv-icon-color);
+            width: 28px; height: 28px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
+        }
+
+        .timeline-item { 
+            margin-bottom: 20px; border-left: 2px solid #e5e7eb; 
+            padding-left: 20px; position: relative; 
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -5px; top: 6px;
+            width: 8px; height: 8px; background: var(--cv-title); border-radius: 50%;
+        }
+        
+        .job-title { font-weight: 700; font-size: 14px; color: var(--cv-title); }
+        .job-company { font-weight: 600; font-size: 13px; color: var(--cv-text); opacity: 0.9; margin-top: 2px; }
+        .job-date { font-size: 11px; color: #9ca3af; margin-bottom: 6px; display: block; margin-top: 2px; font-style: italic;}
+        .job-desc { font-size: 12px; color: var(--cv-text); line-height: 1.5; white-space: pre-line; }
+
+        @media (max-width: 1000px) {
+            body { flex-direction: column; overflow: auto; }
+            .editor-panel { width: 100%; height: auto; border: none; }
+            .preview-panel { display: none; }
+            .btn-download { position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 100; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="editor-panel">
+        <div class="editor-header">
+            <h1>Criador de Currículos</h1>
+            <p>Preencha os dados abaixo. Seções vazias não aparecem.</p>
+        </div>
+
+        <div class="color-picker-container">
+            <div class="color-btn active" style="background: #111827;" onclick="setTheme('mono')" title="Monocromático"></div>
+            <div class="color-btn" style="background: #1e3a8a;" onclick="setTheme('blue')" title="Azul Corporativo"></div>
+            <div class="color-btn" style="background: #14532d;" onclick="setTheme('green')" title="Verde Floresta"></div>
+            <div class="color-btn" style="background: #581c87;" onclick="setTheme('purple')" title="Roxo Criativo"></div>
+            <div class="color-btn" style="background: #7f1d1d;" onclick="setTheme('red')" title="Vinho"></div>
+        </div>
+
+        <div class="section-group">
+            <h3><i class="fa-regular fa-id-card"></i> Dados Pessoais</h3>
+            <div class="input-group">
+                <label>Foto (Opcional)</label>
+                <input type="file" id="inp-photo" accept="image/*" onchange="loadPhoto(event)">
+            </div>
+            <div class="input-group">
+                <label>Nome Completo</label>
+                <input type="text" id="inp-name" placeholder="Ex: João Silva" oninput="renderCV()">
+            </div>
+            <div class="input-group">
+                <label>Cargo Desejado</label>
+                <input type="text" id="inp-role" placeholder="Ex: Analista Financeiro" oninput="renderCV()">
+            </div>
+            <div class="input-group">
+                <label>Resumo Profissional</label>
+                <textarea id="inp-summary" placeholder="Breve resumo..." oninput="renderCV()"></textarea>
+            </div>
+        </div>
+
+        <div class="section-group">
+            <h3><i class="fa-solid fa-address-book"></i> Contato</h3>
+            <div class="input-group"><label>Email</label><input type="email" id="inp-email" oninput="renderCV()"></div>
+            <div class="input-group"><label>Telefone</label><input type="text" id="inp-phone" oninput="renderCV()"></div>
+            <div class="input-group"><label>Cidade/Estado</label><input type="text" id="inp-location" oninput="renderCV()"></div>
+            <div class="input-group"><label>Link (LinkedIn/Portfólio)</label><input type="text" id="inp-linkedin" oninput="renderCV()"></div>
+        </div>
+
+        <div class="section-group">
+            <h3><i class="fa-solid fa-briefcase"></i> Experiência</h3>
+            <p style="font-size:0.75rem; color:#666; margin-bottom:10px;">Limpe o texto para remover uma experiência.</p>
+            <div id="jobs-container"></div>
+            <button class="btn-add" onclick="addJob()">+ Adicionar</button>
+        </div>
+
+        <div class="section-group">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Educação</h3>
+            <p style="font-size:0.75rem; color:#666; margin-bottom:10px;">Limpe o texto para remover uma formação.</p>
+            <div id="edu-container"></div>
+            <button class="btn-add" onclick="addEdu()">+ Adicionar</button>
+        </div>
+
+        <div class="section-group">
+            <h3><i class="fa-solid fa-bolt"></i> Habilidades</h3>
+            <div class="input-group">
+                <label>Lista (separe por vírgula)</label>
+                <textarea id="inp-skills" placeholder="Excel Avançado, Inglês, Liderança..." oninput="renderCV()"></textarea>
+            </div>
+        </div>
+
+        <button class="btn-download" onclick="generatePDF()">
+            <i class="fa-solid fa-download"></i> Baixar
+        </button>
+    </div>
+
+    <div class="preview-panel">
+        <div id="resume">
+            <div class="cv-sidebar">
+                <div class="cv-photo-container" id="out-photo-wrapper">
+                    <div class="cv-photo"><img id="out-photo" src="" alt=""></div>
+                </div>
+                <div class="sidebar-section" id="sec-contact">
+                    <div class="sidebar-title">Contato</div>
+                    <ul class="contact-info">
+                        <li id="li-email"><i class="fa-solid fa-envelope"></i> <span id="out-email"></span></li>
+                        <li id="li-phone"><i class="fa-solid fa-phone"></i> <span id="out-phone"></span></li>
+                        <li id="li-location"><i class="fa-solid fa-location-dot"></i> <span id="out-location"></span></li>
+                        <li id="li-linkedin"><i class="fa-brands fa-link"></i> <span id="out-linkedin"></span></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section" id="sec-skills">
+                    <div class="sidebar-title">Competências</div>
+                    <div class="skills-list" id="out-skills"></div>
+                </div>
+            </div>
+
+            <div class="cv-main">
+                <div class="cv-header" id="sec-header">
+                    <div class="cv-name" id="out-name"></div>
+                    <div class="cv-role" id="out-role"></div>
+                    <div class="cv-summary" id="out-summary"></div>
+                </div>
+
+                <div class="main-section" id="sec-experience">
+                    <div class="main-title">
+                        <div class="main-title-icon-box"><i class="fa-solid fa-briefcase"></i></div>
+                        Experiência Profissional
+                    </div>
+                    <div id="out-jobs-list"></div>
+                </div>
+
+                <div class="main-section" id="sec-education">
+                    <div class="main-title">
+                        <div class="main-title-icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
+                        Formação Acadêmica
+                    </div>
+                    <div id="out-edu-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GERENCIAMENTO DE CORES ---
+        const themes = {
+            mono: {
+                '--cv-sidebar-bg': '#111827',
+                '--cv-sidebar-text': '#f9fafb',
+                '--cv-accent': '#9ca3af',
+                '--cv-title': '#000000',
+                '--cv-text': '#374151',
+                '--cv-icon-bg': '#f3f4f6',
+                '--cv-icon-color': '#1f2937'
+            },
+            blue: {
+                '--cv-sidebar-bg': '#1e3a8a',
+                '--cv-sidebar-text': '#eff6ff',
+                '--cv-accent': '#93c5fd',
+                '--cv-title': '#1e3a8a',
+                '--cv-text': '#1e293b',
+                '--cv-icon-bg': '#eff6ff',
+                '--cv-icon-color': '#1d4ed8'
+            },
+            green: {
+                '--cv-sidebar-bg': '#14532d',
+                '--cv-sidebar-text': '#f0fdf4',
+                '--cv-accent': '#86efac',
+                '--cv-title': '#166534',
+                '--cv-text': '#14532d',
+                '--cv-icon-bg': '#f0fdf4',
+                '--cv-icon-color': '#15803d'
+            },
+            purple: {
+                '--cv-sidebar-bg': '#581c87',
+                '--cv-sidebar-text': '#faf5ff',
+                '--cv-accent': '#d8b4fe',
+                '--cv-title': '#6b21a8',
+                '--cv-text': '#3b0764',
+                '--cv-icon-bg': '#faf5ff',
+                '--cv-icon-color': '#7e22ce'
+            },
+            red: {
+                '--cv-sidebar-bg': '#7f1d1d',
+                '--cv-sidebar-text': '#fef2f2',
+                '--cv-accent': '#fca5a5',
+                '--cv-title': '#991b1b',
+                '--cv-text': '#450a0a',
+                '--cv-icon-bg': '#fef2f2',
+                '--cv-icon-color': '#b91c1c'
+            }
+        };
+
+        function setTheme(themeName) {
+            const root = document.documentElement;
+            const theme = themes[themeName];
+            
+            // Aplica variaveis
+            for (const [key, value] of Object.entries(theme)) {
+                root.style.setProperty(key, value);
+            }
+
+            // Atualiza UI dos botoes
+            document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+            // Lógica simples para achar o botão clicado baseado no onclick (poderia ser melhorada com IDs)
+            event.target.classList.add('active');
+        }
+
+        // --- DADOS ---
+        let jobs = [];
+        let education = [];
+
+        window.onload = () => {
+            // Inicializa com 1 item vazio
+            addJob();
+            addEdu();
+            renderCV();
+        };
+
+        // Adicionar Job (Sem botão de deletar)
+        function addJob() {
+            const id = Date.now();
+            jobs.push({ id, title: '', company: '', date: '', desc: '' });
+            renderJobInputs();
+        }
+
+        // Renderiza inputs SEM A LIXEIRA
+        function renderJobInputs() {
+            const container = document.getElementById('jobs-container');
+            container.innerHTML = '';
+            
+            jobs.forEach((job) => {
+                const div = document.createElement('div');
+                div.className = 'repeater-item';
+                // Removemos o botão de lixeira daqui
+                div.innerHTML = `
+                    <div class="input-group">
+                        <label>Empresa</label>
+                        <input type="text" placeholder="Nome da Empresa" value="${job.company}" oninput="updateJob(${job.id}, 'company', this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>Cargo</label>
+                        <input type="text" placeholder="Seu Cargo" value="${job.title}" oninput="updateJob(${job.id}, 'title', this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>Período</label>
+                        <input type="text" placeholder="2022 - Atual" value="${job.date}" oninput="updateJob(${job.id}, 'date', this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>Descrição</label>
+                        <textarea placeholder="Responsabilidades..." oninput="updateJob(${job.id}, 'desc', this.value)">${job.desc}</textarea>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateJob(id, field, value) {
+            const job = jobs.find(j => j.id === id);
+            if (job) job[field] = value;
+            renderCV(); // Atualiza preview instantaneamente
+        }
+
+        // Educação
+        function addEdu() {
+            const id = Date.now() + 1;
+            education.push({ id, school: '', degree: '', date: '' });
+            renderEduInputs();
+        }
+
+        function renderEduInputs() {
+            const container = document.getElementById('edu-container');
+            container.innerHTML = '';
+            
+            education.forEach((edu) => {
+                const div = document.createElement('div');
+                div.className = 'repeater-item';
+                div.innerHTML = `
+                    <div class="input-group">
+                        <label>Instituição</label>
+                        <input type="text" placeholder="Universidade" value="${edu.school}" oninput="updateEdu(${edu.id}, 'school', this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>Curso</label>
+                        <input type="text" placeholder="Curso" value="${edu.degree}" oninput="updateEdu(${edu.id}, 'degree', this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>Ano</label>
+                        <input type="text" placeholder="2023" value="${edu.date}" oninput="updateEdu(${edu.id}, 'date', this.value)">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateEdu(id, field, value) {
+            const edu = education.find(e => e.id === id);
+            if (edu) edu[field] = value;
+            renderCV();
+        }
+
+        // --- RENDERIZAÇÃO INTELIGENTE (FILTRA VAZIOS) ---
+        function renderCV() {
+            // Textos básicos
+            updateText('inp-name', 'out-name', 'sec-header');
+            updateText('inp-role', 'out-role', null);
+            updateText('inp-summary', 'out-summary', null);
+            
+            // Contatos
+            updateContact('inp-email', 'out-email', 'li-email');
+            updateContact('inp-phone', 'out-phone', 'li-phone');
+            updateContact('inp-location', 'out-location', 'li-location');
+            updateContact('inp-linkedin', 'out-linkedin', 'li-linkedin');
+            
+            // Visibilidade da seção contato
+            const hasContact = ['inp-email', 'inp-phone', 'inp-location', 'inp-linkedin'].some(id => document.getElementById(id).value.trim() !== '');
+            document.getElementById('sec-contact').style.display = hasContact ? 'block' : 'none';
+
+            // JOBS - Filtra itens completamente vazios
+            const jobContainer = document.getElementById('out-jobs-list');
+            jobContainer.innerHTML = '';
+            
+            // Lógica "Automática": Só mostra se tiver Empresa OU Cargo preenchido
+            const activeJobs = jobs.filter(j => j.company.trim() !== '' || j.title.trim() !== '');
+
+            if (activeJobs.length > 0) {
+                document.getElementById('sec-experience').style.display = 'block';
+                activeJobs.forEach(job => {
+                    jobContainer.innerHTML += `
+                        <div class="timeline-item">
+                            <div class="job-title">${job.title}</div>
+                            <div class="job-company">${job.company}</div>
+                            <span class="job-date">${job.date}</span>
+                            <div class="job-desc">${job.desc}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                document.getElementById('sec-experience').style.display = 'none';
+            }
+
+            // EDUCATION - Filtra vazios
+            const eduContainer = document.getElementById('out-edu-list');
+            eduContainer.innerHTML = '';
+            
+            const activeEdu = education.filter(e => e.school.trim() !== '' || e.degree.trim() !== '');
+
+            if (activeEdu.length > 0) {
+                document.getElementById('sec-education').style.display = 'block';
+                activeEdu.forEach(edu => {
+                    eduContainer.innerHTML += `
+                        <div class="timeline-item">
+                            <div class="job-title">${edu.degree}</div>
+                            <div class="job-company">${edu.school}</div>
+                            <span class="job-date">${edu.date}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                document.getElementById('sec-education').style.display = 'none';
+            }
+
+            // Skills
+            const skillsVal = document.getElementById('inp-skills').value;
+            const skillsContainer = document.getElementById('out-skills');
+            skillsContainer.innerHTML = '';
+            if (skillsVal.trim()) {
+                document.getElementById('sec-skills').style.display = 'block';
+                skillsVal.split(',').forEach(skill => {
+                    if (skill.trim()) skillsContainer.innerHTML += `<span class="skill-tag">${skill.trim()}</span>`;
+                });
+            } else {
+                document.getElementById('sec-skills').style.display = 'none';
+            }
+        }
+
+        function updateText(inputId, outputId, parentSec) {
+            const val = document.getElementById(inputId).value;
+            document.getElementById(outputId).innerText = val;
+            if (parentSec && inputId === 'inp-name') {
+                document.getElementById(parentSec).style.display = val.trim() ? 'block' : 'none';
+            }
+        }
+
+        function updateContact(inId, outId, liId) {
+            const val = document.getElementById(inId).value;
+            document.getElementById(outId).innerText = val;
+            document.getElementById(liId).style.display = val.trim() ? 'flex' : 'none';
+        }
+
+        function loadPhoto(e) {
+            const file = e.target.files[0];
+            const c = document.getElementById('out-photo-wrapper');
+            const i = document.getElementById('out-photo');
+            if(file){
+                const r = new FileReader();
+                r.onload = (ev) => { i.src = ev.target.result; c.style.display = 'flex'; }
+                r.readAsDataURL(file);
+            } else { c.style.display = 'none'; }
+        }
+
+        function generatePDF() {
+            const element = document.getElementById('resume');
+            const name = document.getElementById('inp-name').value || 'cv';
+            element.style.boxShadow = 'none';
+            element.style.maxHeight = '297mm';
+            element.style.overflow = 'hidden';
+
+            const opt = {
+                margin: 0,
+                filename: `${name.trim().replace(/\s+/g,'_').toLowerCase()}.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowHeight: 1123 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.boxShadow = '';
+                element.style.maxHeight = 'none';
+                element.style.overflow = '';
+            });
+        }
+    </script>
+</body>
+</html>
