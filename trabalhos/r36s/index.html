@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R36S Hub | Comunidade Retro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+</head>
+
+<style>
+    /* ==========================================================================
+    VARIÁREIS E DEFINIÇÕES GLOBAIS
+    ========================================================================== */
+    :root {
+        --bg-color: #050508;
+        --card-bg: rgba(22, 27, 34, 0.7);
+        --primary: #8b5cf6;
+        --primary-glow: rgba(139, 92, 246, 0.2); /* Ajustado para mais sutileza */
+        --secondary: #0ea5e9;
+        --text-main: #f8fafc;
+        --text-muted: #a0aec4; /* Melhor contraste */
+        --border: rgba(255, 255, 255, 0.08);
+        --radius: 16px;
+        --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: var(--bg-color);
+        /* Mesh Gradient de fundo para profundidade visual */
+        background-image: 
+            radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Scrollbar Customizada */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    /* ==========================================================================
+    TIPOGRAFIA E UTILITÁRIOS
+    ========================================================================== */
+    h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; }
+
+    .pixel-font { 
+        font-family: 'Press Start 2P', cursive; 
+        font-size: 0.75rem; 
+        color: var(--secondary); 
+        text-transform: uppercase;
+    }
+
+    .gradient-text {
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    /* ==========================================================================
+    NAVEGAÇÃO (NAVBAR)
+    ========================================================================== */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 5%;
+        background: rgba(5, 5, 8, 0.8);
+        backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+    .nav-links a.active, .nav-links a:hover {
+        color: var(--text-main);
+        text-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+        display: none;
+        cursor: pointer;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: var(--text-main);
+        transition: 0.3s;
+    }
+
+    @media (max-width: 768px) {
+        .hamburger { display: flex; }
+        .nav-links { 
+            display: none; 
+            flex-direction: column; 
+            position: absolute; 
+            top: 60px; 
+            right: 20px; 
+            background: var(--card-bg); 
+            padding: 1rem; 
+            border-radius: var(--radius); 
+            border: 1px solid var(--border);
+            gap: 1rem;
+        }
+        .nav-links.active { display: flex; }
+    }
+
+    /* ==========================================================================
+    HERO E BUSCA
+    ========================================================================== */
+    .hero {
+        text-align: center;
+        padding: 5rem 1rem 3rem;
+    }
+
+    .hero p {
+        color: var(--text-muted);
+        margin-top: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .search-bar {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 0.8rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 550px;
+        margin: 2.5rem auto 0;
+        transition: var(--transition);
+    }
+
+    .search-bar:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-glow);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .search-bar input {
+        background: transparent;
+        border: none;
+        color: white;
+        width: 100%;
+        outline: none;
+        font-size: 1rem;
+    }
+
+    /* ==========================================================================
+    FILTROS E CHIPS
+    ========================================================================== */
+    .filters {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-chip {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filter-chip:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-main);
+    }
+
+    .filter-chip.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    /* Chips com Ícones (exemplos com emojis) */
+    .filter-chip[data-cat="theme"]::before { content: '🎨 '; }
+    .filter-chip[data-cat="tutorial"]::before { content: '📖 '; }
+    .filter-chip[data-cat="cd"]::before { content: '💿 '; }
+
+    /* ==========================================================================
+    GRID DE CONTEÚDO E CARDS
+    ========================================================================== */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding-bottom: 5rem;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.3s ease-out, box-shadow 0.3s;
+        position: relative;
+        backdrop-filter: blur(4px);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
+    }
+
+    .card-img {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .card-body { padding: 1.5rem; }
+
+    .card-tag {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: var(--secondary);
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    /* Botão Favorito (Like) */
+    .fav-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 10;
+        background: rgba(0,0,0,0.6);
+        border: none;
+        color: white;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(4px);
+    }
+
+    .fav-btn:hover { transform: scale(1.15); }
+    .fav-btn.active { color: #ef4444; background: white; }
+
+    /* Animação Fade-in no Grid */
+    .content-grid article { animation: fadeIn 0.5s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ==========================================================================
+    MODAIS E DETALHES DO POST
+    ========================================================================== */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(12px);
+        z-index: 2000;
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        background: #0d1117;
+        width: 90%;
+        max-width: 850px;
+        margin: 5vh auto;
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        position: relative;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+
+    .close-x {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,255,255,0.05);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+
+    .close-x:hover { background: #ef4444; transform: rotate(90deg); }
+
+    .post-banner { width: 100%; height: 380px; object-fit: cover; }
+    .post-body { padding: 3rem; }
+
+    /* Markdown Styling */
+    .markdown-content { margin: 2rem 0; font-size: 1.05rem; line-height: 1.8; }
+    .markdown-content h3 { color: var(--secondary); margin: 2rem 0 1rem; border-left: 4px solid var(--primary); padding-left: 15px; }
+    .markdown-content code { background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.9em; }
+    .markdown-content ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+
+    /* ==========================================================================
+    FORMULÁRIOS E BOTÕES
+    ========================================================================== */
+    .dash-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        background: var(--card-bg);
+        padding: 3rem;
+        border-radius: 24px;
+        border: 1px solid var(--border);
+    }
+
+    .dash-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .form-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.6rem;
+    }
+
+    .dash-form input, .dash-form select, .dash-form textarea {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+        background: #050508;
+        border: 1px solid var(--border);
+        color: white;
+        font-family: inherit;
+        transition: 0.3s;
+    }
+
+    .dash-form input:focus, .dash-form textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), #6d28d9);
+        color: white;
+        border: none;
+        padding: 0.9rem 1.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: white;
+        border: none;
+        padding: 0.9rem 1.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .btn-danger:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px #ef4444;
+    }
+
+    .btn-danger:active { transform: scale(0.98); }
+
+    /* ==========================================================================
+    SISTEMA DE TOASTS E FEEDBACK
+    ========================================================================== */
+    #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
+
+    .toast {
+        padding: 1.2rem 2.5rem;
+        border-radius: 16px;
+        color: white;
+        margin-top: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        animation: toastSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes toastSlideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .loading-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem;
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+
+    /* ==========================================================================
+    RESPONSIVIDADE
+    ========================================================================== */
+    @media (max-width: 768px) {
+        .navbar { padding: 1rem 1.5rem; }
+        .grid-2 { grid-template-columns: 1fr; }
+        .hero { padding: 3rem 1rem; }
+        .post-body { padding: 1.5rem; }
+        .post-banner { height: 250px; }
+        .modal-content { width: 95%; margin: 2vh auto; }
+    }
+</style>
+<body>
+
+    <div id="toast-container"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="pixel-font">R36S</span> HUB
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" id="view-home" class="active">Explorar</a></li>
+            <li id="nav-dashboard" style="display: none;"><a href="#" id="view-dash">Contribuir</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+        <div id="auth-controls">
+            <button id="btn-login-open" class="btn-primary">
+                <i class="ph-user"></i> <span>Entrar</span>
+            </button>
+            <button id="btn-logout" class="btn-primary btn-danger" style="display: none;">
+                <i class="ph-sign-out"></i> Sair
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section id="section-home">
+            <header class="hero">
+                <h1>O melhor do <span class="gradient-text">R36S</span></h1>
+                <p>Biblioteca de temas, guias e firmwares pela comunidade.</p>
+                
+                <div class="search-bar">
+                    <i class="ph-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Pesquisar temas ou guias...">
+                </div>
+            </header>
+            
+            <div class="filters">
+                <button class="filter-chip active" data-cat="all">Todos</button>
+                <button class="filter-chip" data-cat="theme">Temas</button>
+                <button class="filter-chip" data-cat="tutorial">Tutoriais</button>
+                <button class="filter-chip" id="filter-favs">
+                <i class="ph-heart-fill"></i> Salvos
+                </button>
+            </div>
+
+            <section id="content-grid" class="content-grid"></section>
+        </section>
+
+        <section id="section-dashboard" style="display: none;">
+            <div class="dash-container">
+                <h2 class="gradient-text">Nova Contribuição</h2>
+                <form id="form-contribute" class="dash-form">
+                    <div class="form-group">
+                        <label>Título do Projeto</label>
+                        <input type="text" id="item-title" placeholder="Ex: Crystal OS Dark" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="item-type">
+                            <option value="theme">Tema</option>
+                            <option value="tutorial">Tutorial / Guia</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descrição Curta (Card)</label>
+                        <textarea id="item-desc" rows="2" placeholder="Uma breve introdução..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Conteúdo Detalhado (Markdown Suportado)</label>
+                        <textarea id="item-content" style="height: 250px;" placeholder="Escreva o seu guia aqui..."></textarea>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>URL da Imagem (Capa)</label>
+                            <input type="url" id="item-thumb" placeholder="https://imgur.com/..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>ID do Vídeo YouTube (Opcional)</label>
+                            <input type="text" id="item-video" placeholder="Ex: dQw4w9WgXcQ">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Link de Download</label>
+                        <input type="url" id="item-link" placeholder="GitHub, Mega, etc." required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem;">
+                        <i class="ph-paper-plane-tilt"></i> Publicar no Hub
+                    </button>
+                </form>
+            </div>
+            <!-- Nova seção para posts do usuário -->
+            <div class="dash-container" id="user-posts" style="display: none;">
+                <h2 class="gradient-text">Seus Posts</h2>
+                <div id="user-posts-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="post-modal" class="modal">
+        <div class="modal-content post-detail">
+            <button id="btn-close-post" class="close-x">
+                <i class="ph-x"></i>
+            </button>
+            <div id="post-content-area">
+                </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px; padding: 2.5rem;">
+            <h2 id="auth-title" class="pixel-font" style="margin-bottom: 0.5rem;">Login</h2>
+            <p id="auth-subtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">
+                Aceda à sua conta para gerir publicações.
+            </p>
+            
+            <div class="dash-form">
+                <div class="form-group">
+                    <input type="email" id="auth-email" placeholder="E-mail">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="auth-pass" placeholder="Palavra-passe">
+                </div>
+                <button id="btn-auth-confirm" class="btn-primary" style="width: 100%; justify-content: center;">
+                    Confirmar
+                </button>
+                <button id="btn-auth-toggle" class="btn-link" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size: 0.8rem; margin-top: 10px;">
+                    Não tem conta? Registe-se
+                </button>
+                <button id="btn-auth-close" style="background:transparent; border:none; color: #555; cursor:pointer; margin-top: 15px;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // ==========================================================================
+        // CONFIGURAÇÃO E IMPORTAÇÕES DO FIREBASE
+        // ==========================================================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, query, serverTimestamp, orderBy, limit, startAfter, where, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG5BLxR02T6jO8yX9smrELRudlIV1vDOw",
+            authDomain: "r36s-97621.firebaseapp.com",
+            projectId: "r36s-97621",
+            storageBucket: "r36s-97621.firebasestorage.app",
+            messagingSenderId: "77809018203",
+            appId: "1:77809018203:web:aba6d9dd8b7b523cfd667e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // ==========================================================================
+        // UTILITÁRIOS E UI
+        // ==========================================================================
+
+        // Sistema de Notificações (Toasts)
+        function notify(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast`;
+            toast.style.background = type === 'success' ? '#10b981' : (type === 'info' ? '#3b82f6' : '#ef4444');
+            toast.innerHTML = `<i class="ph-info-bold"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // Template padrão para novos tutoriais
+        const tutorialTemplate = `### 📋 Requisitos
+* Cartão SD Original (SanDisk/Samsung)
+* Firmware ArkOS/RetroOz atualizado
+
+### 🚀 Passo a Passo
+1. Primeiro passo detalhado aqui...
+2. Configure as seguintes opções no menu...
+
+### ⚠️ Notas Importantes
+> Nunca desligue o console durante o processo de flash!`;
+
+        // ==========================================================================
+        // GESTÃO DE FAVORITOS (LocalStorage)
+        // ==========================================================================
+
+        function getFavs() {
+            return JSON.parse(localStorage.getItem('r36s_favs') || '[]');
+        }
+
+        function toggleFav(id, event) {
+            if (event) event.stopPropagation();
+            let favs = getFavs();
+            const index = favs.indexOf(id);
+
+            if (index > -1) {
+                favs.splice(index, 1);
+                notify("Removido dos favoritos", "info");
+            } else {
+                favs.push(id);
+                notify("Guardado nos favoritos!", "success");
+            }
+
+            localStorage.setItem('r36s_favs', JSON.stringify(favs));
+            
+            // Re-renderizar se necessário
+            const currentActiveFilter = document.querySelector('.filter-chip.active');
+            fetchContent(currentActiveFilter.dataset.cat, document.getElementById('searchInput').value, currentActiveFilter.id === 'filter-favs');
+        }
+
+        // ==========================================================================
+        // MOTOR DE DADOS: BUSCA E RENDERIZAÇÃO
+        // ==========================================================================
+
+        let lastDoc = null;
+
+        async function fetchContent(category = 'all', term = '', onlyFavs = false, loadMore = false) {
+            const grid = document.getElementById('content-grid');
+            if (!loadMore) {
+                grid.innerHTML = '<div class="loading-state">A sintonizar o Hub...</div>';
+                lastDoc = null;
+            }
+            
+            try {
+                let q = query(collection(db, "resources"), orderBy("createdAt", "desc"), limit(10));
+                if (lastDoc && loadMore) q = query(q, startAfter(lastDoc));
+                const snap = await getDocs(q);
+                lastDoc = snap.docs[snap.docs.length - 1];
+
+                const favs = getFavs();
+                if (!loadMore) grid.innerHTML = '';
+
+                let count = 0;
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const id = doc.id;
+                    
+                    // Busca avançada em múltiplos campos
+                    const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
+                    if (term && !searchStr.includes(term.toLowerCase())) return;
+                    if (category !== 'all' && data.type !== category) return;
+                    if (onlyFavs && !favs.includes(id)) return;
+
+                    count++;
+                    const isFav = favs.includes(id);
+
+                    const card = document.createElement('article');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <button class="fav-btn ${isFav ? 'active' : ''}" title="Favoritar" aria-label="Favoritar post">
+                            <i class="ph-heart-fill"></i>
+                        </button>
+                        <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/161b22/FFF?text=R36S+Hub'">
+                        <div class="card-body">
+                            <span class="card-tag">${data.type}</span>
+                            <h3>${data.title}</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${data.description.substring(0, 80)}...</p>
+                        </div>
+                    `;
+
+                    // Eventos do Card
+                    card.querySelector('.fav-btn').onclick = (e) => toggleFav(id, e);
+                    card.onclick = () => openPost(data);
+                    grid.appendChild(card);
+                });
+
+                // Botão Load More
+                if (snap.size === 10 && !document.getElementById('load-more-btn')) {
+                    const loadBtn = document.createElement('button');
+                    loadBtn.id = 'load-more-btn';
+                    loadBtn.className = 'btn-primary';
+                    loadBtn.style.margin = '2rem auto';
+                    loadBtn.style.display = 'block';
+                    loadBtn.innerText = 'Carregar Mais';
+                    loadBtn.onclick = () => {
+                        fetchContent(category, term, onlyFavs, true);
+                        loadBtn.remove();
+                    };
+                    grid.appendChild(loadBtn);
+                }
+
+                if (count === 0 && !loadMore) {
+                    grid.innerHTML = '<div class="loading-state">Nenhum resultado encontrado nesta categoria.</div>';
+                }
+
+            } catch (err) { 
+                console.error(err);
+                notify("Erro ao carregar dados do Firebase: " + err.message, "error");
+            }
+        }
+
+        function openPost(data) {
+            const area = document.getElementById('post-content-area');
+            
+            // Tratamento de Vídeo YouTube melhorado
+            let videoHTML = '';
+            if (data.videoUrl) {
+                const match = data.videoUrl.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                const videoId = match ? match[1] : data.videoUrl;
+                videoHTML = `
+                    <div class="post-video" style="position:relative; padding-bottom:56.25%; height:0; margin: 2rem 0; overflow:hidden; border-radius:12px;">
+                        <iframe style="position:absolute; top:0; left:0; width:100%; height:100%;" 
+                        src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                    </div>`;
+            }
+            
+            area.innerHTML = `
+                <img src="${data.thumbnailUrl}" class="post-banner" alt="Banner de ${data.title}" onerror="this.src='https://placehold.co/1200x600/161b22/FFF?text=R36S+Hub'">
+                <div class="post-body">
+                    <span class="pixel-font">${data.type}</span>
+                    <h1 style="margin: 10px 0 5px 0;">${data.title}</h1>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Contribuído por: <strong>${data.authorName || 'Membro do Hub'}</strong></p>
+                    
+                    <div class="markdown-content">${marked.parse(data.content || '*Sem detalhes adicionais.*')}</div>
+                    
+                    ${videoHTML}
+                    
+                    <a href="${data.link}" target="_blank" class="btn-primary" style="justify-content:center; text-decoration:none; padding: 1.2rem; margin-top: 2rem; width: 100%;">
+                        <i class="ph-download-simple"></i> Download / Aceder Recurso
+                    </a>
+                </div>
+            `;
+            document.getElementById('post-modal').style.display = 'block';
+        }
+
+        // ==========================================================================
+        // EVENTOS DE NAVEGAÇÃO E AUTENTICAÇÃO
+        // ==========================================================================
+
+        // Alternar entre abas (Início / Dashboard)
+        const showView = (view) => {
+            document.getElementById('section-home').style.display = view === 'home' ? 'block' : 'none';
+            document.getElementById('section-dashboard').style.display = view === 'dash' ? 'block' : 'none';
+            
+            // Atualiza estado ativo nos links da nav
+            document.getElementById('view-home').classList.toggle('active', view === 'home');
+            document.getElementById('view-dash').classList.toggle('active', view === 'dash');
+            
+            if(view === 'home') fetchContent();
+            if(view === 'dash') loadUserPosts();
+        };
+
+        document.getElementById('view-home').onclick = (e) => { e.preventDefault(); showView('home'); };
+        document.getElementById('view-dash').onclick = (e) => { e.preventDefault(); showView('dash'); };
+
+        // Hamburger Toggle
+        document.getElementById('hamburger').onclick = () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        };
+
+        // Login / Registo
+        let isLoginMode = true;
+        const authModal = document.getElementById('auth-modal');
+
+        document.getElementById('btn-auth-toggle').onclick = () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerText = isLoginMode ? "Entrar" : "Criar Conta";
+            document.getElementById('btn-auth-confirm').innerText = isLoginMode ? "Entrar" : "Registar";
+            document.getElementById('btn-auth-toggle').innerText = isLoginMode ? "Não tem conta? Registe-se" : "Já tem conta? Login";
+        };
+
+        document.getElementById('btn-auth-confirm').onclick = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            
+            if(!email || !pass) return notify("Preencha todos os campos", "error");
+
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    notify("Sessão iniciada!");
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    notify("Conta criada com sucesso!");
+                }
+                authModal.style.display = 'none';
+            } catch (e) {
+                notify("Erro: Verifique as suas credenciais.", "error");
+            }
+        };
+
+        // Monitor de estado do Utilizador
+        onAuthStateChanged(auth, user => {
+            document.getElementById('nav-dashboard').style.display = user ? 'block' : 'none';
+            document.getElementById('btn-login-open').style.display = user ? 'none' : 'block';
+            document.getElementById('btn-logout').style.display = user ? 'block' : 'none';
+            document.getElementById('user-posts').style.display = user ? 'block' : 'none';
+        });
+
+        // Fechar Modais
+        document.getElementById('btn-login-open').onclick = () => authModal.style.display = 'block';
+        document.getElementById('btn-auth-close').onclick = () => authModal.style.display = 'none';
+        document.getElementById('btn-close-post').onclick = () => document.getElementById('post-modal').style.display = 'none';
+        document.getElementById('btn-logout').onclick = () => {
+            signOut(auth);
+            showView('home');
+            notify("Sessão terminada", "info");
+        };
+
+        // Fechar modal ao clicar fora dele
+        window.onclick = (event) => {
+            if (event.target == authModal) authModal.style.display = "none";
+            if (event.target == document.getElementById('post-modal')) document.getElementById('post-modal').style.display = "none";
+        };
+
+        // ==========================================================================
+        // FILTROS E PESQUISA
+        // ==========================================================================
+
+        let debounceTimer;
+        document.getElementById('searchInput').oninput = (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                fetchContent('all', e.target.value);
+            }, 300); // Debounce para performance
+        };
+
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.onclick = () => {
+                if(chip.id === 'filter-favs') {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    fetchContent('all', '', true);
+                    return;
+                }
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                fetchContent(chip.dataset.cat);
+            };
+        });
+
+        // Template Automático
+        document.getElementById('item-type').onchange = (e) => {
+            const content = document.getElementById('item-content');
+            if (e.target.value === 'tutorial' && !content.value) {
+                content.value = tutorialTemplate;
+                notify("Template de tutorial aplicado", "info");
+            }
+        };
+
+        // ==========================================================================
+        // SUBMISSÃO DE CONTEÚDO
+        // ==========================================================================
+
+        function validateForm() {
+            const title = document.getElementById('item-title').value;
+            const thumb = document.getElementById('item-thumb').value;
+            const link = document.getElementById('item-link').value;
+            let video = document.getElementById('item-video').value;
+
+            if (!title) {
+                notify("Título é obrigatório", "error");
+                return false;
+            }
+            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg)$/i)) {
+                notify("URL de imagem inválida (deve ser jpg, png ou gif)", "error");
+                return false;
+            }
+            if (!link.match(/^https?:\/\/.+/i)) {
+                notify("Link de download inválido", "error");
+                return false;
+            }
+            if (video) {
+                const match = video.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                if (!match) {
+                    notify("ID de vídeo YouTube inválido", "error");
+                    return false;
+                }
+                video = match[1]; // Atualiza para ID puro
+            }
+            return true;
+        }
+
+        document.getElementById('form-contribute').onsubmit = async (e) => {
+            e.preventDefault();
+            if (!validateForm()) return;
+
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.innerText = "A publicar...";
+
+            try {
+                await addDoc(collection(db, "resources"), {
+                    title: document.getElementById('item-title').value,
+                    type: document.getElementById('item-type').value,
+                    description: document.getElementById('item-desc').value,
+                    content: document.getElementById('item-content').value,
+                    thumbnailUrl: document.getElementById('item-thumb').value,
+                    videoUrl: document.getElementById('item-video').value,
+                    link: document.getElementById('item-link').value,
+                    authorName: auth.currentUser.email.split('@')[0],
+                    createdAt: serverTimestamp()
+                });
+
+                notify("Publicado com sucesso no Hub!");
+                e.target.reset();
+                showView('home');
+            } catch (err) {
+                notify("Erro ao publicar conteúdo: " + err.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
+            }
+        };
+
+        // ==========================================================================
+        // CARREGAR POSTS DO USUÁRIO PARA EDIÇÃO/EXCLUSÃO
+        // ==========================================================================
+
+        async function loadUserPosts() {
+            if (!auth.currentUser) return;
+            const userPostsList = document.getElementById('user-posts-list');
+            userPostsList.innerHTML = '<div class="loading-state">Carregando seus posts...</div>';
+
+            try {
+                const q = query(collection(db, "resources"), where("authorName", "==", auth.currentUser.email.split('@')[0]), orderBy("createdAt", "desc"));
+                const snap = await getDocs(q);
+                userPostsList.innerHTML = '';
+
+                if (snap.empty) {
+                    userPostsList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Você ainda não tem posts.</p>';
+                    return;
+                }
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const id = doc.id;
+                    const postItem = document.createElement('div');
+                    postItem.style.marginBottom = '1rem';
+                    postItem.style.padding = '1rem';
+                    postItem.style.border = '1px solid var(--border)';
+                    postItem.style.borderRadius = '12px';
+                    postItem.innerHTML = `
+                        <h3>${data.title}</h3>
+                        <p>${data.description.substring(0, 50)}...</p>
+                        <button class="btn-primary" onclick="editPost('${id}')">Editar</button>
+                        <button class="btn-danger" onclick="deletePost('${id}')">Excluir</button>
+                    `;
+                    userPostsList.appendChild(postItem);
+                });
+            } catch (err) {
+                notify("Erro ao carregar seus posts: " + err.message, "error");
+            }
+        }
+
+        // Funções de Edição e Exclusão (básicas, expandir conforme necessário)
+        window.editPost = async (id) => {
+            notify("Funcionalidade de edição em desenvolvimento.", "info");
+            // Para implementação completa: fetch doc, preencha form, use updateDoc
+        };
+
+        window.deletePost = async (id) => {
+            if (!confirm("Tem certeza que deseja excluir este post?")) return;
+            try {
+                await deleteDoc(doc(db, "resources", id));
+                notify("Post excluído com sucesso!", "success");
+                loadUserPosts();
+            } catch (err) {
+                notify("Erro ao excluir post: " + err.message, "error");
+            }
+        };
+
+        // Inicialização
+        fetchContent();
+    </script>
+</body>
+</html>
