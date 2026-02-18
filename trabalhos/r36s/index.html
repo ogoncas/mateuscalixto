@@ -196,23 +196,47 @@
     .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
     @media (max-width: 768px) {
-        .hamburger { display: flex; }
+        .hamburger { 
+            display: flex; 
+            margin-left: auto;
+        }
         .nav-links { 
             display: none; 
             flex-direction: column; 
-            position: absolute; 
-            top: 60px; 
-            left: 0; 
-            width: 100%; 
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            width: 280px; 
+            height: 100vh; 
             background: rgba(10, 10, 15, 0.95); 
-            padding: 1.5rem 0; 
-            border-bottom: 1px solid var(--border);
+            padding: 4rem 2rem 2rem; 
+            border-left: 1px solid var(--border);
             gap: 1.5rem;
-            align-items: center;
-            animation: slideDown 0.3s ease-out;
+            align-items: flex-start;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
         }
-        .nav-links.active { display: flex; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-links.active { 
+            display: flex; 
+            transform: translateX(0);
+        }
+        .nav-links li {
+            width: 100%;
+        }
+        .nav-links a {
+            padding: 0.5rem 0;
+            width: 100%;
+        }
+        .nav-links #auth-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+        .nav-links #auth-controls button {
+            width: 100%;
+            justify-content: flex-start;
+        }
     }
 
     /* ==========================================================================
@@ -378,7 +402,7 @@
     .fav-btn.active { color: #f43f5e; background: rgba(255,255,255,0.9); }
 
     /* ==========================================================================
-    MODAIS E DETALHES DO POST - MAIS LAPIDADOS
+    MODAIS E DETALHES DO POST - MAIS LAPIDADOS E MELHORADOS
     ========================================================================== */
     .modal {
         display: none;
@@ -398,7 +422,7 @@
     .modal-content {
         background: #111827;
         width: 90%;
-        max-width: 900px;
+        max-width: 1000px; /* Aumentado para melhor exibição em telas maiores */
         margin: auto;
         border-radius: var(--radius);
         border: 1px solid var(--border);
@@ -427,14 +451,163 @@
 
     .close-x:hover { color: #ef4444; transform: scale(1.1); }
 
-    .post-banner { width: 100%; height: 400px; object-fit: cover; }
-    .post-body { padding: 2.5rem; }
+    .post-banner { 
+        width: 100%; 
+        height: 400px; 
+        object-fit: cover; 
+        border-bottom: 1px solid var(--border); /* Adicionado borda sutil para separação */
+    }
 
-    /* Markdown Styling - Mais clean */
-    .markdown-content { margin: 1.5rem 0; font-size: 1rem; line-height: 1.75; }
-    .markdown-content h3 { color: var(--text-main); margin: 1.5rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-    .markdown-content code { background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-    .markdown-content ul { padding-left: 1.25rem; margin-bottom: 1.25rem; list-style-type: disc; }
+    .post-body { 
+        padding: 2.5rem; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 1.5rem; /* Melhor espaçamento interno */
+    }
+
+    .post-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .post-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    /* Markdown Styling - Aprimorado para melhor legibilidade e visual */
+    .markdown-content { 
+        margin: 1.5rem 0; 
+        font-size: 1rem; 
+        line-height: 1.75; 
+    }
+
+    .markdown-content h1,
+    .markdown-content h2,
+    .markdown-content h3,
+    .markdown-content h4,
+    .markdown-content h5,
+    .markdown-content h6 {
+        color: var(--text-main);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+
+    .markdown-content h1 { font-size: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    .markdown-content h2 { font-size: 1.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    .markdown-content h3 { font-size: 1.5rem; }
+    .markdown-content h4 { font-size: 1.25rem; }
+    .markdown-content h5 { font-size: 1.1rem; }
+    .markdown-content h6 { font-size: 1rem; color: var(--text-muted); }
+
+    .markdown-content p {
+        margin-bottom: 1.25rem;
+        color: var(--text-main);
+    }
+
+    .markdown-content ul,
+    .markdown-content ol {
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+
+    .markdown-content ul { list-style-type: disc; }
+    .markdown-content ol { list-style-type: decimal; }
+
+    .markdown-content li {
+        margin-bottom: 0.75rem;
+    }
+
+    .markdown-content a {
+        color: var(--primary);
+        text-decoration: underline;
+        transition: var(--transition);
+    }
+
+    .markdown-content a:hover {
+        color: var(--secondary);
+    }
+
+    .markdown-content code {
+        background: rgba(255,255,255,0.05);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        color: #f472b6;
+    }
+
+    .markdown-content pre {
+        background: rgba(17, 24, 39, 0.8); /* Fundo mais escuro para destaque */
+        padding: 1.25rem;
+        border-radius: 12px;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95em;
+        line-height: 1.5;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.2); /* Sombra interna para profundidade */
+    }
+
+    .markdown-content pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+    }
+
+    .markdown-content blockquote {
+        border-left: 4px solid var(--primary);
+        padding-left: 1.25rem;
+        margin: 1.5rem 0;
+        color: var(--text-muted);
+        font-style: italic;
+        background: rgba(255,255,255,0.02);
+        border-radius: 4px;
+    }
+
+    .markdown-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.3s ease;
+    }
+
+    .markdown-content img:hover {
+        transform: scale(1.02);
+    }
+
+    .markdown-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+
+    .markdown-content th,
+    .markdown-content td {
+        border: 1px solid var(--border);
+        padding: 0.75rem;
+        text-align: left;
+    }
+
+    .markdown-content th {
+        background: rgba(255,255,255,0.05);
+        font-weight: 600;
+    }
+
+    .markdown-content hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2rem 0;
+    }
 
     /* ==========================================================================
     FORMULÁRIOS E BOTÕES - MAIS PROFISSIONAIS
@@ -636,6 +809,7 @@
         .post-banner { height: 300px; }
         .modal-content { width: 95%; }
         .content-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        .markdown-content pre { padding: 1rem; font-size: 0.85em; }
     }
 </style>
 <body>
@@ -747,10 +921,10 @@
 
     <footer>
         <div class="footer-links">
-            <a href="#">Sobre</a>
-            <a href="#">Contato</a>
-            <a href="#">Termos de Uso</a>
-            <a href="#">Privacidade</a>
+            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#sobre">Sobre</a>
+            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#contato">Contato</a>
+            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#termos-de-uso">Termos de Uso</a>
+            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#privacidade">Privacidade</a>
         </div>
         <p>&copy; 2026 R36S Hub. Criado por <a href="https://mateuscalixto.com.br">Mateus Calixto</a>. Todos os direitos reservados.</p>
     </footer>
@@ -962,18 +1136,30 @@
                 const match = data.videoUrl.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
                 const videoId = match ? match[1] : data.videoUrl;
                 videoHTML = `
-                    <div class="post-video" style="position:relative; padding-bottom:56.25%; height:0; margin: 2rem 0; overflow:hidden; border-radius:12px;">
+                    <div class="post-video" style="position:relative; padding-bottom:56.25%; height:0; margin: 2rem 0; overflow:hidden; border-radius:12px; box-shadow: var(--shadow-sm);">
                         <iframe style="position:absolute; top:0; left:0; width:100%; height:100%;" 
                         src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
                     </div>`;
             }
             
+            // Adicionado formatação de data se disponível (assumindo data.createdAt é um Timestamp do Firebase)
+            let dateStr = '';
+            if (data.createdAt && data.createdAt.toDate) {
+                const date = data.createdAt.toDate();
+                dateStr = date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            
             area.innerHTML = `
                 <img src="${data.thumbnailUrl}" class="post-banner" alt="Banner de ${data.title}" onerror="this.src='https://placehold.co/1200x600/161b22/FFF?text=R36S+Hub'">
                 <div class="post-body">
-                    <span class="pixel-font">${data.type}</span>
-                    <h1 style="margin: 10px 0 5px 0;">${data.title}</h1>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Contribuído por: <strong>${data.authorName || 'Membro do Hub'}</strong></p>
+                    <div class="post-header">
+                        <span class="pixel-font">${data.type}</span>
+                        <h1 style="margin: 10px 0 5px 0;">${data.title}</h1>
+                    </div>
+                    <div class="post-meta">
+                        <span>Contribuído por: <strong>${data.authorName || 'Membro do Hub'}</strong></span>
+                        ${dateStr ? `<span>Publicado em: ${dateStr}</span>` : ''}
+                    </div>
                     
                     <div class="markdown-content">${marked.parse(data.content || '*Sem detalhes adicionais.*')}</div>
                     
@@ -1054,6 +1240,7 @@
             document.getElementById('btn-login-open').style.display = user ? 'none' : 'block';
             document.getElementById('btn-logout').style.display = user ? 'block' : 'none';
             document.getElementById('user-posts').style.display = user ? 'block' : 'none';
+            handleMobileLayout(); // Reajustar layout após mudança de estado
         });
 
         // Fechar Modais
@@ -1262,6 +1449,36 @@
                 notify("Erro ao excluir post: " + err.message, "error");
             }
         };
+
+        // Ajuste para layout mobile
+        function handleMobileLayout() {
+            const isMobile = window.innerWidth <= 768;
+            const navLinks = document.querySelector('.nav-links');
+            const authControls = document.getElementById('auth-controls');
+            const hamburger = document.getElementById('hamburger');
+            const navbar = document.querySelector('.navbar');
+
+            if (isMobile) {
+                hamburger.style.marginLeft = 'auto';
+                if (!navLinks.querySelector('#auth-controls')) {
+                    const li = document.createElement('li');
+                    li.id = 'auth-li';
+                    li.style.marginTop = '1rem';
+                    li.appendChild(authControls);
+                    navLinks.appendChild(li);
+                }
+            } else {
+                hamburger.style.marginLeft = '';
+                const authLi = document.getElementById('auth-li');
+                if (authLi) {
+                    navbar.appendChild(authControls);
+                    authLi.remove();
+                }
+            }
+        }
+
+        window.addEventListener('resize', handleMobileLayout);
+        handleMobileLayout();
 
         // Inicialização
         fetchContent();
