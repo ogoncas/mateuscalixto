@@ -7,26 +7,40 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/phosphor-icons"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <meta name="description" content="Explore uma vasta coleção de temas, tutoriais e firmwares para R36S. Contribua com seus próprios projetos e faça parte da comunidade R36S!">
+    <meta name="author" content="Mateus Calixto">
+    <link rel="canonical" href="https://mateuscalixto.com.br/trabalhos/r36s">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mateuscalixto.com.br/trabalhos/r36s">
+    <meta property="og:title" content="R36S Hub | Comunidade Retro">
+    <meta property="og:description" content="Explore uma vasta coleção de temas, tutoriais e firmwares para R36S. Contribua com seus próprios projetos e faça parte da comunidade R36S!">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="R36S Hub | Comunidade Retro">
+    <meta name="twitter:description" content="Explore uma vasta coleção de temas, tutoriais e firmwares para R36S. Contribua com seus próprios projetos e faça parte da comunidade R36S!">
     
 </head>
 
 <style>
     /* ==========================================================================
-    VARIÁREIS E DEFINIÇÕES GLOBAIS
+    VARIÁREIS E DEFINIÇÕES GLOBAIS - APRIMORADAS PARA DESIGN MODERNO
     ========================================================================== */
     :root {
-        --bg-color: #050508;
-        --card-bg: rgba(22, 27, 34, 0.7);
-        --primary: #8b5cf6;
-        --primary-glow: rgba(139, 92, 246, 0.2); /* Ajustado para mais sutileza */
-        --secondary: #0ea5e9;
-        --text-main: #f8fafc;
-        --text-muted: #a0aec4; /* Melhor contraste */
-        --border: rgba(255, 255, 255, 0.08);
-        --radius: 16px;
-        --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        --bg-color: #0a0a0f;
+        --card-bg: rgba(20, 25, 35, 0.85);
+        --primary: #7c3aed;
+        --primary-glow: rgba(124, 58, 237, 0.15);
+        --secondary: #06b6d4;
+        --text-main: #f9fafb;
+        --text-muted: #9ca3af;
+        --border: rgba(255, 255, 255, 0.1);
+        --radius: 20px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -41,68 +55,94 @@
 
     body {
         background: var(--bg-color);
-        /* Mesh Gradient de fundo para profundidade visual */
         background-image: 
-            radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-            radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+            radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
         color: var(--text-main);
         font-family: 'Inter', sans-serif;
-        line-height: 1.6;
+        line-height: 1.7;
         min-height: 100vh;
         overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
-    /* Scrollbar Customizada */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-color); }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    main { flex: 1; }
+
+    /* Scrollbar Customizada - Mais fluida */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
     /* ==========================================================================
-    TIPOGRAFIA E UTILITÁRIOS
+    TIPOGRAFIA E UTILITÁRIOS - APRIMORADOS PARA PROFISSIONALISMO
     ========================================================================== */
-    h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
-    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; }
+    h1, h2, h3 { font-weight: 700; letter-spacing: -0.025em; }
+    h1 { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.05; }
+    h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+    h3 { font-size: 1.25rem; }
 
     .pixel-font { 
         font-family: 'Press Start 2P', cursive; 
-        font-size: 0.75rem; 
+        font-size: 0.8rem; 
         color: var(--secondary); 
         text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     .gradient-text {
-        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     .container {
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 0 1.5rem;
     }
 
     /* ==========================================================================
-    NAVEGAÇÃO (NAVBAR)
+    NAVEGAÇÃO (NAVBAR) - MAIS MODERNA E FLUIDA
     ========================================================================== */
     .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.2rem 5%;
-        background: rgba(5, 5, 8, 0.8);
-        backdrop-filter: blur(16px) saturate(180%);
+        padding: 1rem 5%;
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(20px) saturate(150%);
         border-bottom: 1px solid var(--border);
         position: sticky;
         top: 0;
         z-index: 1000;
+        box-shadow: var(--shadow-sm);
+        transition: background 0.3s ease;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: -0.05em;
+        color: var(--text-main);
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover { transform: scale(1.05); }
+
+    .logo::before {
+        content: '🕹️';
+        font-size: 1.4rem;
     }
 
     .nav-links {
         display: flex;
-        gap: 2.5rem;
+        gap: 2rem;
         list-style: none;
     }
 
@@ -111,28 +151,49 @@
         text-decoration: none;
         font-weight: 500;
         font-size: 0.95rem;
+        position: relative;
         transition: var(--transition);
     }
 
-    .nav-links a.active, .nav-links a:hover {
+    .nav-links a:hover, .nav-links a.active {
         color: var(--text-main);
-        text-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
 
-    /* Hamburger Menu */
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after, .nav-links a.active::after {
+        width: 100%;
+    }
+
+    /* Hamburger Menu - Animado */
     .hamburger {
         display: none;
         cursor: pointer;
         flex-direction: column;
-        gap: 5px;
+        gap: 4px;
+        transition: var(--transition);
     }
 
     .hamburger span {
-        width: 25px;
-        height: 3px;
+        width: 24px;
+        height: 2px;
         background: var(--text-main);
-        transition: 0.3s;
+        border-radius: 2px;
+        transition: 0.3s ease;
     }
+
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
     @media (max-width: 768px) {
         .hamburger { display: flex; }
@@ -141,108 +202,117 @@
             flex-direction: column; 
             position: absolute; 
             top: 60px; 
-            right: 20px; 
-            background: var(--card-bg); 
-            padding: 1rem; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border);
-            gap: 1rem;
+            left: 0; 
+            width: 100%; 
+            background: rgba(10, 10, 15, 0.95); 
+            padding: 1.5rem 0; 
+            border-bottom: 1px solid var(--border);
+            gap: 1.5rem;
+            align-items: center;
+            animation: slideDown 0.3s ease-out;
         }
         .nav-links.active { display: flex; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     }
 
     /* ==========================================================================
-    HERO E BUSCA
+    HERO E BUSCA - MAIS POLIDA
     ========================================================================== */
     .hero {
         text-align: center;
-        padding: 5rem 1rem 3rem;
+        padding: 6rem 1rem 4rem;
+        animation: fadeInUp 1s ease-out;
     }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     .hero p {
         color: var(--text-muted);
         margin-top: 1rem;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .search-bar {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.04);
         border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        padding: 0.75rem 1.75rem;
         display: flex;
         align-items: center;
-        gap: 12px;
-        max-width: 550px;
+        gap: 10px;
+        max-width: 600px;
         margin: 2.5rem auto 0;
         transition: var(--transition);
+        box-shadow: var(--shadow-sm);
     }
 
     .search-bar:focus-within {
         border-color: var(--primary);
-        box-shadow: 0 0 0 4px var(--primary-glow);
-        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px var(--primary-glow), var(--shadow-md);
+        background: rgba(255, 255, 255, 0.06);
     }
 
     .search-bar input {
         background: transparent;
         border: none;
-        color: white;
+        color: var(--text-main);
         width: 100%;
         outline: none;
         font-size: 1rem;
+        transition: color 0.3s ease;
     }
 
+    .search-bar input::placeholder { color: var(--text-muted); }
+
     /* ==========================================================================
-    FILTROS E CHIPS
+    FILTROS E CHIPS - MAIS FLUIDOS
     ========================================================================== */
     .filters {
         display: flex;
         justify-content: center;
-        gap: 12px;
+        gap: 10px;
         margin-bottom: 3rem;
         flex-wrap: wrap;
     }
 
     .filter-chip {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.02);
         border: 1px solid var(--border);
         color: var(--text-muted);
-        padding: 0.6rem 1.4rem;
-        border-radius: 100px;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
         cursor: pointer;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 0.85rem;
         transition: var(--transition);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .filter-chip:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.06);
         color: var(--text-main);
+        box-shadow: var(--shadow-sm);
     }
 
     .filter-chip.active {
-        background: var(--primary);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: white;
-        border-color: var(--primary);
-        box-shadow: 0 4px 15px var(--primary-glow);
+        border-color: transparent;
+        box-shadow: 0 4px 12px var(--primary-glow);
     }
 
-    /* Chips com Ícones (exemplos com emojis) */
-    .filter-chip[data-cat="theme"]::before { content: '🎨 '; }
-    .filter-chip[data-cat="tutorial"]::before { content: '📖 '; }
-    .filter-chip[data-cat="cd"]::before { content: '💿 '; }
-
     /* ==========================================================================
-    GRID DE CONTEÚDO E CARDS
+    GRID DE CONTEÚDO E CARDS - MAIS MODERNOS
     ========================================================================== */
     .content-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
         padding-bottom: 5rem;
     }
 
@@ -252,242 +322,320 @@
         border: 1px solid var(--border);
         overflow: hidden;
         cursor: pointer;
-        transition: transform 0.3s ease-out, box-shadow 0.3s;
+        transition: var(--transition);
         position: relative;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(8px);
+        box-shadow: var(--shadow-sm);
     }
 
     .card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-8px);
         border-color: var(--primary);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
+        box-shadow: var(--shadow-md), 0 0 15px var(--primary-glow);
     }
 
     .card-img {
         width: 100%;
-        height: 190px;
+        height: 200px;
         object-fit: cover;
-        border-bottom: 1px solid var(--border);
+        transition: transform 0.5s ease;
     }
 
-    .card-body { padding: 1.5rem; }
+    .card:hover .card-img { transform: scale(1.05); }
+
+    .card-body { padding: 1.25rem; }
 
     .card-tag {
-        font-size: 0.65rem;
-        font-weight: 800;
+        font-size: 0.7rem;
+        font-weight: 700;
         color: var(--secondary);
         text-transform: uppercase;
         margin-bottom: 0.5rem;
         display: block;
     }
 
-    /* Botão Favorito (Like) */
+    /* Botão Favorito - Animado */
     .fav-btn {
         position: absolute;
         top: 12px;
         right: 12px;
         z-index: 10;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.5);
         border: none;
-        color: white;
-        width: 38px;
-        height: 38px;
+        color: var(--text-main);
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: var(--transition);
         backdrop-filter: blur(4px);
     }
 
-    .fav-btn:hover { transform: scale(1.15); }
-    .fav-btn.active { color: #ef4444; background: white; }
-
-    /* Animação Fade-in no Grid */
-    .content-grid article { animation: fadeIn 0.5s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fav-btn:hover { transform: scale(1.1); background: rgba(0,0,0,0.7); }
+    .fav-btn.active { color: #f43f5e; background: rgba(255,255,255,0.9); }
 
     /* ==========================================================================
-    MODAIS E DETALHES DO POST
+    MODAIS E DETALHES DO POST - MAIS LAPIDADOS
     ========================================================================== */
     .modal {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.85);
-        backdrop-filter: blur(12px);
+        background: rgba(0,0,0,0.75);
+        backdrop-filter: blur(10px);
         z-index: 2000;
         overflow-y: auto;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s ease;
     }
 
+    .modal.active { display: flex; opacity: 1; }
+
     .modal-content {
-        background: #0d1117;
+        background: #111827;
         width: 90%;
-        max-width: 850px;
-        margin: 5vh auto;
-        border-radius: 24px;
+        max-width: 900px;
+        margin: auto;
+        border-radius: var(--radius);
         border: 1px solid var(--border);
         position: relative;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        animation: modalScaleIn 0.3s ease-out;
+    }
+
+    @keyframes modalScaleIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
     }
 
     .close-x {
         position: absolute;
-        top: 20px;
-        right: 20px;
-        background: rgba(255,255,255,0.05);
+        top: 16px;
+        right: 16px;
+        background: transparent;
         border: none;
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
+        color: var(--text-muted);
+        font-size: 1.5rem;
         cursor: pointer;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: 0.3s;
+        transition: var(--transition);
     }
 
-    .close-x:hover { background: #ef4444; transform: rotate(90deg); }
+    .close-x:hover { color: #ef4444; transform: scale(1.1); }
 
-    .post-banner { width: 100%; height: 380px; object-fit: cover; }
-    .post-body { padding: 3rem; }
+    .post-banner { width: 100%; height: 400px; object-fit: cover; }
+    .post-body { padding: 2.5rem; }
 
-    /* Markdown Styling */
-    .markdown-content { margin: 2rem 0; font-size: 1.05rem; line-height: 1.8; }
-    .markdown-content h3 { color: var(--secondary); margin: 2rem 0 1rem; border-left: 4px solid var(--primary); padding-left: 15px; }
-    .markdown-content code { background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.9em; }
-    .markdown-content ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    /* Markdown Styling - Mais clean */
+    .markdown-content { margin: 1.5rem 0; font-size: 1rem; line-height: 1.75; }
+    .markdown-content h3 { color: var(--text-main); margin: 1.5rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .markdown-content code { background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    .markdown-content ul { padding-left: 1.25rem; margin-bottom: 1.25rem; list-style-type: disc; }
 
     /* ==========================================================================
-    FORMULÁRIOS E BOTÕES
+    FORMULÁRIOS E BOTÕES - MAIS PROFISSIONAIS
     ========================================================================== */
     .dash-container {
-        max-width: 700px;
+        max-width: 800px;
         margin: 2rem auto;
         background: var(--card-bg);
-        padding: 3rem;
-        border-radius: 24px;
+        padding: 2.5rem;
+        border-radius: var(--radius);
         border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
     }
 
-    .dash-form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .dash-form { display: flex; flex-direction: column; gap: 1.25rem; }
 
     .form-group label {
         display: block;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        margin-bottom: 0.6rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
     }
 
     .dash-form input, .dash-form select, .dash-form textarea {
         width: 100%;
-        padding: 1rem;
-        border-radius: 12px;
-        background: #050508;
+        padding: 0.875rem;
+        border-radius: 8px;
+        background: #1f2937;
         border: 1px solid var(--border);
-        color: white;
+        color: var(--text-main);
         font-family: inherit;
-        transition: 0.3s;
+        transition: var(--transition);
     }
 
-    .dash-form input:focus, .dash-form textarea:focus {
+    .dash-form input:focus, .dash-form textarea:focus, .dash-form select:focus {
         border-color: var(--primary);
         outline: none;
-        box-shadow: 0 0 0 3px var(--primary-glow);
+        box-shadow: 0 0 0 2px var(--primary-glow);
     }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary), #6d28d9);
+        background: linear-gradient(135deg, var(--primary), #5b21b6);
         color: white;
         border: none;
-        padding: 0.9rem 1.8rem;
-        border-radius: 12px;
+        padding: 0.875rem 1.75rem;
+        border-radius: 8px;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         transition: var(--transition);
         text-decoration: none;
     }
 
     .btn-primary:hover {
-        transform: scale(1.02);
-        box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(124, 58, 237, 0.3);
     }
 
-    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:active { transform: translateY(0); }
 
     .btn-danger {
-        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        background: linear-gradient(135deg, #ef4444, #dc2626);
         color: white;
         border: none;
-        padding: 0.9rem 1.8rem;
-        border-radius: 12px;
+        padding: 0.875rem 1.75rem;
+        border-radius: 8px;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         transition: var(--transition);
         text-decoration: none;
     }
 
     .btn-danger:hover {
-        transform: scale(1.02);
-        box-shadow: 0 10px 20px #ef4444;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
     }
 
-    .btn-danger:active { transform: scale(0.98); }
+    .btn-danger:active { transform: translateY(0); }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #eab308, #ca8a04);
+        color: white;
+        border: none;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+        margin-right: 0.75rem;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(234, 179, 8, 0.3);
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        border: none;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+    }
 
     /* ==========================================================================
-    SISTEMA DE TOASTS E FEEDBACK
+    SISTEMA DE TOASTS E FEEDBACK - MAIS SUAVE
     ========================================================================== */
-    #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
+    #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 9999; }
 
     .toast {
-        padding: 1.2rem 2.5rem;
-        border-radius: 16px;
+        padding: 1rem 2rem;
+        border-radius: 8px;
         color: white;
-        margin-top: 12px;
-        font-weight: 600;
+        margin-top: 10px;
+        font-weight: 500;
         display: flex;
         align-items: center;
-        gap: 12px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        animation: toastSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        gap: 10px;
+        box-shadow: var(--shadow-md);
+        animation: toastIn 0.3s ease-out;
+        min-width: 250px;
     }
 
-    @keyframes toastSlideIn {
-        from { transform: translateX(100%); opacity: 0; }
+    @keyframes toastIn {
+        from { transform: translateX(50px); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
     }
 
     .loading-state {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 4rem;
+        padding: 3rem;
         color: var(--text-muted);
-        font-size: 1.2rem;
-        letter-spacing: 2px;
+        font-size: 1.1rem;
     }
 
     /* ==========================================================================
-    RESPONSIVIDADE
+    FOOTER - APRIMORADO
+    ========================================================================== */
+    footer {
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--border);
+        padding: 2.5rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    footer a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    footer a:hover {
+        color: var(--secondary);
+    }
+
+    footer .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.75rem;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    /* ==========================================================================
+    RESPONSIVIDADE - MAIS FLUIDA
     ========================================================================== */
     @media (max-width: 768px) {
-        .navbar { padding: 1rem 1.5rem; }
+        .navbar { padding: 1rem 2rem; }
         .grid-2 { grid-template-columns: 1fr; }
-        .hero { padding: 3rem 1rem; }
-        .post-body { padding: 1.5rem; }
-        .post-banner { height: 250px; }
-        .modal-content { width: 95%; margin: 2vh auto; }
+        .hero { padding: 4rem 1rem; }
+        .post-body { padding: 2rem 1.5rem; }
+        .post-banner { height: 300px; }
+        .modal-content { width: 95%; }
+        .content-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
     }
 </style>
 <body>
@@ -496,7 +644,7 @@
 
     <nav class="navbar">
         <div class="logo">
-            <span class="pixel-font">R36S</span> HUB
+            R36S Hub
         </div>
         <ul class="nav-links">
             <li><a href="#" id="view-home" class="active">Explorar</a></li>
@@ -509,7 +657,7 @@
             <button id="btn-login-open" class="btn-primary">
                 <i class="ph-user"></i> <span>Entrar</span>
             </button>
-            <button id="btn-logout" class="btn-primary btn-danger" style="display: none;">
+            <button id="btn-logout" class="btn-danger" style="display: none;">
                 <i class="ph-sign-out"></i> Sair
             </button>
         </div>
@@ -542,8 +690,9 @@
 
         <section id="section-dashboard" style="display: none;">
             <div class="dash-container">
-                <h2 class="gradient-text">Nova Contribuição</h2>
+                <h2 class="gradient-text" id="dash-title">Nova Contribuição</h2>
                 <form id="form-contribute" class="dash-form">
+                    <input type="hidden" id="item-id">
                     <div class="form-group">
                         <label>Título do Projeto</label>
                         <input type="text" id="item-title" placeholder="Ex: Crystal OS Dark" required>
@@ -583,7 +732,7 @@
                         <input type="url" id="item-link" placeholder="GitHub, Mega, etc." required>
                     </div>
                     
-                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem;">
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem;" id="btn-submit-post">
                         <i class="ph-paper-plane-tilt"></i> Publicar no Hub
                     </button>
                 </form>
@@ -595,6 +744,16 @@
             </div>
         </section>
     </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Sobre</a>
+            <a href="#">Contato</a>
+            <a href="#">Termos de Uso</a>
+            <a href="#">Privacidade</a>
+        </div>
+        <p>&copy; 2026 R36S Hub. Criado por <a href="https://mateuscalixto.com.br">Mateus Calixto</a>. Todos os direitos reservados.</p>
+    </footer>
 
     <div id="post-modal" class="modal">
         <div class="modal-content post-detail">
@@ -638,7 +797,7 @@
         // CONFIGURAÇÃO E IMPORTAÇÕES DO FIREBASE
         // ==========================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, query, serverTimestamp, orderBy, limit, startAfter, where, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, query, serverTimestamp, orderBy, limit, startAfter, where, updateDoc, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -668,7 +827,7 @@
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
+                setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
@@ -825,7 +984,7 @@
                     </a>
                 </div>
             `;
-            document.getElementById('post-modal').style.display = 'block';
+            document.getElementById('post-modal').style.display = 'flex';
         }
 
         // ==========================================================================
@@ -842,7 +1001,10 @@
             document.getElementById('view-dash').classList.toggle('active', view === 'dash');
             
             if(view === 'home') fetchContent();
-            if(view === 'dash') loadUserPosts();
+            if(view === 'dash') {
+                resetForm();
+                loadUserPosts();
+            }
         };
 
         document.getElementById('view-home').onclick = (e) => { e.preventDefault(); showView('home'); };
@@ -850,7 +1012,9 @@
 
         // Hamburger Toggle
         document.getElementById('hamburger').onclick = () => {
-            document.querySelector('.nav-links').classList.toggle('active');
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+            document.getElementById('hamburger').classList.toggle('active');
         };
 
         // Login / Registo
@@ -893,7 +1057,7 @@
         });
 
         // Fechar Modais
-        document.getElementById('btn-login-open').onclick = () => authModal.style.display = 'block';
+        document.getElementById('btn-login-open').onclick = () => authModal.style.display = 'flex';
         document.getElementById('btn-auth-close').onclick = () => authModal.style.display = 'none';
         document.getElementById('btn-close-post').onclick = () => document.getElementById('post-modal').style.display = 'none';
         document.getElementById('btn-logout').onclick = () => {
@@ -944,7 +1108,7 @@
         };
 
         // ==========================================================================
-        // SUBMISSÃO DE CONTEÚDO
+        // SUBMISSÃO E EDIÇÃO DE CONTEÚDO
         // ==========================================================================
 
         function validateForm() {
@@ -976,35 +1140,50 @@
             return true;
         }
 
+        function resetForm() {
+            document.getElementById('form-contribute').reset();
+            document.getElementById('item-id').value = '';
+            document.getElementById('dash-title').innerText = 'Nova Contribuição';
+            document.getElementById('btn-submit-post').innerHTML = `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
+        }
+
         document.getElementById('form-contribute').onsubmit = async (e) => {
             e.preventDefault();
             if (!validateForm()) return;
 
-            const btn = e.target.querySelector('button');
+            const btn = document.getElementById('btn-submit-post');
             btn.disabled = true;
-            btn.innerText = "A publicar...";
+            btn.innerText = "Processando...";
+
+            const id = document.getElementById('item-id').value;
+            const data = {
+                title: document.getElementById('item-title').value,
+                type: document.getElementById('item-type').value,
+                description: document.getElementById('item-desc').value,
+                content: document.getElementById('item-content').value,
+                thumbnailUrl: document.getElementById('item-thumb').value,
+                videoUrl: document.getElementById('item-video').value,
+                link: document.getElementById('item-link').value,
+                authorName: auth.currentUser.email.split('@')[0]
+            };
 
             try {
-                await addDoc(collection(db, "resources"), {
-                    title: document.getElementById('item-title').value,
-                    type: document.getElementById('item-type').value,
-                    description: document.getElementById('item-desc').value,
-                    content: document.getElementById('item-content').value,
-                    thumbnailUrl: document.getElementById('item-thumb').value,
-                    videoUrl: document.getElementById('item-video').value,
-                    link: document.getElementById('item-link').value,
-                    authorName: auth.currentUser.email.split('@')[0],
-                    createdAt: serverTimestamp()
-                });
-
-                notify("Publicado com sucesso no Hub!");
-                e.target.reset();
+                if (id) {
+                    await updateDoc(doc(db, "resources", id), data);
+                    notify("Post atualizado com sucesso!");
+                } else {
+                    data.createdAt = serverTimestamp();
+                    await addDoc(collection(db, "resources"), data);
+                    notify("Publicado com sucesso no Hub!");
+                }
+                resetForm();
+                loadUserPosts();
                 showView('home');
             } catch (err) {
-                notify("Erro ao publicar conteúdo: " + err.message, "error");
+                notify("Erro ao processar conteúdo: " + err.message, "error");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
+                btn.innerHTML = id ? `<i class="ph-pencil-simple"></i> Atualizar Post` : `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
             }
         };
 
@@ -1038,8 +1217,8 @@
                     postItem.innerHTML = `
                         <h3>${data.title}</h3>
                         <p>${data.description.substring(0, 50)}...</p>
-                        <button class="btn-primary" onclick="editPost('${id}')">Editar</button>
-                        <button class="btn-danger" onclick="deletePost('${id}')">Excluir</button>
+                        <button class="btn-edit" onclick="editPost('${id}')"><i class="ph-pencil-simple"></i> Editar</button>
+                        <button class="btn-delete" onclick="deletePost('${id}')"><i class="ph-trash"></i> Excluir</button>
                     `;
                     userPostsList.appendChild(postItem);
                 });
@@ -1048,10 +1227,29 @@
             }
         }
 
-        // Funções de Edição e Exclusão (básicas, expandir conforme necessário)
+        // Função de Edição
         window.editPost = async (id) => {
-            notify("Funcionalidade de edição em desenvolvimento.", "info");
-            // Para implementação completa: fetch doc, preencha form, use updateDoc
+            try {
+                const postDoc = await getDoc(doc(db, "resources", id));
+                if (postDoc.exists()) {
+                    const data = postDoc.data();
+                    document.getElementById('item-id').value = id;
+                    document.getElementById('item-title').value = data.title;
+                    document.getElementById('item-type').value = data.type;
+                    document.getElementById('item-desc').value = data.description;
+                    document.getElementById('item-content').value = data.content;
+                    document.getElementById('item-thumb').value = data.thumbnailUrl;
+                    document.getElementById('item-video').value = data.videoUrl;
+                    document.getElementById('item-link').value = data.link;
+                    document.getElementById('dash-title').innerText = 'Editar Contribuição';
+                    document.getElementById('btn-submit-post').innerHTML = `<i class="ph-pencil-simple"></i> Atualizar Post`;
+                    notify("Modo de edição ativado.", "info");
+                } else {
+                    notify("Post não encontrado.", "error");
+                }
+            } catch (err) {
+                notify("Erro ao carregar post para edição: " + err.message, "error");
+            }
         };
 
         window.deletePost = async (id) => {
