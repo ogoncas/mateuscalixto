@@ -7,7 +7,7 @@
 
     <link rel="icon" type="image/png" href="favicon.png">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/phosphor-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -28,21 +28,16 @@
 
 <style>
     /* ==========================================================================
-    VARIÁREIS E DEFINIÇÕES GLOBAIS - APRIMORADAS PARA DESIGN MODERNO
+    VARIÁVEIS E DEFINIÇÕES GLOBAIS - MONOCROMÁTICO ESCURO E MODERNO
     ========================================================================== */
     :root {
-        --bg-color: #0a0a0f;
-        --card-bg: rgba(20, 25, 35, 0.85);
-        --primary: #7c3aed;
-        --primary-glow: rgba(124, 58, 237, 0.15);
-        --secondary: #06b6d4;
-        --text-main: #f9fafb;
-        --text-muted: #9ca3af;
-        --border: rgba(255, 255, 255, 0.1);
-        --radius: 20px;
-        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.2);
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-main: #ffffff;
+        --text-muted: #aaaaaa;
+        --border: #333333;
+        --radius: 8px;
+        --transition: all 0.2s ease;
     }
 
     * {
@@ -57,12 +52,9 @@
 
     body {
         background: var(--bg-color);
-        background-image: 
-            radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
-            radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
         color: var(--text-main);
         font-family: 'Inter', sans-serif;
-        line-height: 1.7;
+        line-height: 1.6;
         min-height: 100vh;
         overflow-x: hidden;
         display: flex;
@@ -71,86 +63,61 @@
 
     main { flex: 1; }
 
-    /* Scrollbar Customizada - Mais fluida */
+    /* Scrollbar Simples */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
     /* ==========================================================================
-    TIPOGRAFIA E UTILITÁRIOS - APRIMORADOS PARA PROFISSIONALISMO
+    TIPOGRAFIA - SIMPLES E LEGÍVEL
     ========================================================================== */
-    h1, h2, h3 { font-weight: 700; letter-spacing: -0.025em; }
-    h1 { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.05; }
-    h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+    h1, h2, h3, h4, h5, h6 { font-weight: 600; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
     h3 { font-size: 1.25rem; }
 
-    .pixel-font { 
-        font-family: 'Press Start 2P', cursive; 
-        font-size: 0.8rem; 
-        color: var(--secondary); 
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .gradient-text {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
     .container {
-        max-width: 1280px;
+        max-width: 1200px;
         margin: 0 auto;
-        padding: 0 1.5rem;
+        padding: 0 1rem;
     }
 
     /* ==========================================================================
-    NAVEGAÇÃO (NAVBAR) - MAIS MODERNA E FLUIDA
+    NAVEGAÇÃO (NAVBAR) - MINIMALISTA
     ========================================================================== */
     .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 5%;
-        background: rgba(10, 10, 15, 0.95);
-        backdrop-filter: blur(20px) saturate(150%);
+        padding: 1rem;
+        background: #1e1e1e;
         border-bottom: 1px solid var(--border);
         position: sticky;
         top: 0;
         z-index: 1000;
-        box-shadow: var(--shadow-sm);
-        transition: background 0.3s ease;
     }
 
     .logo {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
         font-size: 1.25rem;
         font-weight: 600;
-        letter-spacing: -0.05em;
         color: var(--text-main);
-        transition: transform 0.3s ease;
     }
-
-    .logo:hover { transform: scale(1.05); }
 
     .logo::before {
         content: '';
         display: inline-block;
-        width: 30px;  
-        height: 30px; 
-        background-image: url('favicon.png'); 
+        width: 24px;
+        height: 24px;
+        background-image: url('favicon.png');
         background-size: contain;
         background-repeat: no-repeat;
         vertical-align: middle;
-        margin-right: 0px; 
+        margin-right: 0.5rem;
     }
+
     .nav-links {
         display: flex;
-        gap: 2rem;
+        gap: 1.5rem;
         list-style: none;
     }
 
@@ -158,8 +125,6 @@
         color: var(--text-muted);
         text-decoration: none;
         font-weight: 500;
-        font-size: 0.95rem;
-        position: relative;
         transition: var(--transition);
     }
 
@@ -167,28 +132,11 @@
         color: var(--text-main);
     }
 
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: -6px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: var(--primary);
-        transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after, .nav-links a.active::after {
-        width: 100%;
-    }
-
-    /* Hamburger Menu - Animado */
     .hamburger {
         display: none;
         cursor: pointer;
         flex-direction: column;
         gap: 4px;
-        transition: var(--transition);
     }
 
     .hamburger span {
@@ -196,95 +144,53 @@
         height: 2px;
         background: var(--text-main);
         border-radius: 2px;
-        transition: 0.3s ease;
     }
 
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-
     @media (max-width: 768px) {
-        .hamburger { 
-            display: flex; 
-            margin-left: auto;
-        }
+        .hamburger { display: flex; }
         .nav-links { 
             display: none; 
             flex-direction: column; 
-            position: fixed; 
-            top: 0; 
-            right: 0; 
-            width: 280px; 
-            height: 100vh; 
-            background: rgba(10, 10, 15, 0.95); 
-            padding: 4rem 2rem 2rem; 
-            border-left: 1px solid var(--border);
-            gap: 1.5rem;
-            align-items: flex-start;
-            transform: translateX(100%);
-            transition: transform 0.3s ease-out;
+            position: absolute; 
+            top: 100%; 
+            left: 0; 
+            width: 100%; 
+            background: #1e1e1e; 
+            padding: 1rem; 
+            border-bottom: 1px solid var(--border);
         }
-        .nav-links.active { 
-            display: flex; 
-            transform: translateX(0);
-        }
-        .nav-links li {
-            width: 100%;
-        }
-        .nav-links a {
-            padding: 0.5rem 0;
-            width: 100%;
-        }
-        .nav-links #auth-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 100%;
-        }
-        .nav-links #auth-controls button {
-            width: 100%;
-            justify-content: flex-start;
-        }
+        .nav-links.active { display: flex; }
+        .nav-links a { padding: 0.5rem 0; }
+        #auth-controls { display: flex; flex-direction: column; gap: 1rem; }
     }
 
     /* ==========================================================================
-    HERO E BUSCA - MAIS POLIDA
+    HERO E BUSCA - DIRETO E SIMPLES
     ========================================================================== */
     .hero {
         text-align: center;
-        padding: 6rem 1rem 4rem;
-        animation: fadeInUp 1s ease-out;
+        padding: 4rem 1rem 2rem;
     }
-
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     .hero p {
         color: var(--text-muted);
         margin-top: 1rem;
-        font-size: 1.15rem;
+        font-size: 1rem;
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
     }
 
     .search-bar {
-        background: rgba(255, 255, 255, 0.04);
         border: 1px solid var(--border);
-        border-radius: 50px;
-        padding: 0.75rem 1.75rem;
+        border-radius: var(--radius);
+        padding: 0.75rem 1rem;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 0.5rem;
         max-width: 600px;
-        margin: 2.5rem auto 0;
-        transition: var(--transition);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .search-bar:focus-within {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-glow), var(--shadow-md);
-        background: rgba(255, 255, 255, 0.06);
+        margin: 2rem auto 0;
+        background: #1e1e1e;
     }
 
     .search-bar input {
@@ -294,58 +200,52 @@
         width: 100%;
         outline: none;
         font-size: 1rem;
-        transition: color 0.3s ease;
     }
 
     .search-bar input::placeholder { color: var(--text-muted); }
 
     /* ==========================================================================
-    FILTROS E CHIPS - MAIS FLUIDOS
+    FILTROS E CHIPS - SIMPLES
     ========================================================================== */
     .filters {
         display: flex;
         justify-content: center;
-        gap: 10px;
-        margin-bottom: 3rem;
+        gap: 1rem;
+        margin-bottom: 2rem;
         flex-wrap: wrap;
     }
 
     .filter-chip {
-        background: rgba(255, 255, 255, 0.02);
+        background: #1e1e1e;
         border: 1px solid var(--border);
         color: var(--text-muted);
-        padding: 0.5rem 1.25rem;
-        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
         cursor: pointer;
         font-weight: 500;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         transition: var(--transition);
-        display: flex;
-        align-items: center;
-        gap: 6px;
     }
 
     .filter-chip:hover {
-        background: rgba(255, 255, 255, 0.06);
+        background: #252525;
         color: var(--text-main);
-        box-shadow: var(--shadow-sm);
     }
 
     .filter-chip.active {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        color: white;
-        border-color: transparent;
-        box-shadow: 0 4px 12px var(--primary-glow);
+        background: #333333;
+        color: var(--text-main);
+        border-color: #444444;
     }
 
     /* ==========================================================================
-    GRID DE CONTEÚDO E CARDS - MAIS MODERNOS
+    GRID DE CONTEÚDO E CARDS - MINIMALISTA
     ========================================================================== */
     .content-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1.5rem;
-        padding-bottom: 5rem;
+        padding-bottom: 4rem;
     }
 
     .card {
@@ -355,100 +255,73 @@
         overflow: hidden;
         cursor: pointer;
         transition: var(--transition);
-        position: relative;
-        backdrop-filter: blur(8px);
-        box-shadow: var(--shadow-sm);
     }
 
     .card:hover {
-        transform: translateY(-8px);
-        border-color: var(--primary);
-        box-shadow: var(--shadow-md), 0 0 15px var(--primary-glow);
+        border-color: #444444;
     }
 
     .card-img {
         width: 100%;
-        height: 200px;
+        height: 180px;
         object-fit: cover;
-        transition: transform 0.5s ease;
     }
 
-    .card:hover .card-img { transform: scale(1.05); }
-
-    .card-body { padding: 1.25rem; }
+    .card-body { padding: 1rem; }
 
     .card-tag {
-        font-size: 0.7rem;
-        font-weight: 700;
-        color: var(--secondary);
-        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-muted);
         margin-bottom: 0.5rem;
-        display: block;
     }
 
-    /* Botão Favorito - Animado */
     .fav-btn {
         position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 10;
-        background: rgba(0,0,0,0.5);
+        top: 0.5rem;
+        right: 0.5rem;
+        background: transparent;
         border: none;
-        color: var(--text-main);
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        color: var(--text-muted);
         cursor: pointer;
         transition: var(--transition);
-        backdrop-filter: blur(4px);
     }
 
-    .fav-btn:hover { transform: scale(1.1); background: rgba(0,0,0,0.7); }
-    .fav-btn.active { color: #f43f5e; background: rgba(255,255,255,0.9); }
+    .fav-btn:hover { color: var(--text-main); }
+    .fav-btn.active { color: #777777; }
 
     /* ==========================================================================
-    MODAIS E DETALHES DO POST - MAIS LAPIDADOS E MELHORADOS
+    MODAIS - SIMPLES E INTUITIVO (APENAS PARA AUTH)
     ========================================================================== */
     .modal {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.75);
-        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.7);
         z-index: 2000;
         overflow-y: auto;
         align-items: center;
         justify-content: center;
-        transition: opacity 0.3s ease;
     }
 
-    .modal.active { display: flex; opacity: 1; }
+    .modal.active { display: flex; }
 
     .modal-content {
-        background: #111827;
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        border-radius: 0;
-        border: none;
+        background: #1e1e1e;
+        width: 90%;
+        max-width: 400px;
+        margin: 2rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
         position: relative;
-        box-shadow: none;
-        overflow-y: auto;
-        animation: modalScaleIn 0.3s ease-out;
-    }
-
-    @keyframes modalScaleIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
+        overflow: hidden;
+        padding: 2rem;
     }
 
     .close-x {
         position: absolute;
-        top: 16px;
-        right: 16px;
+        top: 1rem;
+        right: 1rem;
         background: transparent;
         border: none;
         color: var(--text-muted);
@@ -457,185 +330,25 @@
         transition: var(--transition);
     }
 
-    .close-x:hover { color: #ef4444; transform: scale(1.1); }
-
-    .post-banner { 
-        width: 100%; 
-        height: auto; 
-        max-height: 50vh;
-        object-fit: cover; 
-        border-bottom: 1px solid var(--border); /* Adicionado borda sutil para separação */
-    }
-
-    .post-body { 
-        padding: 2.5rem; 
-        display: flex; 
-        flex-direction: column; 
-        gap: 1.5rem; /* Melhor espaçamento interno */
-    }
-
-    .post-header {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .post-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
-
-    /* Markdown Styling - Aprimorado para melhor legibilidade e visual */
-    .markdown-content { 
-        margin: 1.5rem 0; 
-        font-size: 1rem; 
-        line-height: 1.75; 
-    }
-
-    .markdown-content h1,
-    .markdown-content h2,
-    .markdown-content h3,
-    .markdown-content h4,
-    .markdown-content h5,
-    .markdown-content h6 {
-        color: var(--text-main);
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        letter-spacing: -0.02em;
-    }
-
-    .markdown-content h1 { font-size: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
-    .markdown-content h2 { font-size: 1.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-    .markdown-content h3 { font-size: 1.5rem; }
-    .markdown-content h4 { font-size: 1.25rem; }
-    .markdown-content h5 { font-size: 1.1rem; }
-    .markdown-content h6 { font-size: 1rem; color: var(--text-muted); }
-
-    .markdown-content p {
-        margin-bottom: 1.25rem;
-        color: var(--text-main);
-    }
-
-    .markdown-content ul,
-    .markdown-content ol {
-        margin-bottom: 1.25rem;
-        padding-left: 1.5rem;
-    }
-
-    .markdown-content ul { list-style-type: disc; }
-    .markdown-content ol { list-style-type: decimal; }
-
-    .markdown-content li {
-        margin-bottom: 0.75rem;
-    }
-
-    .markdown-content a {
-        color: var(--primary);
-        text-decoration: underline;
-        transition: var(--transition);
-    }
-
-    .markdown-content a:hover {
-        color: var(--secondary);
-    }
-
-    .markdown-content code {
-        background: rgba(255,255,255,0.05);
-        padding: 0.2rem 0.4rem;
-        border-radius: 4px;
-        font-family: 'Courier New', monospace;
-        font-size: 0.9em;
-        color: #f472b6;
-    }
-
-    .markdown-content pre {
-        background: rgba(17, 24, 39, 0.8); /* Fundo mais escuro para destaque */
-        padding: 1.25rem;
-        border-radius: 12px;
-        overflow-x: auto;
-        margin-bottom: 1.5rem;
-        font-family: 'Courier New', monospace;
-        font-size: 0.95em;
-        line-height: 1.5;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.2); /* Sombra interna para profundidade */
-    }
-
-    .markdown-content pre code {
-        background: none;
-        padding: 0;
-        color: inherit;
-    }
-
-    .markdown-content blockquote {
-        border-left: 4px solid var(--primary);
-        padding-left: 1.25rem;
-        margin: 1.5rem 0;
-        color: var(--text-muted);
-        font-style: italic;
-        background: rgba(255,255,255,0.02);
-        border-radius: 4px;
-    }
-
-    .markdown-content img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 1.5rem auto;
-        border-radius: 12px;
-        box-shadow: var(--shadow-sm);
-        transition: transform 0.3s ease;
-    }
-
-    .markdown-content img:hover {
-        transform: scale(1.02);
-    }
-
-    .markdown-content table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 1.5rem;
-    }
-
-    .markdown-content th,
-    .markdown-content td {
-        border: 1px solid var(--border);
-        padding: 0.75rem;
-        text-align: left;
-    }
-
-    .markdown-content th {
-        background: rgba(255,255,255,0.05);
-        font-weight: 600;
-    }
-
-    .markdown-content hr {
-        border: none;
-        border-top: 1px solid var(--border);
-        margin: 2rem 0;
-    }
+    .close-x:hover { color: var(--text-main); }
 
     /* ==========================================================================
-    FORMULÁRIOS E BOTÕES - MAIS PROFISSIONAIS
+    FORMULÁRIOS E BOTÕES - INTUITIVOS E MINIMALISTAS
     ========================================================================== */
     .dash-container {
         max-width: 800px;
         margin: 2rem auto;
         background: var(--card-bg);
-        padding: 2.5rem;
+        padding: 2rem;
         border-radius: var(--radius);
         border: 1px solid var(--border);
-        box-shadow: var(--shadow-sm);
     }
 
-    .dash-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .dash-form { display: flex; flex-direction: column; gap: 1rem; }
 
     .form-group label {
         display: block;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 500;
         color: var(--text-main);
         margin-bottom: 0.5rem;
@@ -643,182 +356,140 @@
 
     .dash-form input, .dash-form select, .dash-form textarea {
         width: 100%;
-        padding: 0.875rem;
-        border-radius: 8px;
-        background: #1f2937;
+        padding: 0.75rem;
+        border-radius: var(--radius);
+        background: #252525;
         border: 1px solid var(--border);
         color: var(--text-main);
-        font-family: inherit;
+        font-size: 1rem;
         transition: var(--transition);
     }
 
     .dash-form input:focus, .dash-form textarea:focus, .dash-form select:focus {
-        border-color: var(--primary);
+        border-color: #444444;
         outline: none;
-        box-shadow: 0 0 0 2px var(--primary-glow);
     }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary), #5b21b6);
-        color: white;
+    .btn-primary, .btn-danger, .btn-edit, .btn-delete {
+        background: #333333;
+        color: var(--text-main);
         border: none;
-        padding: 0.875rem 1.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: var(--transition);
-        text-decoration: none;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(124, 58, 237, 0.3);
-    }
-
-    .btn-primary:active { transform: translateY(0); }
-
-    .btn-danger {
-        background: linear-gradient(135deg, #ef4444, #dc2626);
-        color: white;
-        border: none;
-        padding: 0.875rem 1.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: var(--transition);
-        text-decoration: none;
-    }
-
-    .btn-danger:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-danger:active { transform: translateY(0); }
-
-    .btn-edit {
-        background: linear-gradient(135deg, #eab308, #ca8a04);
-        color: white;
-        border: none;
-        padding: 0.625rem 1.25rem;
-        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
         cursor: pointer;
         font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: var(--transition);
-        margin-right: 0.75rem;
-    }
-
-    .btn-edit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(234, 179, 8, 0.3);
-    }
-
-    .btn-delete {
-        background: linear-gradient(135deg, #ef4444, #dc2626);
-        color: white;
-        border: none;
-        padding: 0.625rem 1.25rem;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+        font-size: 1rem;
         transition: var(--transition);
     }
 
-    .btn-delete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+    .btn-primary:hover, .btn-danger:hover, .btn-edit:hover, .btn-delete:hover {
+        background: #444444;
     }
+
+    .btn-full { width: 100%; }
 
     /* ==========================================================================
-    SISTEMA DE TOASTS E FEEDBACK - MAIS SUAVE
+    SISTEMA DE TOASTS - SIMPLES
     ========================================================================== */
-    #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 9999; }
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
 
     .toast {
         padding: 1rem 2rem;
-        border-radius: 8px;
-        color: white;
-        margin-top: 10px;
+        border-radius: var(--radius);
+        background: #333333;
+        color: var(--text-main);
+        margin-top: 1rem;
         font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: var(--shadow-md);
-        animation: toastIn 0.3s ease-out;
-        min-width: 250px;
-    }
-
-    @keyframes toastIn {
-        from { transform: translateX(50px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
     }
 
     .loading-state {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 3rem;
+        padding: 2rem;
         color: var(--text-muted);
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     /* ==========================================================================
-    FOOTER - APRIMORADO
+    FOOTER - DESIGN APRIMORADO E PROFISSIONAL
     ========================================================================== */
     footer {
-        background: rgba(10, 10, 15, 0.95);
-        backdrop-filter: blur(20px);
+        background: #1e1e1e;
         border-top: 1px solid var(--border);
-        padding: 2.5rem 0;
-        text-align: center;
+        padding: 2rem 0;
         color: var(--text-muted);
-        font-size: 0.85rem;
-        box-shadow: var(--shadow-sm);
+        font-size: 0.9rem;
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-copyright {
+        flex: 1;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
     }
 
     footer a {
-        color: var(--primary);
+        color: var(--text-main);
         text-decoration: none;
         transition: var(--transition);
     }
 
     footer a:hover {
-        color: var(--secondary);
+        color: var(--text-muted);
+        text-decoration: underline;
     }
 
-    footer .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 1.75rem;
-        margin-bottom: 1rem;
-        font-weight: 500;
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            text-align: center;
+        }
     }
 
     /* ==========================================================================
-    RESPONSIVIDADE - MAIS FLUIDA
+    SEUS POSTS - MELHOR ALINHAMENTO COM FLEX
+    ========================================================================== */
+    #user-posts-list .post-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+    }
+
+    #user-posts-list .post-item .buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    /* ==========================================================================
+    RESPONSIVIDADE - SIMPLES
     ========================================================================== */
     @media (max-width: 768px) {
-        .navbar { padding: 1rem 2rem; }
         .grid-2 { grid-template-columns: 1fr; }
-        .hero { padding: 4rem 1rem; }
-        .post-body { padding: 2rem 1.5rem; }
-        .post-banner { max-height: 40vh; }
-        .modal-content { width: 100vw; height: 100vh; }
-        .content-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-        .markdown-content pre { padding: 1rem; font-size: 0.85em; }
+        .hero { padding: 3rem 1rem; }
+        .modal-content { width: 95%; margin: 1rem; }
+        .content-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .dash-container { padding: 1.5rem; }
     }
 </style>
 <body>
@@ -838,7 +509,7 @@
         </div>
         <div id="auth-controls">
             <button id="btn-login-open" class="btn-primary">
-                <i class="ph-user"></i> <span>Entrar</span>
+                <i class="ph-user"></i> Entrar
             </button>
             <button id="btn-logout" class="btn-danger" style="display: none;">
                 <i class="ph-sign-out"></i> Sair
@@ -850,7 +521,7 @@
         
         <section id="section-home">
             <header class="hero">
-                <h1>O melhor do <span class="gradient-text">R36S</span></h1>
+                <h1>R36S Hub</h1>
                 <p>Biblioteca de temas, guias e firmwares pela comunidade.</p>
                 
                 <div class="search-bar">
@@ -873,7 +544,7 @@
 
         <section id="section-dashboard" style="display: none;">
             <div class="dash-container">
-                <h2 class="gradient-text" id="dash-title">Nova Contribuição</h2>
+                <h2 id="dash-title">Nova Contribuição</h2>
                 <form id="form-contribute" class="dash-form">
                     <input type="hidden" id="item-id">
                     <div class="form-group">
@@ -890,13 +561,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Descrição Curta (Card)</label>
+                        <label>Descrição Curta</label>
                         <textarea id="item-desc" rows="2" placeholder="Uma breve introdução..." required></textarea>
                     </div>
                     
                     <div class="form-group">
                         <label>Conteúdo Detalhado (Markdown Suportado)</label>
-                        <textarea id="item-content" style="height: 250px;" placeholder="Escreva o seu guia aqui..."></textarea>
+                        <textarea id="item-content" rows="10" placeholder="Escreva o seu guia aqui..."></textarea>
                     </div>
                     
                     <div class="grid-2">
@@ -915,44 +586,36 @@
                         <input type="url" id="item-link" placeholder="GitHub, Mega, etc." required>
                     </div>
                     
-                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem;" id="btn-submit-post">
-                        <i class="ph-paper-plane-tilt"></i> Publicar no Hub
+                    <button type="submit" class="btn-primary btn-full" id="btn-submit-post">
+                        <i class="ph-paper-plane-tilt"></i> Publicar
                     </button>
                 </form>
             </div>
-            <!-- Nova seção para posts do usuário -->
             <div class="dash-container" id="user-posts" style="display: none;">
-                <h2 class="gradient-text">Seus Posts</h2>
+                <h2>Seus Posts</h2>
                 <div id="user-posts-list"></div>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="footer-links">
-            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#sobre">Sobre</a>
-            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#contato">Contato</a>
-            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#termos-de-uso">Termos de Uso</a>
-            <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#privacidade">Privacidade</a>
+        <div class="footer-container">
+            <div class="footer-copyright">
+                <a href="https://mateuscalixto.com.br">© 2026 Mateus Calixto</a> | <a href="mailto:contato@mateuscalixto.com.br">contato@mateuscalixto.com.br</a>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#sobre">Sobre</a>
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#termos-de-uso">Termos de Uso</a>
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#privacidade">Privacidade</a>
+            </div>
         </div>
-        <p><a style="color: #8f95a1;" href="https://mateuscalixto.com.br">© 2026 Mateus Calixto</a><br><a href="mailto:contato@mateuscalixto.com.br">contato@mateuscalixto.com.br</a></p>
     </footer>
 
-    <div id="post-modal" class="modal">
-        <div class="modal-content post-detail">
-            <button id="btn-close-post" class="close-x">
-                <i class="ph-x"></i>
-            </button>
-            <div id="post-content-area">
-                </div>
-        </div>
-    </div>
-
     <div id="auth-modal" class="modal">
-        <div class="modal-content" style="max-width: 400px; padding: 2.5rem;">
-            <h2 id="auth-title" class="pixel-font" style="margin-bottom: 0.5rem;">Login</h2>
-            <p id="auth-subtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">
-                Aceda à sua conta para gerir publicações.
+        <div class="modal-content">
+            <h2 id="auth-title">Login</h2>
+            <p id="auth-subtitle" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                Acesse sua conta.
             </p>
             
             <div class="dash-form">
@@ -960,15 +623,15 @@
                     <input type="email" id="auth-email" placeholder="E-mail">
                 </div>
                 <div class="form-group">
-                    <input type="password" id="auth-pass" placeholder="Palavra-passe">
+                    <input type="password" id="auth-pass" placeholder="Senha">
                 </div>
-                <button id="btn-auth-confirm" class="btn-primary" style="width: 100%; justify-content: center;">
+                <button id="btn-auth-confirm" class="btn-primary btn-full">
                     Confirmar
                 </button>
-                <button id="btn-auth-toggle" class="btn-link" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size: 0.8rem; margin-top: 10px;">
-                    Não tem conta? Registe-se
+                <button id="btn-auth-toggle" style="background:none; border:none; color:var(--text-main); cursor:pointer; font-size: 0.9rem; margin-top: 1rem; text-align: center;">
+                    Criar conta
                 </button>
-                <button id="btn-auth-close" style="background:transparent; border:none; color: #555; cursor:pointer; margin-top: 15px;">
+                <button id="btn-auth-close" style="background:transparent; border:none; color: var(--text-muted); cursor:pointer; margin-top: 1rem; text-align: center;">
                     Cancelar
                 </button>
             </div>
@@ -1005,8 +668,7 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast`;
-            toast.style.background = type === 'success' ? '#10b981' : (type === 'info' ? '#3b82f6' : '#ef4444');
-            toast.innerHTML = `<i class="ph-info-bold"></i> ${msg}`;
+            toast.innerHTML = `${msg}`;
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
@@ -1015,16 +677,16 @@
         }
 
         // Template padrão para novos tutoriais
-        const tutorialTemplate = `### 📋 Requisitos
+        const tutorialTemplate = `### Requisitos
 * Cartão SD Original (SanDisk/Samsung)
 * Firmware ArkOS/RetroOz atualizado
 
-### 🚀 Passo a Passo
-1. Primeiro passo detalhado aqui...
-2. Configure as seguintes opções no menu...
+### Passo a Passo
+1. Primeiro passo...
+2. Configure as opções...
 
-### ⚠️ Notas Importantes
-> Nunca desligue o console durante o processo de flash!`;
+### Notas Importantes
+> Nunca desligue o console durante o processo.`;
 
         // ==========================================================================
         // GESTÃO DE FAVORITOS (LocalStorage)
@@ -1041,15 +703,14 @@
 
             if (index > -1) {
                 favs.splice(index, 1);
-                notify("Removido dos favoritos", "info");
+                notify("Removido dos salvos");
             } else {
                 favs.push(id);
-                notify("Guardado nos favoritos!", "success");
+                notify("Salvo!");
             }
 
             localStorage.setItem('r36s_favs', JSON.stringify(favs));
             
-            // Re-renderizar se necessário
             const currentActiveFilter = document.querySelector('.filter-chip.active');
             fetchContent(currentActiveFilter.dataset.cat, document.getElementById('searchInput').value, currentActiveFilter.id === 'filter-favs');
         }
@@ -1063,7 +724,7 @@
         async function fetchContent(category = 'all', term = '', onlyFavs = false, loadMore = false) {
             const grid = document.getElementById('content-grid');
             if (!loadMore) {
-                grid.innerHTML = '<div class="loading-state">A sintonizar o Hub...</div>';
+                grid.innerHTML = '<div class="loading-state">Carregando...</div>';
                 lastDoc = null;
             }
             
@@ -1082,7 +743,6 @@
                     const data = doc.data();
                     const id = doc.id;
                     
-                    // Busca avançada em múltiplos campos
                     const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
                     if (term && !searchStr.includes(term.toLowerCase())) return;
                     if (category !== 'all' && data.type !== category) return;
@@ -1094,31 +754,29 @@
                     const card = document.createElement('article');
                     card.className = 'card';
                     card.innerHTML = `
-                        <button class="fav-btn ${isFav ? 'active' : ''}" title="Favoritar" aria-label="Favoritar post">
+                        <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
                             <i class="ph-heart-fill"></i>
                         </button>
-                        <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/161b22/FFF?text=R36S+Hub'">
+                        <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
                         <div class="card-body">
                             <span class="card-tag">${data.type}</span>
                             <h3>${data.title}</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${data.description.substring(0, 80)}...</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">${data.description.substring(0, 80)}...</p>
                         </div>
                     `;
 
-                    // Eventos do Card
                     card.querySelector('.fav-btn').onclick = (e) => toggleFav(id, e);
-                    card.onclick = () => openPost(data);
+                    card.onclick = () => window.location.href = `post.html?id=${id}`;
                     grid.appendChild(card);
                 });
 
-                // Botão Load More
                 if (snap.size === 10 && !document.getElementById('load-more-btn')) {
                     const loadBtn = document.createElement('button');
                     loadBtn.id = 'load-more-btn';
                     loadBtn.className = 'btn-primary';
                     loadBtn.style.margin = '2rem auto';
                     loadBtn.style.display = 'block';
-                    loadBtn.innerText = 'Carregar Mais';
+                    loadBtn.innerText = 'Mais';
                     loadBtn.onclick = () => {
                         fetchContent(category, term, onlyFavs, true);
                         loadBtn.remove();
@@ -1127,72 +785,23 @@
                 }
 
                 if (count === 0 && !loadMore) {
-                    grid.innerHTML = '<div class="loading-state">Nenhum resultado encontrado nesta categoria.</div>';
+                    grid.innerHTML = '<div class="loading-state">Nenhum resultado.</div>';
                 }
 
             } catch (err) { 
                 console.error(err);
-                notify("Erro ao carregar dados do Firebase: " + err.message, "error");
+                notify("Erro ao carregar dados");
             }
-        }
-
-        function openPost(data) {
-            const area = document.getElementById('post-content-area');
-            
-            // Tratamento de Vídeo YouTube melhorado
-            let videoHTML = '';
-            if (data.videoUrl) {
-                const match = data.videoUrl.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-                const videoId = match ? match[1] : data.videoUrl;
-                videoHTML = `
-                    <div class="post-video" style="position:relative; padding-bottom:56.25%; height:0; margin: 2rem 0; overflow:hidden; border-radius:12px; box-shadow: var(--shadow-sm);">
-                        <iframe style="position:absolute; top:0; left:0; width:100%; height:100%;" 
-                        src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-                    </div>`;
-            }
-            
-            // Adicionado formatação de data se disponível (assumindo data.createdAt é um Timestamp do Firebase)
-            let dateStr = '';
-            if (data.createdAt && data.createdAt.toDate) {
-                const date = data.createdAt.toDate();
-                dateStr = date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
-            }
-            
-            area.innerHTML = `
-                <img src="${data.thumbnailUrl}" class="post-banner" alt="Banner de ${data.title}" onerror="this.src='https://placehold.co/1200x600/161b22/FFF?text=R36S+Hub'">
-                <div class="post-body">
-                    <div class="post-header">
-                        <span class="pixel-font">${data.type}</span>
-                        <h1 style="margin: 10px 0 5px 0;">${data.title}</h1>
-                    </div>
-                    <div class="post-meta">
-                        <span>Contribuído por: <strong>${data.authorName || 'Membro do Hub'}</strong></span>
-                        ${dateStr ? `<span>Publicado em: ${dateStr}</span>` : ''}
-                    </div>
-                    
-                    <div class="markdown-content">${marked.parse(data.content || '*Sem detalhes adicionais.*')}</div>
-                    
-                    ${videoHTML}
-                    
-                    <a href="${data.link}" target="_blank" class="btn-primary" style="justify-content:center; text-decoration:none; padding: 1.2rem; margin-top: 2rem; width: 100%;">
-                        <i class="ph-download-simple"></i> Download / Aceder Recurso
-                    </a>
-                </div>
-            `;
-            document.getElementById('post-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Esconde a barra de rolagem principal
         }
 
         // ==========================================================================
         // EVENTOS DE NAVEGAÇÃO E AUTENTICAÇÃO
         // ==========================================================================
 
-        // Alternar entre abas (Início / Dashboard)
         const showView = (view) => {
             document.getElementById('section-home').style.display = view === 'home' ? 'block' : 'none';
             document.getElementById('section-dashboard').style.display = view === 'dash' ? 'block' : 'none';
             
-            // Atualiza estado ativo nos links da nav
             document.getElementById('view-home').classList.toggle('active', view === 'home');
             document.getElementById('view-dash').classList.toggle('active', view === 'dash');
             
@@ -1206,54 +815,50 @@
         document.getElementById('view-home').onclick = (e) => { e.preventDefault(); showView('home'); };
         document.getElementById('view-dash').onclick = (e) => { e.preventDefault(); showView('dash'); };
 
-        // Hamburger Toggle
         document.getElementById('hamburger').onclick = () => {
             const navLinks = document.querySelector('.nav-links');
             navLinks.classList.toggle('active');
             document.getElementById('hamburger').classList.toggle('active');
         };
 
-        // Login / Registo
         let isLoginMode = true;
         const authModal = document.getElementById('auth-modal');
 
         document.getElementById('btn-auth-toggle').onclick = () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Entrar" : "Criar Conta";
-            document.getElementById('btn-auth-confirm').innerText = isLoginMode ? "Entrar" : "Registar";
-            document.getElementById('btn-auth-toggle').innerText = isLoginMode ? "Não tem conta? Registe-se" : "Já tem conta? Login";
+            document.getElementById('auth-title').innerText = isLoginMode ? "Login" : "Criar Conta";
+            document.getElementById('btn-auth-confirm').innerText = isLoginMode ? "Entrar" : "Registrar";
+            document.getElementById('btn-auth-toggle').innerText = isLoginMode ? "Criar conta" : "Já tem conta? Login";
         };
 
         document.getElementById('btn-auth-confirm').onclick = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             
-            if(!email || !pass) return notify("Preencha todos os campos", "error");
+            if(!email || !pass) return notify("Preencha os campos");
 
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, pass);
-                    notify("Sessão iniciada!");
+                    notify("Logado");
                 } else {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    notify("Conta criada com sucesso!");
+                    notify("Conta criada");
                 }
                 authModal.style.display = 'none';
             } catch (e) {
-                notify("Erro: Verifique as suas credenciais.", "error");
+                notify("Erro: Credenciais inválidas");
             }
         };
 
-        // Monitor de estado do Utilizador
         onAuthStateChanged(auth, user => {
             document.getElementById('nav-dashboard').style.display = user ? 'block' : 'none';
             document.getElementById('btn-login-open').style.display = user ? 'none' : 'block';
             document.getElementById('btn-logout').style.display = user ? 'block' : 'none';
             document.getElementById('user-posts').style.display = user ? 'block' : 'none';
-            handleMobileLayout(); // Reajustar layout após mudança de estado
+            handleMobileLayout();
         });
 
-        // Fechar Modais
         document.getElementById('btn-login-open').onclick = () => {
             authModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -1262,24 +867,15 @@
             authModal.style.display = 'none';
             document.body.style.overflow = '';
         };
-        document.getElementById('btn-close-post').onclick = () => {
-            document.getElementById('post-modal').style.display = 'none';
-            document.body.style.overflow = '';
-        };
         document.getElementById('btn-logout').onclick = () => {
             signOut(auth);
             showView('home');
-            notify("Sessão terminada", "info");
+            notify("Saiu");
         };
 
-        // Fechar modal ao clicar fora dele
         window.onclick = (event) => {
             if (event.target == authModal) {
                 authModal.style.display = "none";
-                document.body.style.overflow = '';
-            }
-            if (event.target == document.getElementById('post-modal')) {
-                document.getElementById('post-modal').style.display = "none";
                 document.body.style.overflow = '';
             }
         };
@@ -1293,7 +889,7 @@
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 fetchContent('all', e.target.value);
-            }, 300); // Debounce para performance
+            }, 300);
         };
 
         document.querySelectorAll('.filter-chip').forEach(chip => {
@@ -1310,12 +906,11 @@
             };
         });
 
-        // Template Automático
         document.getElementById('item-type').onchange = (e) => {
             const content = document.getElementById('item-content');
             if (e.target.value === 'tutorial' && !content.value) {
                 content.value = tutorialTemplate;
-                notify("Template de tutorial aplicado", "info");
+                notify("Template aplicado");
             }
         };
 
@@ -1330,24 +925,24 @@
             let video = document.getElementById('item-video').value;
 
             if (!title) {
-                notify("Título é obrigatório", "error");
+                notify("Título obrigatório");
                 return false;
             }
             if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg)$/i)) {
-                notify("URL de imagem inválida (deve ser jpg, png ou gif)", "error");
+                notify("URL de imagem inválida");
                 return false;
             }
             if (!link.match(/^https?:\/\/.+/i)) {
-                notify("Link de download inválido", "error");
+                notify("Link inválido");
                 return false;
             }
             if (video) {
                 const match = video.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
                 if (!match) {
-                    notify("ID de vídeo YouTube inválido", "error");
+                    notify("Vídeo inválido");
                     return false;
                 }
-                video = match[1]; // Atualiza para ID puro
+                video = match[1];
             }
             return true;
         }
@@ -1356,7 +951,7 @@
             document.getElementById('form-contribute').reset();
             document.getElementById('item-id').value = '';
             document.getElementById('dash-title').innerText = 'Nova Contribuição';
-            document.getElementById('btn-submit-post').innerHTML = `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
+            document.getElementById('btn-submit-post').innerHTML = `<i class="ph-paper-plane-tilt"></i> Publicar`;
         }
 
         document.getElementById('form-contribute').onsubmit = async (e) => {
@@ -1382,31 +977,31 @@
             try {
                 if (id) {
                     await updateDoc(doc(db, "resources", id), data);
-                    notify("Post atualizado com sucesso!");
+                    notify("Atualizado");
                 } else {
                     data.createdAt = serverTimestamp();
                     await addDoc(collection(db, "resources"), data);
-                    notify("Publicado com sucesso no Hub!");
+                    notify("Publicado");
                 }
                 resetForm();
                 loadUserPosts();
                 showView('home');
             } catch (err) {
-                notify("Erro ao processar conteúdo: " + err.message, "error");
+                notify("Erro ao processar");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = id ? `<i class="ph-pencil-simple"></i> Atualizar Post` : `<i class="ph-paper-plane-tilt"></i> Publicar no Hub`;
+                btn.innerHTML = id ? `<i class="ph-pencil-simple"></i> Atualizar` : `<i class="ph-paper-plane-tilt"></i> Publicar`;
             }
         };
 
         // ==========================================================================
-        // CARREGAR POSTS DO USUÁRIO PARA EDIÇÃO/EXCLUSÃO
+        // CARREGAR POSTS DO USUÁRIO
         // ==========================================================================
 
         async function loadUserPosts() {
             if (!auth.currentUser) return;
             const userPostsList = document.getElementById('user-posts-list');
-            userPostsList.innerHTML = '<div class="loading-state">Carregando seus posts...</div>';
+            userPostsList.innerHTML = '<div class="loading-state">Carregando...</div>';
 
             try {
                 const q = query(collection(db, "resources"), where("authorName", "==", auth.currentUser.email.split('@')[0]), orderBy("createdAt", "desc"));
@@ -1414,7 +1009,7 @@
                 userPostsList.innerHTML = '';
 
                 if (snap.empty) {
-                    userPostsList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Você ainda não tem posts.</p>';
+                    userPostsList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Sem posts.</p>';
                     return;
                 }
 
@@ -1422,24 +1017,22 @@
                     const data = doc.data();
                     const id = doc.id;
                     const postItem = document.createElement('div');
-                    postItem.style.marginBottom = '1rem';
-                    postItem.style.padding = '1rem';
-                    postItem.style.border = '1px solid var(--border)';
-                    postItem.style.borderRadius = '12px';
+                    postItem.className = 'post-item';
                     postItem.innerHTML = `
                         <h3>${data.title}</h3>
                         <p>${data.description.substring(0, 50)}...</p>
-                        <button class="btn-edit" onclick="editPost('${id}')"><i class="ph-pencil-simple"></i> Editar</button>
-                        <button class="btn-delete" onclick="deletePost('${id}')"><i class="ph-trash"></i> Excluir</button>
+                        <div class="buttons">
+                            <button class="btn-edit" onclick="editPost('${id}')"><i class="ph-pencil-simple"></i> Editar</button>
+                            <button class="btn-delete" onclick="deletePost('${id}')"><i class="ph-trash"></i> Excluir</button>
+                        </div>
                     `;
                     userPostsList.appendChild(postItem);
                 });
             } catch (err) {
-                notify("Erro ao carregar seus posts: " + err.message, "error");
+                notify("Erro ao carregar posts");
             }
         }
 
-        // Função de Edição
         window.editPost = async (id) => {
             try {
                 const postDoc = await getDoc(doc(db, "resources", id));
@@ -1453,29 +1046,28 @@
                     document.getElementById('item-thumb').value = data.thumbnailUrl;
                     document.getElementById('item-video').value = data.videoUrl;
                     document.getElementById('item-link').value = data.link;
-                    document.getElementById('dash-title').innerText = 'Editar Contribuição';
-                    document.getElementById('btn-submit-post').innerHTML = `<i class="ph-pencil-simple"></i> Atualizar Post`;
-                    notify("Modo de edição ativado.", "info");
+                    document.getElementById('dash-title').innerText = 'Editar';
+                    document.getElementById('btn-submit-post').innerHTML = `<i class="ph-pencil-simple"></i> Atualizar`;
+                    notify("Editando");
                 } else {
-                    notify("Post não encontrado.", "error");
+                    notify("Post não encontrado");
                 }
             } catch (err) {
-                notify("Erro ao carregar post para edição: " + err.message, "error");
+                notify("Erro ao editar");
             }
         };
 
         window.deletePost = async (id) => {
-            if (!confirm("Tem certeza que deseja excluir este post?")) return;
+            if (!confirm("Excluir?")) return;
             try {
                 await deleteDoc(doc(db, "resources", id));
-                notify("Post excluído com sucesso!", "success");
+                notify("Excluído");
                 loadUserPosts();
             } catch (err) {
-                notify("Erro ao excluir post: " + err.message, "error");
+                notify("Erro ao excluir");
             }
         };
 
-        // Ajuste para layout mobile
         function handleMobileLayout() {
             const isMobile = window.innerWidth <= 768;
             const navLinks = document.querySelector('.nav-links');
@@ -1484,16 +1076,13 @@
             const navbar = document.querySelector('.navbar');
 
             if (isMobile) {
-                hamburger.style.marginLeft = 'auto';
-                if (!navLinks.querySelector('#auth-controls')) {
+                if (!navLinks.querySelector('#auth-li')) {
                     const li = document.createElement('li');
                     li.id = 'auth-li';
-                    li.style.marginTop = '1rem';
                     li.appendChild(authControls);
                     navLinks.appendChild(li);
                 }
             } else {
-                hamburger.style.marginLeft = '';
                 const authLi = document.getElementById('auth-li');
                 if (authLi) {
                     navbar.appendChild(authControls);

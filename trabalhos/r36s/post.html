@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R36S Hub - Post</title>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<style>
+    /* Styles iguais ao index.html para consistência */
+    :root {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-main: #ffffff;
+        --text-muted: #aaaaaa;
+        --border: #333333;
+        --radius: 8px;
+        --transition: all 0.2s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--bg-color);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .post-banner { 
+        width: 100%; 
+        height: auto; 
+        max-height: 400px;
+        object-fit: cover; 
+        border-radius: var(--radius);
+    }
+
+    .post-body { 
+        padding: 2rem 0; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 1rem;
+    }
+
+    .post-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .post-meta {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .markdown-content { 
+        margin: 1rem 0; 
+        font-size: 1rem; 
+        line-height: 1.6; 
+        color: var(--text-main);
+    }
+
+    .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .markdown-content p { margin-bottom: 1rem; }
+
+    .markdown-content ul, .markdown-content ol {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+
+    .markdown-content li { margin-bottom: 0.5rem; }
+
+    .markdown-content a {
+        color: var(--text-main);
+        text-decoration: underline;
+    }
+
+    .markdown-content code {
+        background: #252525;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+    }
+
+    .markdown-content pre {
+        background: #252525;
+        padding: 1rem;
+        border-radius: var(--radius);
+        overflow-x: auto;
+        margin-bottom: 1rem;
+    }
+
+    .markdown-content blockquote {
+        border-left: 4px solid var(--border);
+        padding-left: 1rem;
+        margin: 1rem 0;
+        color: var(--text-muted);
+    }
+
+    .markdown-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem auto;
+        border-radius: var(--radius);
+    }
+
+    .markdown-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    .markdown-content th, .markdown-content td {
+        border: 1px solid var(--border);
+        padding: 0.75rem;
+        text-align: left;
+    }
+
+    .markdown-content th { background: #252525; }
+
+    .btn-primary {
+        background: #333333;
+        color: var(--text-main);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-primary:hover {
+        background: #444444;
+    }
+
+    .btn-full { width: 100%; }
+
+    .loading-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-muted);
+    }
+
+    .back-btn {
+        margin-bottom: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .back-btn:hover {
+        color: var(--text-muted);
+    }
+</style>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn"><i class="ph-arrow-left"></i> Voltar</a>
+        <div id="post-content-area">
+            <div class="loading-state">Carregando post...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG5BLxR02T6jO8yX9smrELRudlIV1vDOw",
+            authDomain: "r36s-97621.firebaseapp.com",
+            projectId: "r36s-97621",
+            storageBucket: "r36s-97621.firebasestorage.app",
+            messagingSenderId: "77809018203",
+            appId: "1:77809018203:web:aba6d9dd8b7b523cfd667e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (!id) {
+                document.getElementById('post-content-area').innerHTML = '<div class="loading-state">Post não encontrado.</div>';
+                return;
+            }
+
+            try {
+                const postDoc = await getDoc(doc(db, "resources", id));
+                if (postDoc.exists()) {
+                    const data = postDoc.data();
+
+                    let videoHTML = '';
+                    if (data.videoUrl) {
+                        const match = data.videoUrl.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                        const videoId = match ? match[1] : data.videoUrl;
+                        videoHTML = `
+                            <div style="position:relative; padding-bottom:56.25%; height:0; margin: 1rem 0; overflow:hidden; border-radius:var(--radius);">
+                                <iframe style="position:absolute; top:0; left:0; width:100%; height:100%;" 
+                                src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                            </div>`;
+                    }
+                    
+                    let dateStr = '';
+                    if (data.createdAt && data.createdAt.toDate) {
+                        const date = data.createdAt.toDate();
+                        dateStr = date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
+                    }
+                    
+                    document.getElementById('post-content-area').innerHTML = `
+                        <img src="${data.thumbnailUrl}" class="post-banner" alt="Banner de ${data.title}" onerror="this.src='https://placehold.co/1200x600/1e1e1e/fff?text=R36S'">
+                        <div class="post-body">
+                            <div class="post-header">
+                                <span class="card-tag">${data.type}</span>
+                                <h1>${data.title}</h1>
+                            </div>
+                            <div class="post-meta">
+                                <span>Por: ${data.authorName || 'Anônimo'}</span>
+                                ${dateStr ? `<span>Em: ${dateStr}</span>` : ''}
+                            </div>
+                            
+                            <div class="markdown-content">${marked.parse(data.content || 'Sem detalhes.')}</div>
+                            
+                            ${videoHTML}
+                            
+                            <a href="${data.link}" target="_blank" class="btn-primary btn-full" style="margin-top: 1rem;">
+                                Acessar
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('post-content-area').innerHTML = '<div class="loading-state">Post não encontrado.</div>';
+                }
+            } catch (err) {
+                document.getElementById('post-content-area').innerHTML = '<div class="loading-state">Erro ao carregar post.</div>';
+            }
+        }
+
+        loadPost();
+    </script>
+</body>
+</html>
