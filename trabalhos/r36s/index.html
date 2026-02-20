@@ -928,7 +928,7 @@
                 notify("Título obrigatório");
                 return false;
             }
-            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg)$/i)) {
+            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg|bmp)$/i)) {
                 notify("URL de imagem inválida");
                 return false;
             }
@@ -1098,4 +1098,5 @@
         fetchContent();
     </script>
 </body>
+
 </html>
