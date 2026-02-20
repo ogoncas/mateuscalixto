@@ -239,11 +239,11 @@
     }
 
     /* ==========================================================================
-    GRID DE CONTEÚDO E CARDS - MINIMALISTA
+    GRID DE CONTEÚDO E CARDS - ATUALIZADO (3 COLUNAS + ANIMAÇÃO)
     ========================================================================== */
     .content-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(3, 1fr); /* Fixa 3 colunas */
         gap: 1.5rem;
         padding-bottom: 4rem;
     }
@@ -255,10 +255,16 @@
         overflow: hidden;
         cursor: pointer;
         transition: var(--transition);
+        position: relative;
+        
+        /* Configurações da Animação de Entrada */
+        opacity: 0;
+        animation: fadeInUp 0.5s ease forwards;
     }
 
     .card:hover {
         border-color: #444444;
+        transform: translateY(-4px);
     }
 
     .card-img {
@@ -285,10 +291,23 @@
         color: var(--text-muted);
         cursor: pointer;
         transition: var(--transition);
+        z-index: 10;
     }
 
     .fav-btn:hover { color: var(--text-main); }
     .fav-btn.active { color: #777777; }
+
+    /* Keyframes para o surgimento suave */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
     /* ==========================================================================
     MODAIS - SIMPLES E INTUITIVO (APENAS PARA AUTH)
@@ -484,11 +503,15 @@
     /* ==========================================================================
     RESPONSIVIDADE - SIMPLES
     ========================================================================== */
+    @media (max-width: 1024px) {
+        .content-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 768px) {
         .grid-2 { grid-template-columns: 1fr; }
         .hero { padding: 3rem 1rem; }
         .modal-content { width: 95%; margin: 1rem; }
-        .content-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .content-grid { grid-template-columns: 1fr; gap: 1rem; }
         .dash-container { padding: 1.5rem; }
     }
 </style>
@@ -663,7 +686,6 @@
         // UTILITÁRIOS E UI
         // ==========================================================================
 
-        // Sistema de Notificações (Toasts)
         function notify(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -676,7 +698,6 @@
             }, 3000);
         }
 
-        // Template padrão para novos tutoriais
         const tutorialTemplate = `### Requisitos
 * Cartão SD Original (SanDisk/Samsung)
 * Firmware ArkOS/RetroOz atualizado
@@ -716,7 +737,7 @@
         }
 
         // ==========================================================================
-        // MOTOR DE DADOS: BUSCA E RENDERIZAÇÃO
+        // MOTOR DE DADOS: BUSCA E RENDERIZAÇÃO ATUALIZADO (3 POR VEZ)
         // ==========================================================================
 
         let lastDoc = null;
@@ -729,16 +750,20 @@
             }
             
             try {
-                let q = query(collection(db, "resources"), orderBy("createdAt", "desc"), limit(10));
-                if (lastDoc && loadMore) q = query(q, startAfter(lastDoc));
+                // Alterado de 10 para 3
+                let q = query(collection(db, "resources"), orderBy("createdAt", "desc"), limit(3));
+                if (lastDoc && loadMore) q = query(collection(db, "resources"), orderBy("createdAt", "desc"), startAfter(lastDoc), limit(3));
+                
                 const snap = await getDocs(q);
-                lastDoc = snap.docs[snap.docs.length - 1];
-
                 const favs = getFavs();
+                
                 if (!loadMore) grid.innerHTML = '';
+                
+                // Remove o botão antigo para ele não ficar preso no meio da grid
+                const oldBtn = document.getElementById('load-more-btn');
+                if(oldBtn) oldBtn.remove();
 
                 let count = 0;
-
                 snap.forEach(doc => {
                     const data = doc.data();
                     const id = doc.id;
@@ -753,6 +778,9 @@
 
                     const card = document.createElement('article');
                     card.className = 'card';
+                    // Efeito de cascata (um card aparece após o outro)
+                    card.style.animationDelay = `${count * 0.1}s`;
+                    
                     card.innerHTML = `
                         <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
                             <i class="ph-heart-fill"></i>
@@ -770,16 +798,19 @@
                     grid.appendChild(card);
                 });
 
-                if (snap.size === 10 && !document.getElementById('load-more-btn')) {
+                lastDoc = snap.docs[snap.docs.length - 1];
+
+                // Cria o botão "Mostrar Mais" se houver mais conteúdo
+                if (snap.size === 3) {
                     const loadBtn = document.createElement('button');
                     loadBtn.id = 'load-more-btn';
                     loadBtn.className = 'btn-primary';
                     loadBtn.style.margin = '2rem auto';
                     loadBtn.style.display = 'block';
-                    loadBtn.innerText = 'Mais';
+                    loadBtn.style.gridColumn = '1 / -1'; // Ocupa a largura total abaixo dos 3 cards
+                    loadBtn.innerText = 'Mostrar mais';
                     loadBtn.onclick = () => {
                         fetchContent(category, term, onlyFavs, true);
-                        loadBtn.remove();
                     };
                     grid.appendChild(loadBtn);
                 }
@@ -928,7 +959,7 @@
                 notify("Título obrigatório");
                 return false;
             }
-            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg|bmp)$/i)) {
+            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg)$/i)) {
                 notify("URL de imagem inválida");
                 return false;
             }
@@ -1098,5 +1129,4 @@
         fetchContent();
     </script>
 </body>
-
 </html>
