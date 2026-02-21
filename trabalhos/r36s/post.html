@@ -35,12 +35,20 @@
         color: var(--text-main);
         font-family: 'Inter', sans-serif;
         line-height: 1.6;
+        min-height: 100vh; /* Aprimoramento UX: Garante que o body ocupe a altura total para posicionar footer no fundo */
+        display: flex;
+        flex-direction: column;
+    }
+
+    main { 
+        flex: 1; /* Aprimoramento UX: Expande o conteúdo principal para empurrar o footer para baixo */
     }
 
     .container {
         max-width: 800px;
         margin: 2rem auto;
         padding: 0 1rem;
+        width: 100%; /* Aprimoramento: Garante que o container seja 100% em telas menores */
     }
 
     .post-banner { 
@@ -67,6 +75,9 @@
     .post-meta {
         color: var(--text-muted);
         font-size: 0.9rem;
+        display: flex; /* Aprimoramento UI: Alinha itens de meta em linha para melhor leitura */
+        gap: 1rem; /* Espaçamento entre autor e data */
+        flex-wrap: wrap;
     }
 
     .markdown-content { 
@@ -128,6 +139,8 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 1rem;
+        overflow-x: auto; /* Aprimoramento: Permite scroll horizontal em tabelas largas em telas pequenas */
+        display: block;
     }
 
     .markdown-content th, .markdown-content td {
@@ -173,20 +186,191 @@
         color: var(--text-main);
         text-decoration: none;
         font-weight: 500;
+        transition: var(--transition); /* Aprimoramento UI: Adiciona transição suave ao hover */
     }
 
     .back-btn:hover {
         color: var(--text-muted);
     }
+
+    /* Aprimoramento UX/UI: Removido borda, radius e background para "direto na tela" */
+    .post-body {
+        padding: 2rem;
+    }
+
+    /* ==========================================================================
+    FOOTER - Copiado e adaptado do index.html para coesão
+    ========================================================================== */
+    footer {
+        background: #1e1e1e;
+        border-top: 1px solid var(--border);
+        padding: 2rem 0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        width: 100%; /* Aprimoramento: Footer sempre full-width */
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-copyright {
+        flex: 1;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    footer a {
+        color: var(--text-main);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    footer a:hover {
+        color: var(--text-muted);
+        text-decoration: underline;
+    }
+
+    /* Aprimoramento Responsividade: Media Queries mais flexíveis com unidades relativas */
+    @media (max-width: 1024px) {
+        .container {
+            max-width: 90%; /* Ajusta para telas médias */
+        }
+
+        .post-banner {
+            max-height: 350px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 0.5rem; /* Reduz padding lateral em telas menores */
+        }
+
+        .post-banner {
+            max-height: 300px; /* Reduz altura máxima do banner em mobile para melhor proporção */
+        }
+
+        .post-body {
+            padding: 1.5rem; /* Reduz padding interno */
+            gap: 0.75rem; /* Menor gap entre elementos */
+        }
+
+        .post-meta {
+            flex-direction: column; /* Empilha meta itens em coluna para telas estreitas */
+            gap: 0.5rem;
+        }
+
+        .markdown-content {
+            font-size: 0.95rem; /* Leve redução no tamanho da fonte para melhor legibilidade em mobile */
+            line-height: 1.5; /* Ajusta line-height para telas menores */
+        }
+
+        .markdown-content pre {
+            padding: 0.75rem; /* Reduz padding em código */
+        }
+
+        .back-btn {
+            font-size: 0.9rem; /* Ajusta tamanho do botão de voltar */
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            padding: 0.6rem 1.2rem; /* Botão ligeiramente menor em mobile */
+            font-size: 0.95rem;
+        }
+
+        footer {
+            padding: 1.5rem 0; /* Reduz padding do footer */
+        }
+
+        .footer-container {
+            flex-direction: column; /* Empilha elementos do footer em coluna */
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            justify-content: center;
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.5rem; /* Reduz tamanho de títulos em telas muito pequenas */
+        }
+
+        .post-meta {
+            font-size: 0.85rem; /* Ajusta meta texto */
+        }
+
+        .markdown-content {
+            font-size: 0.9rem; /* Maior redução para telas muito pequenas */
+        }
+
+        .post-body {
+            padding: 1rem;
+        }
+
+        .post-banner {
+            max-height: 250px; /* Ainda menor para proporção ideal */
+        }
+
+        .btn-primary {
+            padding: 0.5rem 1rem;
+        }
+
+        footer {
+            font-size: 0.85rem;
+            padding: 1rem 0;
+        }
+    }
+
+    /* Aprimoramento: Adiciona breakpoint para telas maiores que 1200px para flexibilidade */
+    @media (min-width: 1200px) {
+        .container {
+            max-width: 1000px; /* Aumenta largura máxima para telas grandes */
+        }
+
+        .markdown-content {
+            font-size: 1.05rem; /* Leve aumento para melhor leitura em desktops */
+        }
+    }
 </style>
 <body>
 
-    <div class="container">
+    <main class="container">
         <a href="index.html" class="back-btn"><i class="ph-arrow-left"></i> Voltar</a>
         <div id="post-content-area">
             <div class="loading-state">Carregando post...</div>
         </div>
-    </div>
+    </main>
+
+    <!-- Adição: Footer para coesão com index.html e melhor UX (navegação persistente) -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-copyright">
+                <a href="https://mateuscalixto.com.br">© 2026 Mateus Calixto</a> | <a href="mailto:contato@mateuscalixto.com.br">contato@mateuscalixto.com.br</a>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#sobre">Sobre</a>
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#termos-de-uso">Termos de Uso</a>
+                <a href="https://github.com/ogoncas/mateuscalixto/tree/main/trabalhos/r36s#privacidade">Privacidade</a>
+            </div>
+        </div>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -250,9 +434,7 @@
                             
                             ${videoHTML}
                             
-                            <a href="${data.link}" target="_blank" class="btn-primary btn-full" style="margin-top: 1rem;">
-                                Acessar
-                            </a>
+                            ${data.link ? `<a href="${data.link}" target="_blank" class="btn-primary btn-full" style="margin-top: 1rem;">Acessar</a>` : ''}  
                         </div>
                     `;
                 } else {

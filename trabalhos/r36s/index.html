@@ -605,8 +605,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Link de Download</label>
-                        <input type="url" id="item-link" placeholder="GitHub, Mega, etc." required>
+                        <label>Link de Download <span style="color:#888;font-size:0.85rem;">(opcional)</span></label>
+                        <input type="url" id="item-link" placeholder="Opcional: GitHub, Mega, etc.">
                     </div>
                     
                     <button type="submit" class="btn-primary btn-full" id="btn-submit-post">
@@ -952,19 +952,20 @@
         function validateForm() {
             const title = document.getElementById('item-title').value;
             const thumb = document.getElementById('item-thumb').value;
-            const link = document.getElementById('item-link').value;
+            const link = document.getElementById('item-link').value.trim(); // trim para evitar espaços
             let video = document.getElementById('item-video').value;
 
             if (!title) {
                 notify("Título obrigatório");
                 return false;
             }
-            if (!thumb.match(/^https?:\/\/.+\.(jpg|png|gif|jpeg)$/i)) {
+            if (!thumb.match(/^https?:\/\/.+/i)) {
                 notify("URL de imagem inválida");
                 return false;
             }
-            if (!link.match(/^https?:\/\/.+/i)) {
-                notify("Link inválido");
+            // ✅ Link agora é opcional
+            if (link && !link.match(/^https?:\/\/.+/i)) {
+                notify("Link inválido (deve começar com http:// ou https://)");
                 return false;
             }
             if (video) {
