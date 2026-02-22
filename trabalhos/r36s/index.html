@@ -571,13 +571,8 @@
                 </div>
             </header>
             
-            <div class="filters">
-                <button class="filter-chip active" data-cat="all">Todos</button>
-                <button class="filter-chip" data-cat="theme">Temas</button>
-                <button class="filter-chip" data-cat="tutorial">Tutoriais</button>
-                <button class="filter-chip" id="filter-favs">
-                <i class="ph-heart-fill"></i> Salvos
-                </button>
+            <div class="filters" id="filters-container">
+                <!-- Filtros serão adicionados dinamicamente aqui -->
             </div>
 
             <section id="content-grid" class="content-grid"></section>
@@ -596,8 +591,12 @@
                     <div class="form-group">
                         <label>Categoria</label>
                         <select id="item-type">
-                            <option value="theme">Tema</option>
-                            <option value="tutorial">Tutorial / Guia</option>
+                            <option value="guide">Guias</option>
+                            <option value="tutorial">Tutoriais</option>
+                            <option value="theme">Temas</option>
+                            <option value="firmware">Firmwares</option>
+                            <option value="tip">Dicas</option>
+                            <option value="analysis">Análises</option>
                         </select>
                     </div>
                     
@@ -701,6 +700,23 @@
         const auth = getAuth(app);
 
         // ==========================================================================
+        // DEFINIÇÃO DAS CATEGORIAS
+        // ==========================================================================
+        const categories = [
+            { value: 'guide', label: 'Guias' },
+            { value: 'tutorial', label: 'Tutoriais' },
+            { value: 'theme', label: 'Temas' },
+            { value: 'firmware', label: 'Firmwares' },
+            { value: 'tip', label: 'Dicas' },
+            { value: 'analysis', label: 'Análises' }
+        ];
+
+        const typeToLabel = categories.reduce((acc, cat) => {
+            acc[cat.value] = cat.label;
+            return acc;
+        }, {});
+
+        // ==========================================================================
         // UTILITÁRIOS E UI
         // ==========================================================================
 
@@ -751,7 +767,9 @@
             localStorage.setItem('r36s_favs', JSON.stringify(favs));
             
             const currentActiveFilter = document.querySelector('.filter-chip.active');
-            fetchContent(currentActiveFilter.dataset.cat, document.getElementById('searchInput').value, currentActiveFilter.id === 'filter-favs');
+            const cat = currentActiveFilter.dataset.cat || 'all';
+            const isFavs = currentActiveFilter.id === 'filter-favs';
+            fetchContent(cat, document.getElementById('searchInput').value, isFavs);
         }
 
         // ==========================================================================
@@ -759,6 +777,13 @@
         // ==========================================================================
 
         let lastDoc = null;
+
+        async function hasMore(baseQuery) {
+            if (!lastDoc) return false;
+            const checkQ = query(baseQuery, startAfter(lastDoc), limit(1));
+            const checkSnap = await getDocs(checkQ);
+            return checkSnap.size > 0;
+        }
 
         async function fetchContent(category = 'all', term = '', onlyFavs = false, loadMore = false) {
             const grid = document.getElementById('content-grid');
@@ -768,79 +793,191 @@
             }
             
             try {
-                // Alterado de 10 para 3
-                let q = query(collection(db, "resources"), orderBy("createdAt", "desc"), limit(3));
-                if (lastDoc && loadMore) q = query(collection(db, "resources"), orderBy("createdAt", "desc"), startAfter(lastDoc), limit(3));
-                
-                const snap = await getDocs(q);
                 const favs = getFavs();
-                
-                if (!loadMore) grid.innerHTML = '';
-                
-                // Remove o botão antigo para ele não ficar preso no meio da grid
-                const oldBtn = document.getElementById('load-more-btn');
-                if(oldBtn) oldBtn.remove();
-
                 let count = 0;
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    const id = doc.id;
+
+                if (onlyFavs) {
+                    if (loadMore) return; // Sem paginação para favoritos
+                    grid.innerHTML = '';
+                    if (!favs.length) {
+                        grid.innerHTML = '<div class="loading-state">Nenhum salvo.</div>';
+                        return;
+                    }
+
+                    const promises = favs.map(id => getDoc(doc(db, "resources", id)));
+                    const docs = await Promise.all(promises);
+                    let items = docs
+                        .map(d => ({ id: d.id, data: d.data() }))
+                        .filter(item => item.data);
+
+                    // Filtrar por termo de busca
+                    items = items.filter(item => {
+                        const data = item.data;
+                        const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
+                        return !term || searchStr.includes(term.toLowerCase());
+                    });
+
+                    // Ordenar por createdAt desc
+                    items.sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0));
+
+                    // Renderizar
+                    items.forEach(item => {
+                        const data = item.data;
+                        const id = item.id;
+                        const isFav = favs.includes(id);
+
+                        const card = document.createElement('article');
+                        card.className = 'card';
+                        card.style.animationDelay = `${++count * 0.1}s`;
+                        
+                        card.innerHTML = `
+                            <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
+                                <i class="ph-heart-fill"></i>
+                            </button>
+                            <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
+                            <div class="card-body">
+                                <span class="card-tag">${typeToLabel[data.type] || data.type}</span>
+                                <h3>${data.title}</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">${data.description.substring(0, 80)}...</p>
+                            </div>
+                        `;
+
+                        card.querySelector('.fav-btn').onclick = (e) => toggleFav(id, e);
+                        card.onclick = () => window.location.href = `post.html?id=${id}`;
+                        grid.appendChild(card);
+                    });
+
+                    if (count === 0) {
+                        grid.innerHTML = '<div class="loading-state">Nenhum resultado.</div>';
+                    }
+
+                } else {
+                    // Query normal com filtro de categoria no servidor
+                    let baseQ = query(collection(db, "resources"), orderBy("createdAt", "desc"));
+                    if (category !== 'all') {
+                        baseQ = query(baseQ, where("type", "==", category));
+                    }
+                    let q = baseQ;
+                    if (loadMore && lastDoc) {
+                        q = query(q, startAfter(lastDoc));
+                    }
+                    q = query(q, limit(3));
+
+                    const snap = await getDocs(q);
                     
-                    const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
-                    if (term && !searchStr.includes(term.toLowerCase())) return;
-                    if (category !== 'all' && data.type !== category) return;
-                    if (onlyFavs && !favs.includes(id)) return;
-
-                    count++;
-                    const isFav = favs.includes(id);
-
-                    const card = document.createElement('article');
-                    card.className = 'card';
-                    // Efeito de cascata (um card aparece após o outro)
-                    card.style.animationDelay = `${count * 0.1}s`;
+                    if (!loadMore) grid.innerHTML = '';
                     
-                    card.innerHTML = `
-                        <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
-                            <i class="ph-heart-fill"></i>
-                        </button>
-                        <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
-                        <div class="card-body">
-                            <span class="card-tag">${data.type}</span>
-                            <h3>${data.title}</h3>
-                            <p style="font-size: 0.85rem; color: var(--text-muted);">${data.description.substring(0, 80)}...</p>
-                        </div>
-                    `;
+                    // Remove o botão antigo
+                    const oldBtn = document.getElementById('load-more-btn');
+                    if (oldBtn) oldBtn.remove();
 
-                    card.querySelector('.fav-btn').onclick = (e) => toggleFav(id, e);
-                    card.onclick = () => window.location.href = `post.html?id=${id}`;
-                    grid.appendChild(card);
-                });
+                    snap.forEach(d => {
+                        const data = d.data();
+                        const id = d.id;
+                        
+                        const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
+                        if (term && !searchStr.includes(term.toLowerCase())) return;
 
-                lastDoc = snap.docs[snap.docs.length - 1];
+                        const isFav = favs.includes(id);
 
-                // Cria o botão "Mostrar Mais" se houver mais conteúdo
-                if (snap.size === 3) {
-                    const loadBtn = document.createElement('button');
-                    loadBtn.id = 'load-more-btn';
-                    loadBtn.className = 'btn-primary';
-                    loadBtn.style.margin = '2rem auto';
-                    loadBtn.style.display = 'block';
-                    loadBtn.style.gridColumn = '1 / -1'; // Ocupa a largura total abaixo dos 3 cards
-                    loadBtn.innerText = 'Mostrar mais';
-                    loadBtn.onclick = () => {
-                        fetchContent(category, term, onlyFavs, true);
-                    };
-                    grid.appendChild(loadBtn);
-                }
+                        const card = document.createElement('article');
+                        card.className = 'card';
+                        card.style.animationDelay = `${++count * 0.1}s`;
+                        
+                        card.innerHTML = `
+                            <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
+                                <i class="ph-heart-fill"></i>
+                            </button>
+                            <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
+                            <div class="card-body">
+                                <span class="card-tag">${typeToLabel[data.type] || data.type}</span>
+                                <h3>${data.title}</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">${data.description.substring(0, 80)}...</p>
+                            </div>
+                        `;
 
-                if (count === 0 && !loadMore) {
-                    grid.innerHTML = '<div class="loading-state">Nenhum resultado.</div>';
+                        card.querySelector('.fav-btn').onclick = (e) => toggleFav(id, e);
+                        card.onclick = () => window.location.href = `post.html?id=${id}`;
+                        grid.appendChild(card);
+                    });
+
+                    lastDoc = snap.docs[snap.docs.length - 1];
+
+                    // Botão "Mostrar Mais" se houver mais
+                    if (snap.size === 3) {
+                        const hasMorePosts = await hasMore(baseQ);
+                        if (hasMorePosts) {
+                            const loadBtn = document.createElement('button');
+                            loadBtn.id = 'load-more-btn';
+                            loadBtn.className = 'btn-primary';
+                            loadBtn.style.margin = '2rem auto';
+                            loadBtn.style.display = 'block';
+                            loadBtn.style.gridColumn = '1 / -1';
+                            loadBtn.innerText = 'Mostrar mais';
+                            loadBtn.onclick = () => fetchContent(category, term, onlyFavs, true);
+                            grid.appendChild(loadBtn);
+                        }
+                    }
+
+                    if (count === 0 && !loadMore) {
+                        grid.innerHTML = '<div class="loading-state">Nenhum resultado.</div>';
+                    }
                 }
 
             } catch (err) { 
                 console.error(err);
                 notify("Erro ao carregar dados");
             }
+        }
+
+        // ==========================================================================
+        // CARREGAR FILTROS DINÂMICOS
+        // ==========================================================================
+        async function loadFilters() {
+            const filtersContainer = document.getElementById('filters-container');
+            filtersContainer.innerHTML = '';
+
+            // Adiciona "Todos"
+            const allChip = document.createElement('button');
+            allChip.className = 'filter-chip active';
+            allChip.dataset.cat = 'all';
+            allChip.innerText = 'Todos';
+            filtersContainer.appendChild(allChip);
+
+            // Adiciona categorias dinâmicas se tiverem posts
+            for (const cat of categories) {
+                if (await hasPosts(cat.value)) {
+                    const chip = document.createElement('button');
+                    chip.className = 'filter-chip';
+                    chip.dataset.cat = cat.value;
+                    chip.innerText = cat.label;
+                    filtersContainer.appendChild(chip);
+                }
+            }
+
+            // Adiciona "Salvos"
+            const favsChip = document.createElement('button');
+            favsChip.className = 'filter-chip';
+            favsChip.id = 'filter-favs';
+            favsChip.innerHTML = '<i class="ph-heart-fill"></i> Salvos';
+            filtersContainer.appendChild(favsChip);
+
+            // Adiciona eventos aos chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.onclick = () => {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    const cat = chip.dataset.cat || 'all';
+                    const isFavs = chip.id === 'filter-favs';
+                    fetchContent(cat, document.getElementById('searchInput').value, isFavs);
+                };
+            });
+        }
+
+        async function hasPosts(category) {
+            const q = query(collection(db, "resources"), where("type", "==", category), limit(1));
+            const snap = await getDocs(q);
+            return snap.size > 0;
         }
 
         // ==========================================================================
@@ -937,23 +1074,12 @@
         document.getElementById('searchInput').oninput = (e) => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-                fetchContent('all', e.target.value);
+                const activeChip = document.querySelector('.filter-chip.active');
+                const cat = activeChip.dataset.cat || 'all';
+                const isFavs = activeChip.id === 'filter-favs';
+                fetchContent(cat, e.target.value, isFavs);
             }, 300);
         };
-
-        document.querySelectorAll('.filter-chip').forEach(chip => {
-            chip.onclick = () => {
-                if(chip.id === 'filter-favs') {
-                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
-                    fetchContent('all', '', true);
-                    return;
-                }
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                fetchContent(chip.dataset.cat);
-            };
-        });
 
         document.getElementById('item-type').onchange = (e) => {
             const content = document.getElementById('item-content');
@@ -1145,6 +1271,7 @@
         handleMobileLayout();
 
         // Inicialização
+        loadFilters();
         fetchContent();
     </script>
 </body>
