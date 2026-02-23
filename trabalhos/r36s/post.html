@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -9,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/phosphor-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 </head>
 
 <style>
-    /* Styles iguais ao index.html para consistência */
     :root {
         --bg-color: #121212;
         --card-bg: #1e1e1e;
@@ -34,20 +35,25 @@
         color: var(--text-main);
         font-family: 'Inter', sans-serif;
         line-height: 1.6;
-        min-height: 100vh; /* Aprimoramento UX: Garante que o body ocupe a altura total para posicionar footer no fundo */
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
     }
 
     main { 
-        flex: 1; /* Aprimoramento UX: Expande o conteúdo principal para empurrar o footer para baixo */
+        flex: 1; 
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 2px solid #aaaaaa;
+        outline-offset: 2px;
     }
 
     .container {
         max-width: 800px;
         margin: 2rem auto;
         padding: 0 1rem;
-        width: 100%; /* Aprimoramento: Garante que o container seja 100% em telas menores */
+        width: 100%; 
     }
 
     .post-banner { 
@@ -74,8 +80,8 @@
     .post-meta {
         color: var(--text-muted);
         font-size: 0.9rem;
-        display: flex; /* Aprimoramento UI: Alinha itens de meta em linha para melhor leitura */
-        gap: 1rem; /* Espaçamento entre autor e data */
+        display: flex; 
+        gap: 1rem; 
         flex-wrap: wrap;
     }
 
@@ -117,11 +123,17 @@
         border-radius: var(--radius);
         overflow-x: auto;
         margin-bottom: 1rem;
+        border: 1px solid var(--border);
+        border-left: 4px solid #00ff88; 
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
 
     .markdown-content blockquote {
-        border-left: 4px solid var(--border);
-        padding-left: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-left: 4px solid var(--text-muted);
+        padding: 1rem;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        font-style: italic;
         margin: 1rem 0;
         color: var(--text-muted);
     }
@@ -132,13 +144,14 @@
         display: block;
         margin: 1rem auto;
         border-radius: var(--radius);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .markdown-content table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 1rem;
-        overflow-x: auto; /* Aprimoramento: Permite scroll horizontal em tabelas largas em telas pequenas */
+        overflow-x: auto; 
         display: block;
     }
 
@@ -185,28 +198,24 @@
         color: var(--text-main);
         text-decoration: none;
         font-weight: 500;
-        transition: var(--transition); /* Aprimoramento UI: Adiciona transição suave ao hover */
+        transition: var(--transition); 
     }
 
     .back-btn:hover {
         color: var(--text-muted);
     }
 
-    /* Aprimoramento UX/UI: Removido borda, radius e background para "direto na tela" */
     .post-body {
         padding: 2rem;
     }
 
-    /* ==========================================================================
-    FOOTER - Copiado e adaptado do index.html para coesão
-    ========================================================================== */
     footer {
         background: #1e1e1e;
         border-top: 1px solid var(--border);
         padding: 2rem 0;
         color: var(--text-muted);
         font-size: 0.9rem;
-        width: 100%; /* Aprimoramento: Footer sempre full-width */
+        width: 100%;
     }
 
     .footer-container {
@@ -220,9 +229,7 @@
         gap: 1rem;
     }
 
-    .footer-copyright {
-        flex: 1;
-    }
+    .footer-copyright { flex: 1; }
 
     .footer-links {
         display: flex;
@@ -241,111 +248,38 @@
         text-decoration: underline;
     }
 
-    /* Aprimoramento Responsividade: Media Queries mais flexíveis com unidades relativas */
     @media (max-width: 1024px) {
-        .container {
-            max-width: 90%; /* Ajusta para telas médias */
-        }
-
-        .post-banner {
-            max-height: 350px;
-        }
+        .container { max-width: 90%; }
+        .post-banner { max-height: 350px; }
     }
 
     @media (max-width: 768px) {
-        .container {
-            padding: 0 0.5rem; /* Reduz padding lateral em telas menores */
-        }
-
-        .post-banner {
-            max-height: 300px; /* Reduz altura máxima do banner em mobile para melhor proporção */
-        }
-
-        .post-body {
-            padding: 1.5rem; /* Reduz padding interno */
-            gap: 0.75rem; /* Menor gap entre elementos */
-        }
-
-        .post-meta {
-            flex-direction: column; /* Empilha meta itens em coluna para telas estreitas */
-            gap: 0.5rem;
-        }
-
-        .markdown-content {
-            font-size: 0.95rem; /* Leve redução no tamanho da fonte para melhor legibilidade em mobile */
-            line-height: 1.5; /* Ajusta line-height para telas menores */
-        }
-
-        .markdown-content pre {
-            padding: 0.75rem; /* Reduz padding em código */
-        }
-
-        .back-btn {
-            font-size: 0.9rem; /* Ajusta tamanho do botão de voltar */
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-primary {
-            padding: 0.6rem 1.2rem; /* Botão ligeiramente menor em mobile */
-            font-size: 0.95rem;
-        }
-
-        footer {
-            padding: 1.5rem 0; /* Reduz padding do footer */
-        }
-
-        .footer-container {
-            flex-direction: column; /* Empilha elementos do footer em coluna */
-            text-align: center;
-            gap: 1rem;
-        }
-
-        .footer-links {
-            justify-content: center;
-            gap: 1rem;
-        }
+        .container { padding: 0 0.5rem; }
+        .post-banner { max-height: 300px; }
+        .post-body { padding: 1.5rem; gap: 0.75rem; }
+        .post-meta { flex-direction: column; gap: 0.5rem; }
+        .markdown-content { font-size: 0.95rem; line-height: 1.5; }
+        .markdown-content pre { padding: 0.75rem; }
+        .back-btn { font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .btn-primary { padding: 0.6rem 1.2rem; font-size: 0.95rem; }
+        footer { padding: 1.5rem 0; }
+        .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
+        .footer-links { justify-content: center; gap: 1rem; }
     }
 
     @media (max-width: 480px) {
-        h1 {
-            font-size: 1.5rem; /* Reduz tamanho de títulos em telas muito pequenas */
-        }
-
-        .post-meta {
-            font-size: 0.85rem; /* Ajusta meta texto */
-        }
-
-        .markdown-content {
-            font-size: 0.9rem; /* Maior redução para telas muito pequenas */
-        }
-
-        .post-body {
-            padding: 1rem;
-        }
-
-        .post-banner {
-            max-height: 250px; /* Ainda menor para proporção ideal */
-        }
-
-        .btn-primary {
-            padding: 0.5rem 1rem;
-        }
-
-        footer {
-            font-size: 0.85rem;
-            padding: 1rem 0;
-        }
+        h1 { font-size: 1.5rem; }
+        .post-meta { font-size: 0.85rem; }
+        .markdown-content { font-size: 0.9rem; }
+        .post-body { padding: 1rem; }
+        .post-banner { max-height: 250px; }
+        .btn-primary { padding: 0.5rem 1rem; }
+        footer { font-size: 0.85rem; padding: 1rem 0; }
     }
 
-    /* Aprimoramento: Adiciona breakpoint para telas maiores que 1200px para flexibilidade */
     @media (min-width: 1200px) {
-        .container {
-            max-width: 1000px; /* Aumenta largura máxima para telas grandes */
-        }
-
-        .markdown-content {
-            font-size: 1.05rem; /* Leve aumento para melhor leitura em desktops */
-        }
+        .container { max-width: 1000px; }
+        .markdown-content { font-size: 1.05rem; }
     }
 </style>
 <body>
@@ -357,7 +291,6 @@
         </div>
     </main>
 
-    <!-- Adição: Footer para coesão com index.html e melhor UX (navegação persistente) -->
     <footer>
         <div class="footer-container">
             <div class="footer-copyright">
@@ -438,7 +371,7 @@
                                 ${dateStr ? `<span>Em: ${dateStr}</span>` : ''}
                             </div>
                             
-                            <div class="markdown-content">${marked.parse(data.content || 'Sem detalhes.')}</div>
+                            <div class="markdown-content">${DOMPurify.sanitize(marked.parse(data.content || 'Sem detalhes.'))}</div>
                             
                             ${videoHTML}
                             

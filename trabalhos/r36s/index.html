@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/phosphor-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
     <meta name="description" content="Explore uma vasta coleção de temas, tutoriais e firmwares para R36S. Contribua com seus próprios projetos e faça parte da comunidade R36S!">
     <meta name="author" content="Mateus Calixto">
@@ -27,9 +28,6 @@
 </head>
 
 <style>
-    /* ==========================================================================
-    VARIÁVEIS E DEFINIÇÕES GLOBAIS - MONOCROMÁTICO ESCURO E MODERNO
-    ========================================================================== */
     :root {
         --bg-color: #121212;
         --card-bg: #1e1e1e;
@@ -63,14 +61,15 @@
 
     main { flex: 1; }
 
-    /* Scrollbar Simples */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    /* ==========================================================================
-    TIPOGRAFIA - SIMPLES E LEGÍVEL
-    ========================================================================== */
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+        outline: 2px solid #aaaaaa;
+        outline-offset: 2px;
+    }
+
     h1, h2, h3, h4, h5, h6 { font-weight: 600; }
     h1 { font-size: 2rem; }
     h2 { font-size: 1.5rem; }
@@ -82,9 +81,6 @@
         padding: 0 1rem;
     }
 
-    /* ==========================================================================
-    NAVEGAÇÃO (NAVBAR) - MINIMALISTA
-    ========================================================================== */
     .navbar {
         display: flex;
         justify-content: space-between;
@@ -164,9 +160,6 @@
         #auth-controls { display: flex; flex-direction: column; gap: 1rem; }
     }
 
-    /* ==========================================================================
-    HERO E BUSCA - DIRETO E SIMPLES
-    ========================================================================== */
     .hero {
         text-align: center;
         padding: 4rem 1rem 2rem;
@@ -204,9 +197,6 @@
 
     .search-bar input::placeholder { color: var(--text-muted); }
 
-    /* ==========================================================================
-    FILTROS E CHIPS - SIMPLES
-    ========================================================================== */
     .filters {
         display: flex;
         justify-content: center;
@@ -238,12 +228,9 @@
         border-color: #444444;
     }
 
-    /* ==========================================================================
-    GRID DE CONTEÚDO E CARDS - ATUALIZADO (3 COLUNAS + ANIMAÇÃO)
-    ========================================================================== */
     .content-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Fixa 3 colunas */
+        grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
         padding-bottom: 4rem;
     }
@@ -256,8 +243,6 @@
         cursor: pointer;
         transition: var(--transition);
         position: relative;
-        
-        /* Configurações da Animação de Entrada */
         opacity: 0;
         animation: fadeInUp 0.5s ease forwards;
     }
@@ -297,21 +282,11 @@
     .fav-btn:hover { color: var(--text-main); }
     .fav-btn.active { color: #777777; }
 
-    /* Keyframes para o surgimento suave */
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ==========================================================================
-    MODAIS - SIMPLES E INTUITIVO (APENAS PARA AUTH)
-    ========================================================================== */
     .modal {
         display: none;
         position: fixed;
@@ -351,9 +326,6 @@
 
     .close-x:hover { color: var(--text-main); }
 
-    /* ==========================================================================
-    FORMULÁRIOS E BOTÕES - INTUITIVOS E MINIMALISTAS
-    ========================================================================== */
     .dash-container {
         max-width: 800px;
         margin: 2rem auto;
@@ -409,9 +381,6 @@
 
     .btn-full { width: 100%; }
 
-    /* ==========================================================================
-    SISTEMA DE TOASTS - SIMPLES
-    ========================================================================== */
     #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
 
     .toast {
@@ -431,16 +400,13 @@
         font-size: 1rem;
     }
 
-    /* ==========================================================================
-    FOOTER - DESIGN APRIMORADO E PROFISSIONAL
-    ========================================================================== */
     footer {
         background: #1e1e1e;
         border-top: 1px solid var(--border);
         padding: 2rem 0;
         color: var(--text-muted);
         font-size: 0.9rem;
-        width: 100%; /* Aprimoramento: Footer sempre full-width */
+        width: 100%;
     }
 
     .footer-container {
@@ -454,9 +420,7 @@
         gap: 1rem;
     }
 
-    .footer-copyright {
-        flex: 1;
-    }
+    .footer-copyright { flex: 1; }
 
     .footer-links {
         display: flex;
@@ -475,26 +439,6 @@
         text-decoration: underline;
     }
 
-    @media (max-width: 768px) {
-        footer {
-            padding: 1.5rem 0; /* Reduz padding do footer */
-        }
-
-        .footer-container {
-            flex-direction: column; /* Empilha elementos do footer em coluna */
-            text-align: center;
-            gap: 1rem;
-        }
-
-        .footer-links {
-            justify-content: center;
-            gap: 1rem;
-        }
-    }
-
-    /* ==========================================================================
-    SEUS POSTS - MELHOR ALINHAMENTO COM FLEX
-    ========================================================================== */
     #user-posts-list .post-item {
         display: flex;
         flex-direction: column;
@@ -511,9 +455,6 @@
         margin-top: 0.5rem;
     }
 
-    /* ==========================================================================
-    RESPONSIVIDADE - SIMPLES
-    ========================================================================== */
     @media (max-width: 1024px) {
         .content-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -524,13 +465,13 @@
         .modal-content { width: 95%; margin: 1rem; }
         .content-grid { grid-template-columns: 1fr; gap: 1rem; }
         .dash-container { padding: 1.5rem; }
+        footer { padding: 1.5rem 0; }
+        .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
+        .footer-links { justify-content: center; gap: 1rem; }
     }
 
-        @media (max-width: 480px) {
-        footer {
-            font-size: 0.85rem;
-            padding: 1rem 0;
-        }
+    @media (max-width: 480px) {
+        footer { font-size: 0.85rem; padding: 1rem 0; }
     }
 </style>
 <body>
@@ -572,8 +513,7 @@
             </header>
             
             <div class="filters" id="filters-container">
-                <!-- Filtros serão adicionados dinamicamente aqui -->
-            </div>
+                </div>
 
             <section id="content-grid" class="content-grid"></section>
         </section>
@@ -593,6 +533,7 @@
                         <select id="item-type">
                             <option value="guide">Guias</option>
                             <option value="tutorial">Tutoriais</option>
+                            <option value="utilities">Utilitários</option>
                             <option value="theme">Temas</option>
                             <option value="firmware">Firmwares</option>
                             <option value="tip">Dicas</option>
@@ -679,9 +620,6 @@
     </div>
 
     <script type="module">
-        // ==========================================================================
-        // CONFIGURAÇÃO E IMPORTAÇÕES DO FIREBASE
-        // ==========================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, query, serverTimestamp, orderBy, limit, startAfter, where, updateDoc, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -699,12 +637,10 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // ==========================================================================
-        // DEFINIÇÃO DAS CATEGORIAS
-        // ==========================================================================
         const categories = [
             { value: 'guide', label: 'Guias' },
             { value: 'tutorial', label: 'Tutoriais' },
+            { value: 'utilities', label: 'Utilitários' },
             { value: 'theme', label: 'Temas' },
             { value: 'firmware', label: 'Firmwares' },
             { value: 'tip', label: 'Dicas' },
@@ -715,10 +651,6 @@
             acc[cat.value] = cat.label;
             return acc;
         }, {});
-
-        // ==========================================================================
-        // UTILITÁRIOS E UI
-        // ==========================================================================
 
         function notify(msg, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -743,10 +675,6 @@
 ### Notas Importantes
 > Nunca desligue o console durante o processo.`;
 
-        // ==========================================================================
-        // GESTÃO DE FAVORITOS (LocalStorage)
-        // ==========================================================================
-
         function getFavs() {
             return JSON.parse(localStorage.getItem('r36s_favs') || '[]');
         }
@@ -767,23 +695,14 @@
             localStorage.setItem('r36s_favs', JSON.stringify(favs));
             
             const currentActiveFilter = document.querySelector('.filter-chip.active');
-            const cat = currentActiveFilter.dataset.cat || 'all';
-            const isFavs = currentActiveFilter.id === 'filter-favs';
-            fetchContent(cat, document.getElementById('searchInput').value, isFavs);
+            if (currentActiveFilter) {
+                const cat = currentActiveFilter.dataset.cat || 'all';
+                const isFavs = currentActiveFilter.id === 'filter-favs';
+                fetchContent(cat, document.getElementById('searchInput').value, isFavs);
+            }
         }
-
-        // ==========================================================================
-        // MOTOR DE DADOS: BUSCA E RENDERIZAÇÃO ATUALIZADO (3 POR VEZ)
-        // ==========================================================================
 
         let lastDoc = null;
-
-        async function hasMore(baseQuery) {
-            if (!lastDoc) return false;
-            const checkQ = query(baseQuery, startAfter(lastDoc), limit(1));
-            const checkSnap = await getDocs(checkQ);
-            return checkSnap.size > 0;
-        }
 
         async function fetchContent(category = 'all', term = '', onlyFavs = false, loadMore = false) {
             const grid = document.getElementById('content-grid');
@@ -797,7 +716,7 @@
                 let count = 0;
 
                 if (onlyFavs) {
-                    if (loadMore) return; // Sem paginação para favoritos
+                    if (loadMore) return; 
                     grid.innerHTML = '';
                     if (!favs.length) {
                         grid.innerHTML = '<div class="loading-state">Nenhum salvo.</div>';
@@ -810,17 +729,14 @@
                         .map(d => ({ id: d.id, data: d.data() }))
                         .filter(item => item.data);
 
-                    // Filtrar por termo de busca
                     items = items.filter(item => {
                         const data = item.data;
                         const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
                         return !term || searchStr.includes(term.toLowerCase());
                     });
 
-                    // Ordenar por createdAt desc
                     items.sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0));
 
-                    // Renderizar
                     items.forEach(item => {
                         const data = item.data;
                         const id = item.id;
@@ -834,7 +750,7 @@
                             <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
                                 <i class="ph-heart-fill"></i>
                             </button>
-                            <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
+                            <img src="${data.thumbnailUrl}" loading="lazy" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
                             <div class="card-body">
                                 <span class="card-tag">${typeToLabel[data.type] || data.type}</span>
                                 <h3>${data.title}</h3>
@@ -852,26 +768,31 @@
                     }
 
                 } else {
-                    // Query normal com filtro de categoria no servidor
                     let baseQ = query(collection(db, "resources"), orderBy("createdAt", "desc"));
                     if (category !== 'all') {
                         baseQ = query(baseQ, where("type", "==", category));
                     }
                     let q = baseQ;
+
                     if (loadMore && lastDoc) {
                         q = query(q, startAfter(lastDoc));
                     }
-                    q = query(q, limit(3));
+
+                    const fetchLimit = term ? 20 : 3; 
+                    q = query(q, limit(fetchLimit + 1));
 
                     const snap = await getDocs(q);
                     
                     if (!loadMore) grid.innerHTML = '';
                     
-                    // Remove o botão antigo
                     const oldBtn = document.getElementById('load-more-btn');
                     if (oldBtn) oldBtn.remove();
 
-                    snap.forEach(d => {
+                    const docsArray = snap.docs;
+                    const hasMorePosts = docsArray.length > fetchLimit;
+                    const renderDocs = hasMorePosts ? docsArray.slice(0, fetchLimit) : docsArray;
+
+                    renderDocs.forEach(d => {
                         const data = d.data();
                         const id = d.id;
                         
@@ -888,7 +809,7 @@
                             <button class="fav-btn ${isFav ? 'active' : ''}" title="Salvar" aria-label="Salvar post">
                                 <i class="ph-heart-fill"></i>
                             </button>
-                            <img src="${data.thumbnailUrl}" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
+                            <img src="${data.thumbnailUrl}" loading="lazy" class="card-img" alt="Capa de ${data.title}" onerror="this.src='https://placehold.co/600x400/1e1e1e/fff?text=R36S'">
                             <div class="card-body">
                                 <span class="card-tag">${typeToLabel[data.type] || data.type}</span>
                                 <h3>${data.title}</h3>
@@ -901,22 +822,20 @@
                         grid.appendChild(card);
                     });
 
-                    lastDoc = snap.docs[snap.docs.length - 1];
+                    if (renderDocs.length > 0) {
+                        lastDoc = renderDocs[renderDocs.length - 1];
+                    }
 
-                    // Botão "Mostrar Mais" se houver mais
-                    if (snap.size === 3) {
-                        const hasMorePosts = await hasMore(baseQ);
-                        if (hasMorePosts) {
-                            const loadBtn = document.createElement('button');
-                            loadBtn.id = 'load-more-btn';
-                            loadBtn.className = 'btn-primary';
-                            loadBtn.style.margin = '2rem auto';
-                            loadBtn.style.display = 'block';
-                            loadBtn.style.gridColumn = '1 / -1';
-                            loadBtn.innerText = 'Mostrar mais';
-                            loadBtn.onclick = () => fetchContent(category, term, onlyFavs, true);
-                            grid.appendChild(loadBtn);
-                        }
+                    if (hasMorePosts && !term) {
+                        const loadBtn = document.createElement('button');
+                        loadBtn.id = 'load-more-btn';
+                        loadBtn.className = 'btn-primary';
+                        loadBtn.style.margin = '2rem auto';
+                        loadBtn.style.display = 'block';
+                        loadBtn.style.gridColumn = '1 / -1';
+                        loadBtn.innerText = 'Mostrar mais';
+                        loadBtn.onclick = () => fetchContent(category, term, onlyFavs, true);
+                        grid.appendChild(loadBtn);
                     }
 
                     if (count === 0 && !loadMore) {
@@ -930,21 +849,16 @@
             }
         }
 
-        // ==========================================================================
-        // CARREGAR FILTROS DINÂMICOS
-        // ==========================================================================
         async function loadFilters() {
             const filtersContainer = document.getElementById('filters-container');
             filtersContainer.innerHTML = '';
 
-            // Adiciona "Todos"
             const allChip = document.createElement('button');
             allChip.className = 'filter-chip active';
             allChip.dataset.cat = 'all';
             allChip.innerText = 'Todos';
             filtersContainer.appendChild(allChip);
 
-            // Adiciona categorias dinâmicas se tiverem posts
             for (const cat of categories) {
                 if (await hasPosts(cat.value)) {
                     const chip = document.createElement('button');
@@ -955,14 +869,12 @@
                 }
             }
 
-            // Adiciona "Salvos"
             const favsChip = document.createElement('button');
             favsChip.className = 'filter-chip';
             favsChip.id = 'filter-favs';
             favsChip.innerHTML = '<i class="ph-heart-fill"></i> Salvos';
             filtersContainer.appendChild(favsChip);
 
-            // Adiciona eventos aos chips
             document.querySelectorAll('.filter-chip').forEach(chip => {
                 chip.onclick = () => {
                     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -979,10 +891,6 @@
             const snap = await getDocs(q);
             return snap.size > 0;
         }
-
-        // ==========================================================================
-        // EVENTOS DE NAVEGAÇÃO E AUTENTICAÇÃO
-        // ==========================================================================
 
         const showView = (view) => {
             document.getElementById('section-home').style.display = view === 'home' ? 'block' : 'none';
@@ -1066,18 +974,16 @@
             }
         };
 
-        // ==========================================================================
-        // FILTROS E PESQUISA
-        // ==========================================================================
-
         let debounceTimer;
         document.getElementById('searchInput').oninput = (e) => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 const activeChip = document.querySelector('.filter-chip.active');
-                const cat = activeChip.dataset.cat || 'all';
-                const isFavs = activeChip.id === 'filter-favs';
-                fetchContent(cat, e.target.value, isFavs);
+                if (activeChip) {
+                    const cat = activeChip.dataset.cat || 'all';
+                    const isFavs = activeChip.id === 'filter-favs';
+                    fetchContent(cat, e.target.value, isFavs);
+                }
             }, 300);
         };
 
@@ -1089,14 +995,10 @@
             }
         };
 
-        // ==========================================================================
-        // SUBMISSÃO E EDIÇÃO DE CONTEÚDO
-        // ==========================================================================
-
         function validateForm() {
             const title = document.getElementById('item-title').value;
             const thumb = document.getElementById('item-thumb').value;
-            const link = document.getElementById('item-link').value.trim(); // trim para evitar espaços
+            const link = document.getElementById('item-link').value.trim();
             let video = document.getElementById('item-video').value;
 
             if (!title) {
@@ -1107,7 +1009,6 @@
                 notify("URL de imagem inválida");
                 return false;
             }
-            // ✅ Link agora é opcional
             if (link && !link.match(/^https?:\/\/.+/i)) {
                 notify("Link inválido (deve começar com http:// ou https://)");
                 return false;
@@ -1141,6 +1042,7 @@
             const id = document.getElementById('item-id').value;
             const data = {
                 title: document.getElementById('item-title').value,
+                authorId: auth.currentUser.uid,
                 type: document.getElementById('item-type').value,
                 description: document.getElementById('item-desc').value,
                 content: document.getElementById('item-content').value,
@@ -1169,10 +1071,6 @@
                 btn.innerHTML = id ? `<i class="ph-pencil-simple"></i> Atualizar` : `<i class="ph-paper-plane-tilt"></i> Publicar`;
             }
         };
-
-        // ==========================================================================
-        // CARREGAR POSTS DO USUÁRIO
-        // ==========================================================================
 
         async function loadUserPosts() {
             if (!auth.currentUser) return;
@@ -1270,7 +1168,6 @@
         window.addEventListener('resize', handleMobileLayout);
         handleMobileLayout();
 
-        // Inicialização
         loadFilters();
         fetchContent();
     </script>
