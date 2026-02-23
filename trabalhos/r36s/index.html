@@ -455,6 +455,31 @@
         margin-top: 0.5rem;
     }
 
+    #clearSearch {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        transition: var(--transition);
+    }
+
+    #clearSearch:hover {
+        color: var(--text-main);
+    }
+
+    .spin-anim {
+        animation: spin 1s linear infinite;
+        color: var(--text-muted);
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 1024px) {
         .content-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -505,10 +530,12 @@
             <header class="hero">
                 <h1>R36S Hub</h1>
                 <p>Biblioteca de temas, guias e firmwares pela comunidade.</p>
-                
                 <div class="search-bar">
-                    <i class="ph-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Pesquisar temas ou guias...">
+                    <i id="search-icon" class="ph-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Pesquisar temas, guias ou palavras-chave...">
+                    <button id="clearSearch" style="display: none;" title="Limpar pesquisa">
+                        <i class="ph-x"></i>
+                    </button>
                 </div>
             </header>
             
@@ -652,6 +679,11 @@
             return acc;
         }, {});
 
+        // Utilitário para remover acentos e padronizar texto para busca
+        const normalizeText = (text) => {
+            return text ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+        };
+
         function notify(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -665,15 +697,15 @@
         }
 
         const tutorialTemplate = `### Requisitos
-* Cartão SD Original (SanDisk/Samsung)
-* Firmware ArkOS/RetroOz atualizado
+    * Cartão SD Original (SanDisk/Samsung)
+    * Firmware ArkOS/RetroOz atualizado
 
-### Passo a Passo
-1. Primeiro passo...
-2. Configure as opções...
+    ### Passo a Passo
+    1. Primeiro passo...
+    2. Configure as opções...
 
-### Notas Importantes
-> Nunca desligue o console durante o processo.`;
+    ### Notas Importantes
+    > Nunca desligue o console durante o processo.`;
 
         function getFavs() {
             return JSON.parse(localStorage.getItem('r36s_favs') || '[]');
@@ -731,8 +763,11 @@
 
                     items = items.filter(item => {
                         const data = item.data;
-                        const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
-                        return !term || searchStr.includes(term.toLowerCase());
+                        const searchTerms = normalizeText(term).split(' ').filter(t => t.length > 0);
+                        const searchableText = normalizeText(`${data.title} ${data.description} ${typeToLabel[data.type] || data.type} ${data.content || ''}`);
+                        
+                        const matchesSearch = searchTerms.every(t => searchableText.includes(t));
+                        return !term || matchesSearch;
                     });
 
                     items.sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0));
@@ -796,8 +831,11 @@
                         const data = d.data();
                         const id = d.id;
                         
-                        const searchStr = `${data.title} ${data.description} ${data.content || ''}`.toLowerCase();
-                        if (term && !searchStr.includes(term.toLowerCase())) return;
+                        const searchTerms = normalizeText(term).split(' ').filter(t => t.length > 0);
+                        const searchableText = normalizeText(`${data.title} ${data.description} ${typeToLabel[data.type] || data.type} ${data.content || ''}`);
+                        
+                        const matchesSearch = searchTerms.every(t => searchableText.includes(t));
+                        if (term && !matchesSearch) return;
 
                         const isFav = favs.includes(id);
 
@@ -974,18 +1012,49 @@
             }
         };
 
+        // --- NOVA LÓGICA DE PESQUISA COM DEBOUNCE E SPINNER ---
+        const searchInput = document.getElementById('searchInput');
+        const searchIcon = document.getElementById('search-icon');
+        const clearSearch = document.getElementById('clearSearch');
         let debounceTimer;
-        document.getElementById('searchInput').oninput = (e) => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const activeChip = document.querySelector('.filter-chip.active');
-                if (activeChip) {
-                    const cat = activeChip.dataset.cat || 'all';
-                    const isFavs = activeChip.id === 'filter-favs';
-                    fetchContent(cat, e.target.value, isFavs);
+
+        if (searchInput) {
+            searchInput.oninput = (e) => {
+                const term = e.target.value.trim();
+                
+                if (clearSearch) clearSearch.style.display = term.length > 0 ? 'block' : 'none';
+                
+                // Ativa o spinner de carregamento se o ícone existir
+                if (searchIcon) {
+                    searchIcon.classList.remove('ph-magnifying-glass');
+                    searchIcon.classList.add('ph-spinner', 'spin-anim');
                 }
-            }, 300);
-        };
+
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(async () => {
+                    const activeChip = document.querySelector('.filter-chip.active');
+                    if (activeChip) {
+                        const cat = activeChip.dataset.cat || 'all';
+                        const isFavs = activeChip.id === 'filter-favs';
+                        await fetchContent(cat, term, isFavs);
+                    }
+                    
+                    // Retorna ao ícone de lupa
+                    if (searchIcon) {
+                        searchIcon.classList.add('ph-magnifying-glass');
+                        searchIcon.classList.remove('ph-spinner', 'spin-anim');
+                    }
+                }, 400); 
+            };
+        }
+
+        if (clearSearch) {
+            clearSearch.onclick = () => {
+                searchInput.value = '';
+                clearSearch.style.display = 'none';
+                searchInput.dispatchEvent(new Event('input')); // Força a atualização da lista
+            };
+        }
 
         document.getElementById('item-type').onchange = (e) => {
             const content = document.getElementById('item-content');
