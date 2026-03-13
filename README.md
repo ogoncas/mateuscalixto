@@ -32,7 +32,7 @@ O projeto está publicado e pode ser acessado em:
 ## 📧 Contato
 
 - **GitHub:** [@ogoncas](https://github.com/ogoncas)
-- **Email:** [mateusgoncalves.rj.ofc@gmail.com](mailto:mateusgoncalves.rj.ofc@gmail.com)
+- **Email:** [contato@mateuscalixto.com.br](mailto:contato@mateuscalixto.com.br)
 
 ---
 *Desenvolvido por Mateus Calixto © 2026*
