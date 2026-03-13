@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarWrite ✨</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="icon" type="image/png" href="favicon.png">
+
+</head>
+<body>
+
+    <div id="auth-container" class="modal">
+        <div class="modal-content">
+            <h2 id="auth-title">StarWrite ✨</h2>
+            <form id="auth-form">
+                <div id="register-fields" style="display:none;">
+                    <input type="text" id="user-name" placeholder="Nome de Usuário">
+                </div>
+                <input type="email" id="email" placeholder="E-mail" required>
+                <input type="password" id="password" placeholder="Senha Mestra" required>
+                <p id="auth-error" class="error-msg"></p>
+                <div class="auth-buttons">
+                    <button type="submit" id="btn-submit">Entrar</button>
+                    <button type="button" id="btn-toggle-mode" class="secondary-btn">Não tem conta? Criar uma</button>
+                </div>
+            </form>
+            <div class="auth-info">
+                <hr>
+                <p><a href="#" id="link-how-it-works">Como funciona a segurança?</a></p>
+                <p><a href="#" id="link-terms">Termos de Uso</a></p>
+            </div>
+        </div>
+    </div>
+
+    <main class="container" id="main-content" style="display:none;">
+        <header>
+            <div class="logo-area">
+                <h1>StarWrite ✨</h1>
+                <span id="display-username"></span>
+            </div>
+            <div class="controls">
+                <span id="status">Protegido por AES-256</span>
+                <button id="btn-logout">Sair</button>
+            </div>
+        </header>
+        <div id="editor" contenteditable="true" placeholder="Sua escrita está segura aqui..."></div>
+    </main>
+
+    <div id="info-modal" class="modal" style="display:none;">
+        <div class="modal-content info-box">
+            <span id="close-info" class="close" aria-label="Fechar">&times;</span>
+            <div id="info-text"></div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script>
+        // Adicionando a lógica para o novo link de termos no script.js existente ou aqui
+        document.getElementById('link-terms').onclick = (e) => {
+            e.preventDefault();
+            document.getElementById('info-text').innerHTML = `
+                <h3>Termos de Uso</h3>
+                <p>1. <strong>Responsabilidade da Chave:</strong> Você é o único detentor da sua Senha Mestra. Se a perder, os dados não podem ser recuperados nem por nós.</p>
+                <p>2. <strong>Privacidade:</strong> Não recolhemos nem vendemos os seus dados. O conteúdo é cifrado no seu dispositivo.</p>
+                <p>3. <strong>Uso Aceitável:</strong> O utilizador compromete-se a não utilizar a plataforma para atividades ilícitas.</p>
+            `;
+            document.getElementById('info-modal').style.display = 'flex';
+        };
+    </script>
+</body>
+</html>

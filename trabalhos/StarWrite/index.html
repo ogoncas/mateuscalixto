@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarWrite ✨ - Escrita Segura</title>
+    <title>StarWrite ✨</title>
+    
+    <meta name="description" content="StarWrite é uma plataforma de escrita segura que utiliza criptografia AES-256 para proteger seus textos. Privacidade total com tecnologia Zero-Knowledge.">
+    <meta name="author" content="Mateus Calixto">
+    <link rel="canonical" href="https://mateuscalixto.com.br/trabalhos/StarWrite">
+
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
     <meta name="description" content="StarWrite é uma plataforma de escrita segura que utiliza criptografia AES-256 para proteger seus textos. Nem mesmo o administrador do sistema pode acessar seu conteúdo. Crie, edite e armazene suas anotações com total privacidade.">
     <meta name="author" content="Mateus Calixto">
     <link rel="canonical" href="https://mateuscalixto.com.br/trabalhos/StarWrite">
@@ -19,59 +24,207 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="StarWrite ✨ - Escrita Segura">
     <meta name="twitter:description" content="StarWrite é uma plataforma de escrita segura que utiliza criptografia AES-256 para proteger seus textos. Nem mesmo o administrador do sistema pode acessar seu conteúdo. Crie, edite e armazene suas anotações com total privacidade.">
+
+
+    <style>
+        /* Ajustes de layout para a Landing Page sem quebrar o style.css */
+        body {
+            display: block; /* Permite scroll vertical livre */
+            overflow-y: auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 120px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .cta-wrapper {
+            margin-bottom: 80px;
+        }
+
+        .cta-wrapper .btn-main {
+            width: auto;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 5% 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            transition: border-color 0.3s ease;
+        }
+
+        .feature-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .feature-item h3 {
+            margin-top: 0;
+            color: var(--success-text);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 50px 20px;
+            text-align: center;
+            background: var(--bg-main);
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .footer-nav button {
+            width: auto;
+            background: transparent;
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            margin: 0;
+            padding: 5px 10px;
+            font-weight: 400;
+        }
+
+        .footer-nav button:hover {
+            text-decoration: underline;
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        /* Ajuste do modal para texto longo */
+        .info-box {
+            max-width: 550px;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.5rem; }
+            .footer-nav { flex-direction: column; gap: 10px; }
+        }
+    </style>
 </head>
 <body>
 
-    <div id="auth-container" class="modal">
-        <div class="modal-content">
-            <h2 id="auth-title">StarWrite ✨</h2>
-            
-            <form id="auth-form">
-                <div id="register-fields" style="display:none;">
-                    <input type="text" id="user-name" placeholder="Nome de Usuário (Ex: Luke)">
-                </div>
+    <nav style="padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color);">
+        <div style="font-size: 1.5rem; font-weight: bold;">StarWrite ✨</div>
+        <a href="app.html" style="text-decoration: none;">
+            <button style="width: auto; margin: 0; padding: 8px 20px; font-size: 0.9rem;">Entrar</button>
+        </a>
+    </nav>
 
-                <input type="email" id="email" placeholder="E-mail" required>
-                <input type="password" id="password" placeholder="Senha Mestra (Chave de Criptografia)" required>
-                
-                <p id="auth-error" class="error-msg"></p>
-
-                <div class="auth-buttons">
-                    <button type="submit" id="btn-submit">Entrar</button>
-                    <button type="button" id="btn-toggle-mode" class="secondary-btn">Não tem conta? Criar uma</button>
-                </div>
-            </form>
-
-            <div class="auth-info">
-                <hr>
-                <p><a href="#" id="link-how-it-works">Como funciona a segurança?</a></p>
-                <p><a href="#" id="link-terms">Termos de Uso</a></p>
-            </div>
+    <main class="hero">
+        <h1>Sua escrita, <span style="color: var(--accent-blue);">inviolável</span>.</h1>
+        <p>
+            O StarWrite utiliza criptografia de ponta-a-ponta para garantir que apenas você tenha acesso aos seus textos. 
+            Privacidade absoluta através de matemática avançada, sem intermediários.
+        </p>
+        <div class="cta-wrapper">
+            <a href="app.html" style="text-decoration: none;">
+                <button class="btn-main">Começar a escrever agora</button>
+            </a>
         </div>
-    </div>
-
-    <main class="container" id="main-content" style="display:none;">
-        <header>
-            <div class="logo-area">
-                <h1>StarWrite ✨</h1>
-                <span id="display-username"></span>
-            </div>
-            <div class="controls">
-                <span id="status">Protegido por AES-256</span>
-                <button id="btn-logout">Sair</button>
-            </div>
-        </header>
-        
-        <div id="editor" contenteditable="true" placeholder="Sua escrita está segura aqui. Nem o administrador do sistema pode ler este conteúdo..."></div>
     </main>
+
+    <section class="features-grid">
+        <div class="feature-item">
+            <h3>🔒 Criptografia AES-256</h3>
+            <p style="color: var(--text-muted);">Seus dados são cifrados localmente com o padrão ouro da indústria antes de tocarem a nuvem.</p>
+        </div>
+        <div class="feature-item">
+            <h3>🔑 Chave Mestra Única</h3>
+            <p style="color: var(--text-muted);">Utilizamos PBKDF2 com 10.000 iterações para garantir que sua senha seja uma barreira intransponível.</p>
+        </div>
+        <div class="feature-item">
+            <h3>☁️ Sincronização Segura</h3>
+            <p style="color: var(--text-muted);">Acesse suas notas de qualquer lugar. O administrador do sistema nunca verá o conteúdo, apenas hashes cifrados.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-nav">
+            <button id="btn-show-security">Como funciona a segurança?</button>
+            <button id="btn-show-terms">Termos de Uso</button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">&copy; 2026 StarWrite. Criado por <a style="color: var(--accent-blue); text-decoration: none;" href="https://mateuscalixto.com.br/" target="_blank" rel="noopener noreferrer"> Mateus Calixto.</a></p>
+    </footer>
 
     <div id="info-modal" class="modal" style="display:none;">
         <div class="modal-content info-box">
             <span id="close-info" class="close" aria-label="Fechar">&times;</span>
-            <div id="info-text"></div>
+            <div id="info-body">
+                </div>
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script>
+        const modal = document.getElementById('info-modal');
+        const infoBody = document.getElementById('info-body');
+        const closeBtn = document.getElementById('close-info');
+
+        const pages = {
+            security: `
+                <h3>Segurança de Ponta-a-Ponta</h3>
+                <p>No StarWrite, a segurança não é uma opção, é a fundação. Veja como protegemos você:</p>
+                <ul>
+                    <li><strong>PBKDF2:</strong> Sua senha é transformada em uma chave criptográfica forte através de 10.000 rodadas de processamento.</li>
+                    <li><strong>AES-256:</strong> O texto é cifrado no seu navegador. O que chega ao nosso banco de dados é um código ilegível.</li>
+                    <li><strong>Privacidade Zero-Knowledge:</strong> Nós não temos "chaves mestras". Se você perder sua senha, os dados são irrecuperáveis.</li>
+                </ul>
+            `,
+            terms: `
+                <h3>Termos de Uso</h3>
+                <p>Ao utilizar o StarWrite, você concorda com:</p>
+                <ol>
+                    <li><strong>Responsabilidade da Senha:</strong> Você é o único responsável por memorizar sua senha mestra.</li>
+                    <li><strong>Uso Pessoal:</strong> A plataforma é destinada ao uso lícito e pessoal de armazenamento de textos.</li>
+                    <li><strong>Isenção de Responsabilidade:</strong> Por ser um sistema de conhecimento zero, não podemos recuperar contas ou dados em caso de perda de credenciais.</li>
+                </ol>
+            `
+        };
+
+        document.getElementById('btn-show-security').onclick = () => {
+            infoBody.innerHTML = pages.security;
+            modal.style.display = 'flex';
+        };
+
+        document.getElementById('btn-show-terms').onclick = () => {
+            infoBody.innerHTML = pages.terms;
+            modal.style.display = 'flex';
+        };
+
+        closeBtn.onclick = () => modal.style.display = 'none';
+
+        window.onclick = (e) => {
+            if (e.target == modal) modal.style.display = 'none';
+        };
+    </script>
 </body>
 </html>
