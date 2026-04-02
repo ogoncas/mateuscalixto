@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Drogaria Desconto Certo - Saúde e economia em um só lugar. Entrega rápida e preços baixos.">
+    <title>Drogaria Desconto Certo • Saúde e Economia</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    colors: { primary: '#D31526' },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        logo: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <style>
+        .section-header::after {
+            content: ''; display: block; width: 60px; height: 4px;
+            background: #D31526; margin: 12px auto; border-radius: 2px;
+        }
+        .media-hover:hover img { transform: scale(1.05); }
+        
+        /* Modal estilos adicionais */
+        #modal {
+            animation: fadeInModal 0.3s ease forwards;
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content img {
+            animation: zoomInModal 0.4s ease forwards;
+        }
+        @keyframes zoomInModal {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900 transition-colors duration-300">
+
+    <header class="fixed w-full z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300">
+        <nav class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center relative">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="Logo Drogaria Desconto Certo" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                <span class="font-logo text-2xl font-bold text-gray-800 dark:text-white tracking-tight">
+                    Desconto <span class="text-orange-500">Certo</span>
+                </span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600 dark:text-gray-300">
+                <a href="index.html#inicio" class="hover:text-red-600 dark:hover:text-red-400 transition-colors">Início</a>
+                <a href="index.html#sobre" class="hover:text-red-600 dark:hover:text-red-400 transition-colors">Sobre Nós</a>
+                <a href="index.html#localizacao" class="hover:text-red-600 dark:hover:text-red-400 transition-colors">Onde Estamos</a>
+                <a href="https://wa.me/5521976285154" target="_blank" class="bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-5 py-2.5 rounded-xl hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Fale Conosco
+                </a>
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 text-2xl focus:outline-none transition-colors">
+                <i id="menu-icon" class="fa-solid fa-bars"></i>
+            </button>
+        </nav>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 px-6 py-4 shadow-xl absolute w-full left-0 top-20">
+            <div class="flex flex-col gap-4 text-sm font-semibold text-gray-600 dark:text-gray-300">
+                <a href="index.html#inicio" class="mobile-link hover:text-red-600 dark:hover:text-red-400 transition-colors py-2">Início</a>
+                <a href="index.html#sobre" class="mobile-link hover:text-red-600 dark:hover:text-red-400 transition-colors py-2">Sobre Nós</a>
+                <a href="index.html#localizacao" class="mobile-link hover:text-red-600 dark:hover:text-red-400 transition-colors py-2">Onde Estamos</a>
+                <a href="https://wa.me/5521976285154" target="_blank" class="bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-4 py-3 rounded-xl hover:bg-green-600 hover:text-white transition-all flex items-center gap-2 justify-center mt-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Fale Conosco
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="inicio" class="pt-32 pb-20 bg-gradient-to-b from-yellow-100/50 dark:from-yellow-900/10 to-white dark:to-gray-900">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 rounded-full text-xs font-bold uppercase tracking-wider mb-6">Sua saúde no lugar certo</span>
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">Saúde de qualidade com <span class="text-red-600 dark:text-red-500">preço justo</span>.</h1>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">Entregamos medicamentos e itens de cuidado pessoal com agilidade e o carinho que você merece em Nova Iguaçu e região.</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="https://wa.me/5521976285154" target="_blank" class="bg-green-600 dark:bg-green-500 text-white px-8 py-4 rounded-2xl font-bold hover:bg-green-700 dark:hover:bg-green-600 transition-all flex items-center gap-3 shadow-lg shadow-green-200 dark:shadow-none">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> Peça pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="relative hidden md:block">
+                <img src="galeria/3.jpeg" alt="Farmácia" class="rounded-[2.5rem] shadow-2xl dark:shadow-gray-900/50">
+                <div class="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-xl flex items-center gap-4 border border-red-50 dark:border-gray-700">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 dark:text-white">Entrega Rápida</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Toda Nova Iguaçu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre" class="py-24 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="section-header text-4xl font-bold text-gray-900 dark:text-white">Nossa História</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-4">Conheça um pouco mais sobre a Drogaria Desconto Certo</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <p>
+                        A <strong class="text-red-600 dark:text-red-500">Drogaria Desconto Certo</strong> nasceu com um propósito claro: levar saúde e bem-estar para as famílias de Nova Iguaçu, aliando um atendimento humano a preços que realmente cabem no bolso.
+                    </p>
+                    <p>
+                        Acreditamos que o acesso a medicamentos e produtos de higiene não deve ser um privilégio. Por isso, trabalhamos diariamente para negociar as melhores ofertas e garantir que nossa comunidade tenha "sua saúde no lugar certo".
+                    </p>
+                    <ul class="space-y-4 mt-8">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-gray-900 dark:text-white font-medium">Atendimento farmacêutico especializado</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-gray-900 dark:text-white font-medium">Preços populares e descontos reais</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-gray-900 dark:text-white font-medium">Ampla variedade de medicamentos e perfumaria</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- === VÍDEO DO YOUTUBE (clicável) === -->
+                    <div id="video-trigger" 
+                         class="relative w-full aspect-video bg-gray-100 dark:bg-gray-800 rounded-3xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700 group flex items-center justify-center cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=800" 
+                             alt="Capa do Vídeo" 
+                             class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply dark:mix-blend-overlay">
+                        <div class="z-10 w-20 h-20 bg-red-600/90 text-white rounded-full flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 group-hover:bg-red-600 transition-all duration-300">
+                            <i class="fa-solid fa-play ml-1"></i>
+                        </div>
+                    </div>
+
+                    <!-- === GALERIA DE IMAGENS (clicáveis) === -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="media-hover aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md cursor-pointer">
+                            <img src="galeria/2.jpeg" 
+                                 alt="Nossa Loja 1" 
+                                 class="w-full h-full object-cover transition-transform duration-500">
+                        </div>
+                        <div class="media-hover aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md cursor-pointer">
+                            <img src="galeria/4.jpeg" 
+                                 alt="Nossa Loja 2" 
+                                 class="w-full h-full object-cover transition-transform duration-500">
+                        </div>
+                        <div class="media-hover aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md cursor-pointer">
+                            <img src="galeria/1.jpeg" 
+                                 alt="Nossa Loja 3" 
+                                 class="w-full h-full object-cover transition-transform duration-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="localizacao" class="py-24 bg-gray-50 dark:bg-gray-800/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="rounded-[2.5rem] h-[450px] overflow-hidden shadow-2xl border-8 border-white dark:border-gray-800 group relative">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.994925790091!2d-43.48352658886725!3d-22.728429979295083!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x99678b394f57c7%3A0xbbc02c3469b5c31f!2sDrogaria%20Desconto%20Certo!5e0!3m2!1spt-BR!2sbr!4v1775156450670!5m2!1spt-BR!2sbr" 
+                        class="w-full h-full grayscale-[0.3] dark:grayscale-[0.6] dark:invert group-hover:grayscale-0 dark:group-hover:invert-0 transition-all duration-700" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+
+                    <div class="absolute bottom-6 left-6 right-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur p-4 rounded-2xl shadow-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-red-600 dark:text-red-400 uppercase">Visite-nos</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">R. Antônio Coelho, 20 - Cerâmica, NI</p>
+                        </div>
+                        <a href="https://www.google.com/maps?cid=11816890824740634891&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" target="_blank" class="text-red-600 hover:text-red-800 dark:hover:text-red-400 transition-colors">
+                            <i class="fa-solid fa-location-arrow text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:pl-12">
+                    <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">Estamos prontos para te atender.</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="w-14 h-14 bg-white dark:bg-gray-800 shadow-md rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 flex-shrink-0">
+                                <i class="fa-solid fa-phone text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white">Telefone para contato</h4>
+                                <p class="text-gray-500 dark:text-gray-400">(21) 97628-5154</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="w-14 h-14 bg-white dark:bg-gray-800 shadow-md rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 flex-shrink-0">
+                                <i class="fa-solid fa-clock text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white">Horário de Funcionamento</h4>
+                                <p class="text-gray-500 dark:text-gray-400">Segunda à Sábado: 07:30 às 21:30</p>
+                                <p class="text-gray-500 dark:text-gray-400">Domingos: 07:30 às 20:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-300 pt-16 pb-8 border-t border-gray-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="space-y-4">
+                    <a href="index.html" class="flex items-center gap-2">
+                        <img src="logo.png" alt="Logo Drogaria Desconto Certo" class="h-10 w-auto object-contain">
+                        <span class="font-logo text-xl font-bold text-white tracking-tight">
+                            Desconto <span class="text-orange-500">Certo</span>
+                        </span>
+                    </a>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Sua saúde em primeiro lugar. Entregamos medicamentos e itens de cuidado pessoal com agilidade e preço justo na sua porta.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-md"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-md"><i class="fa-brands fa-facebook-f"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-5 uppercase tracking-wider text-sm">Links Rápidos</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html#inicio" class="hover:text-red-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px] text-red-500"></i> Início</a></li>
+                        <li><a href="index.html#sobre" class="hover:text-red-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px] text-red-500"></i> Sobre Nós</a></li>
+                        <li><a href="index.html#localizacao" class="hover:text-red-400 transition-colors flex items-center gap-2"><i class="fa-solid fa-chevron-right text-[10px] text-red-500"></i> Nossa Localização</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-5 uppercase tracking-wider text-sm">Contato</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 w-5 flex justify-center"><i class="fa-solid fa-location-dot text-red-500 text-base"></i></div>
+                            <span>R. Antônio Coelho, 20 - Cerâmica<br>Nova Iguaçu - RJ</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="w-5 flex justify-center"><i class="fa-solid fa-phone text-red-500 text-base"></i></div>
+                            <span>(21) 97628-5154</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="w-5 flex justify-center"><i class="fa-brands fa-whatsapp text-red-500 text-lg"></i></div>
+                            <a href="https://wa.me/5521976285154" target="_blank" class="hover:text-red-400 transition-colors">Peça pelo WhatsApp</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-5 uppercase tracking-wider text-sm">Funcionamento</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between border-b border-gray-800 pb-2">
+                            <span class="text-gray-400">Segunda à Sábado</span>
+                            <span class="text-white font-medium">07:30 - 21:30</span>
+                        </li>
+                        <li class="flex justify-between pb-2">
+                            <span class="text-gray-400">Domingos e Feriados</span>
+                            <span class="text-white font-medium">07:30 - 20:00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                <p>© 2026 Drogaria Desconto Certo. Todos os direitos reservados.</p>
+                <p class="flex items-center gap-1">Desenvolvido por <a href="https://mateuscalixto.com.br" style="color: #D31526;">Mateus Calixto</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====================== MODAL DE EXPANSÃO ====================== -->
+    <div id="modal" onclick="if(event.target.id === 'modal') closeModal()" 
+         class="hidden fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4">
+        
+        <div onclick="event.stopImmediatePropagation()" 
+             class="relative w-full max-w-5xl bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+            
+            <div id="modal-content" class="p-4 md:p-8">
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== FUNÇÕES DO MODAL ====================
+        function openImageModal(src) {
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="flex items-center justify-center">
+                    <img src="${src}" 
+                         alt="Imagem expandida" 
+                         class="modal-content w-full max-h-[80vh] object-contain rounded-2xl shadow-inner">
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function openVideoModal() {
+            const youtubeEmbedUrl = 'https://www.youtube.com/embed/SEU_VIDEO_ID_AQUI'; 
+            
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="aspect-video w-full bg-black rounded-2xl overflow-hidden">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src="${youtubeEmbedUrl}" 
+                        title="Vídeo Institucional - Drogaria Desconto Certo"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <p class="text-center text-xs text-gray-400 mt-4">Clique no play para assistir</p>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            
+            // Limpa o conteúdo (para parar o vídeo imediatamente)
+            document.getElementById('modal-content').innerHTML = '';
+        }
+
+        // ==================== INICIALIZAÇÃO ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Menu mobile (mantido intacto)
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+                if (menu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                }
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                });
+            });
+
+            // ====================== EVENTOS DO MODAL ======================
+            
+            // 1. Vídeo do YouTube
+            const videoTrigger = document.getElementById('video-trigger');
+            if (videoTrigger) {
+                videoTrigger.addEventListener('click', openVideoModal);
+            }
+
+            // 2. Todas as imagens da galeria
+            const galleryImages = document.querySelectorAll('.media-hover');
+            galleryImages.forEach(el => {
+                el.addEventListener('click', () => {
+                    const img = el.querySelector('img');
+                    if (img && img.src) {
+                        openImageModal(img.src);
+                    }
+                });
+            });
+
+            // Fechar com tecla ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
